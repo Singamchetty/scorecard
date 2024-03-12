@@ -19,10 +19,10 @@ connectToDb((err) => {
 })
 
 
-app.get('/products', (req, res) => {
-    db.collection('products').find().toArray()
+app.get('/employees', (req, res) => {
+    db.collection('employees').find().toArray()
         .then(result => { res.send(result) })
-        .catch(error => res.status(500).send(error))
+        .catch(error => res.status(401).send(error))
 })
 
 // app.get('/products', (req, res) => {
