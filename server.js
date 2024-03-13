@@ -33,11 +33,14 @@ app.get('/employee/:id', (req, res) => {
 
 app.post('/getreportees', (req, res) => {
     let reporteesArray = req.body.reportees;
-    let page = parseInt(req.query.page) || 1; 
-    let limit = 10;
-    let skip = (page - 1) * limit;
+    let sortBy=req.body.sort.type || _id
+    let sortByOrder=parseInt(req.body.sort.order)|| 1
+    let page = parseInt(req.body.page) || 1; 
+    let limit = parseInt(req.body.perPage) || 10;
+    let skip = (page - 1) * limit || 0;
     db.collection('employees').find({ empId: { $in: reporteesArray } }, { projection: { _id: false } })
         .skip(skip)
+        .sort({[sortBy]:sortByOrder})
         .limit(limit)
         .toArray()
         .then(result => {
