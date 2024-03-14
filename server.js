@@ -18,6 +18,7 @@ connectToDb((err) => {
     }
 })
 
+//to get all the employees data
 app.get('/employees', (req, res) => {
     db.collection('employees').find().toArray()
         .then(result => { res.send(result) })
@@ -40,6 +41,11 @@ Example of post Data
     "searchText":"eng"
 }*/
 app.post('/getreportees', (req, res) => {
+    let reporteesArray = req.body.reportees || [];
+    let sortBy=req.body.sort?req.body.sort.type || "_id" :"_id"
+    let sortByOrder=req.body.sort?parseInt(req.body.sort.order)|| 1: 1;
+    let page = req.body.page?parseInt(req.body.page) || 1 : 1;
+    let limit = req.body.perPage?parseInt(req.body.perPage) || 10: 10;
     let reporteesArray = req.body.reportees || [];
     let sortBy=req.body.sort?req.body.sort.type || "_id" :"_id"
     let sortByOrder=req.body.sort?parseInt(req.body.sort.order)|| 1: 1;
