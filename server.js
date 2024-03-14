@@ -2,6 +2,7 @@ const express = require("express");
 const { connectToDb, getDb } = require("./db");
 const cors = require("cors");
 const app = express();
+const _ = require('lodash');
 
 app.use(express.json());
 app.use(cors());
@@ -120,7 +121,13 @@ app.post('/createActivity',(req,res)=>{
         return
     }else{
         let {data} = req.body;
-        data = {...data, "recorded_date": new Date() };  
+        data = {...data, "recorded_date": new Date() };
+        
+        if(!_.get(data,"aName", "") || !_.get(data,"aId", "")  ||  !_.get(data,"type", "") ||  !_.get(data,"score", "")  ){
+            res.json({"error":"Invalied Activity data"});
+            return;
+           
+        }  
         let query = {empId:empId };
         db.collection('performance_master').findOne(query).then( (result)=>{                      
             if(result){
