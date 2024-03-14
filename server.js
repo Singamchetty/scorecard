@@ -1,6 +1,5 @@
 const express = require('express')
 const { connectToDb, getDb } = require("./db")
-const { ObjectId } = require("mongodb")
 const cors = require("cors")
 const app = express();
 
@@ -102,7 +101,7 @@ app.post('/getreportees', (req, res) => {
     }
 }
 */
-app.post('/create-performance',(req,res)=>{
+app.post('/createActivity',(req,res)=>{
     const empId = req.body.empId || null;
     if(!empId){
         res.status(401).json({"message":"Employee id is missing"});
@@ -168,5 +167,38 @@ const calculateAverage= (query)=>{
 });
 }
 
+//sending filtered activities data
+const moment = require('moment');
+
+/*Example post data
+{
+    "empId":41689,
+    "fromDate":"2024-03-10",
+    "toDate":"2024-03-11"
+}
+*/
+app.post("/getActivities", (req, res) => {
+    let { empId, fromDate, toDate, today } = req.body;
+    if (!empId) {
+        res.status(401).json({ "message": "Employee id is missing" });
+        return;
+    } else {
+        let query = {
+            "empId": empId
+        };
+        if (fromDate && toDate) {
+            query['activities.recorded_date'] = { $gte: new Date(fromDate), $lte: new Date(toDate) };
+        } else {
+            // If fromDate and toDate are not provided, fetch data for the last 90 days
+            query['activities.recorded_date'] = { $gte: moment().subtract(90, 'days').toDate(), $lte: moment().toDate() };
+        }
+        db.collection('performance_master').find(query).toArray().then((results) => {
+            res.json(results);
+        }).catch((error) => {
+            console.error("Error fetching data:", error);
+            res.status(500).json({ "message": "Error fetching data" });
+        });
+    }
+});
 
 
