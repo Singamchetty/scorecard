@@ -108,54 +108,53 @@ app.post("/getreportees", (req, res) => {
         "aName":"timesheet",
         "aId":"D001",
         "type":"default",
-        "recorded_date":"2024-03-12",
         "score":3,
         "comments":"very good"
     }
 }
 */
-app.post("/createActivity", (req, res) => {
-  const empId = req.body.empId || null;
-  if (!empId) {
-    res.status(401).json({ message: "Employee id is missing" });
-    return;
-  } else {
-    let { data } = req.body;
-    data = { ...data, recorded_date: new Date(data["recorded_date"]) };
-    let query = { empId: empId };
-    db.collection("performance_master")
-      .findOne(query)
-      .then((result) => {
-        if (result) {
-          db.collection("performance_master")
-            .updateOne(query, { $push: { activities: data } })
-            .then(async (updateRes) => {
-              await calculateAverage(query);
-              res.json({ reuslt: updateRes });
-            })
-            .catch((error) => {
-              res.json({ error: error });
-            });
-        } else {
-          let insertData = { empId: empId, activities: [] };
-          insertData.activities.push(data);
-          db.collection("performance_master")
-            .insertOne(insertData)
-            .then(async (result) => {
-              await calculateAverage(query);
-              res.json({ result: result });
-            })
-            .catch((error) => {
-              res.json({ message: error });
-            });
-        }
-      })
-      .catch((error) => {
-        console.log(error);
-        res.send(query);
-      });
-  }
-});
+app.post('/createActivity',(req,res)=>{
+    const empId = req.body.empId || null;
+    if(!empId){
+        res.status(401).json({"message":"Employee id is missing"});
+        return
+    }else{
+        let {data} = req.body;
+        data = {...data, "recorded_date": new Date() };  
+        let query = {empId:empId };
+        db.collection('performance_master').findOne(query).then( (result)=>{                      
+            if(result){
+                db.collection('performance_master').updateOne(query,{ $push: { "activities":data  } })
+                .then(async (updateRes)=>{
+                    await calculateAverage(query);
+                    res.json({"reuslt":updateRes});
+                    
+                })
+                .catch((error)=>{
+                    res.json({"error":error});
+                });             
+            }else{
+                let insertData =  { empId:empId, activities:[]};                
+                insertData.activities.push(data);
+                db.collection('performance_master').insertOne(insertData).then(async (result)=>{
+                    await calculateAverage(query);
+                    res.json({"result":result});
+
+                }).catch((error)=>{
+                    res.json({"message":error})
+
+                })               
+            } 
+        }).catch((error)=>{
+            console.log(error)
+           res.send(query)
+        })
+
+
+    }
+
+
+})
 
 //calculating average score and updating into employees data
 const calculateAverage = (query) => {
