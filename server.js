@@ -25,9 +25,17 @@ app.get('/employees', (req, res) => {
         .catch(error => res.status(401).send(error))
 })
 
+//to get only individual employee data
 app.get('/employee/:id', (req, res) => {
     let Id = parseInt(req.params.id);
     db.collection('employees').findOne({empId:Id},{projection:{_id:false}})
+        .then(result => { res.send(result) })
+        .catch(error => res.status(401).send(error))
+})
+
+//to get activities to display
+app.get('/activities', (req, res) => {
+    db.collection('activities_master').find().toArray()
         .then(result => { res.send(result) })
         .catch(error => res.status(401).send(error))
 })
@@ -41,11 +49,6 @@ Example of post Data
     "searchText":"eng"
 }*/
 app.post('/getreportees', (req, res) => {
-    let reporteesArray = req.body.reportees || [];
-    let sortBy=req.body.sort?req.body.sort.type || "_id" :"_id"
-    let sortByOrder=req.body.sort?parseInt(req.body.sort.order)|| 1: 1;
-    let page = req.body.page?parseInt(req.body.page) || 1 : 1;
-    let limit = req.body.perPage?parseInt(req.body.perPage) || 10: 10;
     let reporteesArray = req.body.reportees || [];
     let sortBy=req.body.sort?req.body.sort.type || "_id" :"_id"
     let sortByOrder=req.body.sort?parseInt(req.body.sort.order)|| 1: 1;
