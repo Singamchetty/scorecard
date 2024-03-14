@@ -15,9 +15,13 @@ export const fetchReportees = createAsyncThunk("getReportees", async (data) => {
 });
 
 const reporteesSlice = createSlice({
-  name: "counter",
+  name: "reportees",
   initialState,
-  reducers: {},
+  reducers: {
+    resetReportees:() => {
+      return initialState
+    }
+  },
   extraReducers: (builder) => {
     builder.addCase(fetchReportees.pending, (state) => {
       state.loading = true;
@@ -25,7 +29,7 @@ const reporteesSlice = createSlice({
     });
     builder.addCase(fetchReportees.fulfilled, (state, action) => {
       state.loading = false;
-      state.reportees = action.payload;
+      state.reportees = action.payload.data;
       state.error = "";
     });
     builder.addCase(fetchReportees.rejected, (state, action) => {
@@ -36,6 +40,6 @@ const reporteesSlice = createSlice({
   },
 });
 
-export const {} = reporteesSlice.actions;
+export const {resetReportees} = reporteesSlice.actions;
 
 export default reporteesSlice.reducer;

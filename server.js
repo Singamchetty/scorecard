@@ -201,13 +201,13 @@ const moment = require("moment");
 {
     "empId":41689,
     "fromDate":"2024-03-10",
-    "toDate":"2024-03-11"
+    "toDate":"2024-03-14"
 }
 */
 app.post("/getActivities", (req, res) => {
   let { empId, fromDate, toDate, today } = req.body;
-  if (!empId) {
-    res.status(401).json({ message: "Employee id is missing" });
+  if (!empId || typeof empId=="string") {
+    res.status(401).json({ message: "Employee id is missing/ EmpId should be string only" });
     return;
   } else {
     let query = {
@@ -231,8 +231,7 @@ app.post("/getActivities", (req, res) => {
       };
     }
     db.collection("performance_master")
-      .find(query)
-      .toArray()
+      .findOne(query)
       .then((results) => {
         res.json(results);
       })

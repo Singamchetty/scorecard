@@ -10,7 +10,7 @@ function Dashboard() {
   const reportees = useSelector((state) => state.reportees.reportees);
   const userDetails = useSelector((state) => state.userDetails);
   const { id } = useParams();
-  const reporteIds = userDetails.user.reportees || {};
+  const reporteIds = userDetails.user.reportees || [];
 
   useEffect(() => {
     if (reporteIds.length > 0) {
@@ -25,11 +25,12 @@ function Dashboard() {
   }, [reporteIds]);
 
   useEffect(() => {
+    if(id !== undefined ||null)
     dispatch(fetchUser(id));
-  }, []);
+  }, [id]);
 
   const headers = [
-    {title: "Name", id:"empName"},
+    {title: "Employee Name", id:"empName"},
     {title: "Emp.Id", id: "empId"},
     {title: "Designation", id: 'designation'},
     {title: "score", id:"score"},
@@ -38,7 +39,7 @@ function Dashboard() {
   ]
   return (
      <div>
-        <Table headers={headers} data={reportees.data} isView={true}/>    
+        <Table headers={headers} data={reportees} isView={true}/>    
      </div>
   )
 }
