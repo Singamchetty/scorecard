@@ -111,29 +111,29 @@ app.post('/create-performance',(req,res)=>{
         let {data} = req.body;
         data = {...data, "recorded_date": new Date(data['recorded_date']) };  
         let query = {empId:empId };
-        db.collection('performance_master').findOne(query).then((result)=>{
-                       
+        db.collection('performance_master').findOne(query).then( (result)=>{                      
             if(result){
                 db.collection('performance_master').updateOne(query,{ $push: { "activities":data  } })
-                .then((updateRes)=>{
+                .then(async (updateRes)=>{
+                    await calculateAverage(query);
                     res.json({"reuslt":updateRes});
+                    
                 })
                 .catch((error)=>{
                     res.json({"error":error});
-                });
-               
+                });             
             }else{
-                //create ne one
                 let insertData =  { empId:empId, activities:[]};                
                 insertData.activities.push(data);
-                db.collection('performance_master').insertOne(insertData).then((result)=>{
+                db.collection('performance_master').insertOne(insertData).then(async (result)=>{
+                    await calculateAverage(query);
                     res.json({"result":result});
 
                 }).catch((error)=>{
                     res.json({"message":error})
 
                 })               
-            }
+            } 
         }).catch((error)=>{
             console.log(error)
            res.send(query)
@@ -145,6 +145,28 @@ app.post('/create-performance',(req,res)=>{
 
 })
 
+//calculating average score and updating into employees data
+const calculateAverage= (query)=>{
+    return new Promise((res,rej)=>{  
+      db.collection('performance_master').findOne(query).then((result)=>{
+        let activitiesList=result.activities;
+        let activitiesLength=activitiesList.length;
+        let score=activitiesList.reduce((acc,curr)=>{
+            return (acc) + (curr.score)
+        },0)            
+        let averageScore=0
+        score<0?averageScore=0:(averageScore=(score/activitiesLength))
+        db.collection("employees").updateOne(query,{$set:{score:averageScore}})
+        .then((result)=>{
+            res(result)       
+        })
+        .catch((error)=>rej(error))
+    })
+    .catch((error)=>{
+        rej(error)
+    })
+});
+}
 
 
 
