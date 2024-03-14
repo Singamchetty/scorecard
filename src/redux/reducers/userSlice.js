@@ -3,39 +3,40 @@ import { base_url } from "../../utils/constants";
 import axios from "axios";
 
 const initialState = {
-  reportees: [],
+  user: {},
   loading: false,
   error: null,
 };
 
-export const fetchReportees = createAsyncThunk("getReportees", async (data) => {
+export const fetchUser = createAsyncThunk("getUser", async (id) => {
   return await axios
-    .post(`${base_url}/getreportees`, data)
+    .get(`${base_url}/employee/${id}`)
     .then((response) => response.data);
 });
 
-const reporteesSlice = createSlice({
+const userSlice = createSlice({
   name: "counter",
   initialState,
   reducers: {},
   extraReducers: (builder) => {
-    builder.addCase(fetchReportees.pending, (state) => {
+    // fetch user
+    builder.addCase(fetchUser.pending, (state) => {
       state.loading = true;
       state.error = "pending";
     });
-    builder.addCase(fetchReportees.fulfilled, (state, action) => {
+    builder.addCase(fetchUser.fulfilled, (state, action) => {
       state.loading = false;
-      state.reportees = action.payload;
+      state.user = action.payload;
       state.error = "";
     });
-    builder.addCase(fetchReportees.rejected, (state, action) => {
+    builder.addCase(fetchUser.rejected, (state, action) => {
       state.loading = false;
-      state.reportees = [];
+      state.user = {};
       state.error = action.error || "Something went wrong!";
     });
   },
 });
 
-export const {} = reporteesSlice.actions;
+export const {} = userSlice.actions;
 
-export default reporteesSlice.reducer;
+export default userSlice.reducer;
