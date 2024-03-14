@@ -171,13 +171,16 @@ const calculateAverage = (query) => {
       .then((result) => {
         let activitiesList = result.activities;
         let activitiesLength = activitiesList.length;
-        let score = activitiesList.reduce((acc, curr) => {
-          return acc + curr.score;
-        }, 0);
+        let score = activitiesList.reduce((acc, curr) => { return acc + curr.score}, 0);
         let averageScore = 0;
         score < 0
           ? (averageScore = 0)
           : (averageScore = score / activitiesLength);
+
+          if (averageScore % 1 !== 0) {
+            averageScore = averageScore.toFixed(1);
+          }
+          
         db.collection("employees")
           .updateOne(query, { $set: { score: averageScore } })
           .then((result) => {
@@ -211,6 +214,11 @@ app.post("/getActivities", (req, res) => {
       empId: empId,
     };
     if (fromDate && toDate) {
+        fromDate =  new Date(fromDate)
+        toDate = new Date(toDate);
+        toDate.setHours(23);
+        toDate.setMinutes(59);
+        toDate.setSeconds(59);
       query["activities.recorded_date"] = {
         $gte: new Date(fromDate),
         $lte: new Date(toDate),
