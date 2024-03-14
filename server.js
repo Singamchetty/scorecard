@@ -214,6 +214,11 @@ app.post("/getActivities", (req, res) => {
       empId: empId,
     };
     if (fromDate && toDate) {
+        fromDate =  new Date(fromDate)
+        toDate = new Date(toDate);
+        toDate.setHours(23);
+        toDate.setMinutes(59);
+        toDate.setSeconds(59);
       query["activities.recorded_date"] = {
         $gte: new Date(fromDate),
         $lte: new Date(toDate),
