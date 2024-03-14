@@ -95,7 +95,6 @@ app.post('/getreportees', (req, res) => {
         "aName":"timesheet",
         "aId":"D001",
         "type":"default",
-        "recorded_date":"2024-03-12",
         "score":3,
         "comments":"very good"
     }
@@ -108,7 +107,7 @@ app.post('/createActivity',(req,res)=>{
         return
     }else{
         let {data} = req.body;
-        data = {...data, "recorded_date": new Date(data['recorded_date']) };  
+        data = {...data, "recorded_date": new Date() };  
         let query = {empId:empId };
         db.collection('performance_master').findOne(query).then( (result)=>{                      
             if(result){
