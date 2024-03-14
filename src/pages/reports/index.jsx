@@ -2,6 +2,7 @@ import React, {useState, useEffect} from 'react';
 import { useSelector,useDispatch } from 'react-redux';
 import { useParams } from 'react-router';
 import { fetchReports } from "../../redux/reducers/reportSlice";
+import ModalButton from '../../components/modal/modalButton';
 
 function Reports() {
     const {id} = useParams();
@@ -33,11 +34,13 @@ function Reports() {
             setEmpDetails(null)
         })
     },[id]);
-    
-    useEffect(()=>{console.log( report, loading, error)},[ report, loading, error])
 
     return (
-        <div>This Perots</div>
+
+        <div>This Perots
+            <ModalButton type={"default"}/>
+        </div>
+        
     )
 }
 

@@ -29,7 +29,7 @@ const reportSlice = createSlice({
     });
     builder.addCase(fetchReports.fulfilled, (state, action) => {
       state.loading = false;
-      state.reports = action.payload.activities;
+      state.reports = action.payload?.activities;
       state.error = "";
     });
     builder.addCase(fetchReports.rejected, (state, action) => {
