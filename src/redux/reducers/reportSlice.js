@@ -3,44 +3,43 @@ import { base_url } from "../../utils/constants";
 import axios from "axios";
 
 const initialState = {
-  user: {},
+  reports: [],
   loading: false,
   error: null,
 };
 
-export const fetchUser = createAsyncThunk("getUser", async (id) => {
+export const fetchReports = createAsyncThunk("getReports", async (data) => {
   return await axios
-    .get(`${base_url}/employee/${id}`)
+    .post(`${base_url}/getActivities`, data)
     .then((response) => response.data);
 });
 
-const userSlice = createSlice({
-  name: "user",
+const reportSlice = createSlice({
+  name: "reportees",
   initialState,
   reducers: {
-    resetUser:() => {
+    resetReports:() => {
       return initialState
     }
   },
   extraReducers: (builder) => {
-    // fetch user
-    builder.addCase(fetchUser.pending, (state) => {
+    builder.addCase(fetchReports.pending, (state) => {
       state.loading = true;
       state.error = "pending";
     });
-    builder.addCase(fetchUser.fulfilled, (state, action) => {
+    builder.addCase(fetchReports.fulfilled, (state, action) => {
       state.loading = false;
-      state.user = action.payload;
+      state.reports = action.payload?.activities;
       state.error = "";
     });
-    builder.addCase(fetchUser.rejected, (state, action) => {
+    builder.addCase(fetchReports.rejected, (state, action) => {
       state.loading = false;
-      state.user = {};
+      state.reports = [];
       state.error = action.error || "Something went wrong!";
     });
   },
 });
 
-export const {resetUser} = userSlice.actions;
+export const {resetReports} = reportSlice.actions;
 
-export default userSlice.reducer;
+export default reportSlice.reducer;
