@@ -7,7 +7,6 @@ export default function MyModal({ visible, onClose ,type}) {
   const [activitiesList, setActivitiesList] = useState([])
   const [enableSubmit,setEnableSubmit]=useState(false)
   const [scoreType,setScoreType]=useState(1)
-  // const [score,setScore]=useState(0)
   const [activityData,setActivityData]=useState({aName:"",aId:"",type:type,score:0,comments:""})
 
   const  getActivitysList= async()=>{
