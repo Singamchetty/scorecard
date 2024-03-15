@@ -19,15 +19,15 @@ connectToDb((err) => {
 });
 
 //to get all the employees data
-app.get("/employees", (req, res) => {
-  db.collection("employees")
-    .find()
-    .toArray()
-    .then((result) => {
-      res.send(result);
-    })
-    .catch((error) => res.status(401).send(error));
-});
+// app.get("/employees", (req, res) => {
+//   db.collection("employees")
+//     .find()
+//     .toArray()
+//     .then((result) => {
+//       res.send(result);
+//     })
+//     .catch((error) => res.status(401).send(error));
+// });
 
 //to get only individual employee data
 app.get("/employee/:id", (req, res) => {
@@ -116,7 +116,7 @@ app.post("/getreportees", (req, res) => {
         "aId":"D001",
         "type":"default",
         "score":3,
-        "comments":"very good"
+        "comments":""
     }
 }
 */

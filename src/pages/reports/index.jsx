@@ -1,15 +1,19 @@
 import React, { useState, useEffect, useMemo } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useParams } from "react-router";
+import { base_url } from "../../utils/constants";
+import axios from 'axios';
 import { fetchReports } from "../../redux/reducers/reportSlice";
 import Accordion from "../../components/accordion";
+import DateRangePicker from "../../components/DateRangePicker";
 
 function Reports() {
   const { id } = useParams();
+  const empId=Number(id)
   const dispatch = useDispatch();
   const reportees = useSelector((state) => state.reportees.reportees);
   const [empDetails, setEmpDetails] = useState(null);
-  const { reports } = useSelector((state) => state.reports);
+  const { reports} = useSelector((state) => state.reports);
 
   /*Example post data
 {
@@ -24,6 +28,28 @@ function Reports() {
     return filtered;
     }
   }, [reports]);
+
+
+
+  const getReports=({startDate, endDate})=>{
+    const data={"empId":empId,"fromDate":startDate,"toDate":endDate}
+    dispatch(fetchReports(data))
+  }
+
+  const handleAddActivity=(activityData)=>{
+    if(id){
+    let newData={
+      "empId":empId,
+      "data":activityData
+    }
+    axios.post(`${base_url}/createActivity`,newData)
+    .then((result)=>{
+      getReports()
+    })
+  }else{
+    alert("Please login")
+  }
+  }
 
     useEffect(() => {
         if(id) {
@@ -40,6 +66,8 @@ function Reports() {
             setEmpDetails(null)
         })
     },[id]);
+
+    useEffect(()=>{},[reports])
 
   return (
     <div className="p-4">
@@ -79,8 +107,11 @@ function Reports() {
         </div>
       </div>
       <div className="max-h-[60vh] overflow-auto">
-        <Accordion title="Default Activities:" data={activities?.default} />
-        <Accordion title="Initiatives:" data={activities?.initiatives} />
+      <div className="container mx-auto mt-4 flex justify-end pe-4">
+      <DateRangePicker getReports={getReports}/>
+    </div>
+        <Accordion title="Default Activities:" data={activities?.default} handleAddActivity={handleAddActivity}/>
+        <Accordion title="Initiatives:" data={activities?.initiative} handleAddActivity={handleAddActivity}/>
       </div>
     </div>
   );
