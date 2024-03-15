@@ -1,6 +1,8 @@
 const express = require("express");
 const { connectToDb, getDb } = require("./db");
 const cors = require("cors");
+const moment = require("moment");
+const { ObjectId } = require("mongodb");
 const app = express();
 const _ = require('lodash');
 
@@ -101,6 +103,7 @@ app.post("/getreportees", (req, res) => {
     .catch((error) => res.status(401).send(error));
 });
 
+
 //Example of post Data
 /*
 {
@@ -122,6 +125,7 @@ app.post('/createActivity',(req,res)=>{
     }else{
         let {data} = req.body;
         data = {...data, "recorded_date": new Date() };
+        data = Object.assign(data, {"_id":new ObjectId()})   
         
         if(!_.get(data,"aName", "") || !_.get(data,"aId", "")  ||  !_.get(data,"type", "") ||  !_.get(data,"score", "")  ){
             res.json({"error":"Invalied Activity data"});
@@ -141,7 +145,8 @@ app.post('/createActivity',(req,res)=>{
                     res.json({"error":error});
                 });             
             }else{
-                let insertData =  { empId:empId, activities:[]};                
+                let insertData =  { empId:empId, activities:[]}; 
+                          
                 insertData.activities.push(data);
                 db.collection('performance_master').insertOne(insertData).then(async (result)=>{
                     await calculateAverage(query);
@@ -195,8 +200,6 @@ const calculateAverage = (query) => {
 };
 
 //sending filtered activities data
-const moment = require("moment");
-
 /*Example post data
 {
     "empId":41689,
