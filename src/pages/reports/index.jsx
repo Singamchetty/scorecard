@@ -31,7 +31,7 @@ function Reports() {
 
 
 
-  const getReports=({startDate, endDate})=>{
+  const getReports=(startDate=null, endDate=null)=>{
     const data={"empId":empId,"fromDate":startDate,"toDate":endDate}
     dispatch(fetchReports(data))
   }
@@ -82,7 +82,7 @@ function Reports() {
         <div className="flex flex-col w-[85%]">
           <div className="flex py-4">
             <p className="w-[23%]">
-              <span className="font-medium">Email Id: </span>Null
+              <span className="font-medium">Email Id: </span>{empDetails?.empEmail}
             </p>
             <p className="w-[23%]">
               <span className="font-medium">Emp.Id: </span>

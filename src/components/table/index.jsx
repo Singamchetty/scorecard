@@ -1,14 +1,13 @@
 import React from "react";
-import {Link} from 'react-router-dom';
 
-function Table({headers, data, isView}) {
+function Table({headers, data, maxHeight}) {
   return (
-    <div className="relative overflow-x-auto sm:rounded-lg p-3">
-      <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 bg-transparent justify-center">
+    <div className={`relative overflow-x-auto sm:rounded-lg p-4 max-h-[${maxHeight}vh]`}>
+      <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 bg-transparent justify-center border-separate border-spacing-y-2">
         <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400 ">
-          <tr>
+          <tr className="mb-2">
             {headers.map((item) => (
-              <th scope="col" className="px-6 py-3" > 
+              <th scope="col" className={`px-6 py-4 w-[${item.width}]`} > 
                 {item.title}
               </th>
             ))}
@@ -16,14 +15,15 @@ function Table({headers, data, isView}) {
         </thead>
         <tbody>
             {
-                data?.map((item, index) => (
-                    <tr className="bg-white border-b-8 dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
-                        {headers?.map((field) => (
-                            field.id !== "action" ?<td className="px-6 py-4 listData" >{field.id==="empName"?<span className="flex items-center"><img className="pr-2" src="/man.png" width="30px" height="30px"/>{item[field.id]}</span> :item[field.id]}</td> : <td className="px-6 py-3 border-l-2"><Link to={`/${item.empId}/reports`}><button type="button" className="bg-blue-400 text-white rounded-md px-3 py-1">View</button></Link></td>
-                        ))}
-                        
-                    </tr>
-                ))
+              data?.map((item, index) => (
+                  <tr className="bg-white dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                      {
+                        headers?.map(({render, id}) => (
+                          <td className="px-6 py-4 listData" >{render ? render(item[id]) : item[id] }</td>
+                        ))
+                      }
+                  </tr>
+              ))
             }
         </tbody>
       </table>
