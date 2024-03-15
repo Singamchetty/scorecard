@@ -10,7 +10,7 @@ export default function MyModal({ visible, onClose ,type,handleAddActivity}) {
   const [activityData,setActivityData]=useState({aName:"",aId:"",type:type,score:0,comments:""})
   const [activityType,setActivtyType]=useState("")
 
-  const  getActivitysList= async()=>{
+  const  getActivitysList= async(type)=>{
     const activities=await axios.get(`${base_url}/activities`)
     const response= await activities.data.filter((item)=>item.type==type)
     setActivitiesList(response)
@@ -56,7 +56,7 @@ export default function MyModal({ visible, onClose ,type,handleAddActivity}) {
     if (visible===false){
       setActivityData({aName:"",aId:"",type:type,score:0,comments:""})
     }else{
-      getActivitysList();
+      getActivitysList(type);
     }
   },[visible,type])
 
@@ -64,9 +64,9 @@ export default function MyModal({ visible, onClose ,type,handleAddActivity}) {
   if (!visible) return null;
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-25 backdrop-blur-sm   flex items-center justify-center">
+    <div className="absolute w-full h-full inset-0 bg-black bg-opacity-25 backdrop-blur-sm   flex items-center justify-center">
       <div className="bg-white rounded lg:w-4/12 sm:w-100">
-        <div className=" text-white py-3 pl-2 bg-blue-500">{activityType} Activity</div>
+        <div className=" text-white py-3 pl-2 bg-blue-500 ">{activityType} Activity</div>
         <div>
           <div>
             <form className=" p-2 max-w-sm mx-auto">
@@ -114,9 +114,7 @@ export default function MyModal({ visible, onClose ,type,handleAddActivity}) {
             </form>
             
 
-          </div>
-          
-         
+          </div>      
         </div>
       </div>
     </div>
