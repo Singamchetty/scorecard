@@ -52,7 +52,7 @@ function Reports() {
   }
 
     useEffect(() => {
-        if(id) {
+        if(id!==undefined|| null) {
             const emp = reportees?.filter((item) => item.empId === Number(id));
             setEmpDetails(emp[0]);
             const data = {
@@ -66,8 +66,6 @@ function Reports() {
             setEmpDetails(null)
         })
     },[id]);
-
-    useEffect(()=>{},[reports])
 
   return (
     <div className="p-4">
