@@ -1,13 +1,8 @@
 import React from "react";
 import moment from "moment";
 
-function AccordionTable({ headers, data }) {
-
-    
+function AccordionTable({ headers, data }) {   
     const getDate = (utc) => {
-        // const utcDate = new Date(utc);
-        // const localTime = utcDate.toLocaleString();
-        // const someday = moment(utc);
         return moment(utc).format('DD-MM-YYYY');
     }
   return (
