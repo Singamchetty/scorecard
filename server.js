@@ -121,7 +121,7 @@ app.post("/getreportees", (req, res) => {
 }
 */
 app.post('/createActivity',(req,res)=>{
-    const empId = req.body.empId || null;
+    const empId = req.body.empId;
     if(!empId){
         res.status(401).json({"message":"Employee id is missing"});
         return
