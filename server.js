@@ -35,7 +35,10 @@ app.get("/employee/:id", (req, res) => {
   db.collection("employees")
     .findOne({ empId: Id }, { projection: { _id: false } })
     .then((result) => {
-      res.send(result);
+      if(!result)
+      res.status(404).json({ message: "Employee not found" });
+      else
+        res.send(result);
     })
     .catch((error) => res.status(401).send(error));
 });
@@ -109,7 +112,7 @@ app.post("/getreportees", (req, res) => {
 {
     "empId":10000,
     "data":{
-        "aName":"timesheet",
+        "aName":"Approval of timesheet",
         "aId":"D001",
         "type":"default",
         "score":3,
