@@ -4,6 +4,8 @@ import axios from "axios";
 
 const initialState = {
   reports: [],
+  defaultAvgScore:0,
+  initiativeAvgScore:0,
   loading: false,
   error: null,
 };
@@ -20,26 +22,34 @@ const reportSlice = createSlice({
   reducers: {
     resetReports:() => {
       return initialState
-    }
+    },
+    calculateDefaultScore:(state, action)=>{
+      const defaultItems = action.payload?.filter(item => item.type === "default");
+      const totalDefaultScore = defaultItems.reduce((acc, curr) => acc+ curr.score, 0);
+      const defaultAvgScore = totalDefaultScore > 0 ? totalDefaultScore / defaultItems.length : 0;
+      return {...state,defaultAvgScore :defaultAvgScore.toFixed(1)}
+    },
+    calculateInitiativeScore:(state,action)=>{
+      const defaultItems = action.payload?.filter(item => item.type === "initiative");
+      const totalDefaultScore = defaultItems.reduce((acc, curr) => acc+ curr.score, 0);
+      const defaultAvgScore = totalDefaultScore > 0 ? totalDefaultScore / defaultItems.length : 0;
+      return {...state,initiativeAvgScore :defaultAvgScore.toFixed(1)}
+    },
+
   },
   extraReducers: (builder) => {
     builder.addCase(fetchReports.pending, (state) => {
-      state.loading = true;
-      state.error = "pending";
+      return {...state,loading :true,error :"pending"}
     });
     builder.addCase(fetchReports.fulfilled, (state, action) => {
-      state.loading = false;
-      state.reports = action.payload?.activities;
-      state.error = "";
+      return {...state,loading :false,error :"",reports:action.payload?.activities}
     });
     builder.addCase(fetchReports.rejected, (state, action) => {
-      state.loading = false;
-      state.reports = [];
-      state.error = action.error || "Something went wrong!";
+      return {...state,loading :false,error :action.error || "Something went wrong!",reports:[]}
     });
   },
 });
 
-export const {resetReports} = reportSlice.actions;
+export const {resetReports,calculateDefaultScore,calculateInitiativeScore} = reportSlice.actions;
 
 export default reportSlice.reducer;
