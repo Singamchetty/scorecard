@@ -2,11 +2,14 @@ import React from "react";
 import moment from "moment";
 
 function AccordionTable({ headers, data }) {
-  const getDate = (utc) => {
-    const utcDate = new Date(utc);
-    const localTime = utcDate.toLocaleString();
-    return moment(localTime).format("DD-MM-YY");
-  };
+
+    
+    const getDate = (utc) => {
+        // const utcDate = new Date(utc);
+        // const localTime = utcDate.toLocaleString();
+        // const someday = moment(utc);
+        return moment(utc).format('DD-MM-YYYY');
+    }
   return (
     <div className="p-4">
       <table className="border-2 border-collapse w-full border-[#B7B7B7]">
@@ -30,11 +33,7 @@ function AccordionTable({ headers, data }) {
                     header.id === "aName" ? "[#D9D9D9]" : "white"
                   }`}
                 >
-                  {header?.id === "recorded_date" ? (
-                    <span>{getDate(item[header?.id])}</span>
-                  ) : (
-                    <span>{item[header?.id]}</span>
-                  )}
+                  {header?.id === 'recorded_date' ? <span>{getDate(item[header?.id])}</span> : <span>{item[header?.id]}</span>}
                 </td>
               ))}
             </tr>
