@@ -40,12 +40,9 @@ export default function MyModal({ visible, onClose ,type}) {
   useEffect(()=>{handleScoreChange(activityData.score)},[scoreType])
 
   useEffect(() => {
-    console.log("activityData changed:", activityData);
-    if (activityData.aName !== "" && activityData.aId !== "" && activityData.comments !== "" && activityData.score != 0 || -0) {
-      console.log("All conditions met. Enabling submit button.");
+    if (activityData.aName !== "" && activityData.aId !== ""  && activityData.score != 0 || -0) {
       setEnableSubmit(true);
     } else {
-      console.log("Some conditions not met. Disabling submit button.");
       setEnableSubmit(false);
     }
   }, [activityData]);
