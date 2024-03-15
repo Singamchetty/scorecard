@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchReportees } from "../../redux/reducers/reporteesSlice";
 import { fetchUser } from "../../redux/reducers/userSlice";
@@ -30,16 +30,38 @@ function Dashboard() {
   }, [id]);
 
   const headers = [
-    {title: "Employee Name", id:"empName"},
-    {title: "Emp.Id", id: "empId"},
-    {title: "Designation", id: 'designation'},
-    {title: "score", id:"score"},
-    {title: "Action", id:"action"},
-
+    {
+      title: "Employee Name", 
+      id:"empName",
+      render: (value) => <span className="flex items-center"><img className="pr-2" src="/man.png" width="30px" height="30px"/>{value}</span>
+    },
+    {
+      title: "Emp.Id", 
+      id: "empId"
+    },
+    {
+      title: "Designation", 
+      id: 'designation'
+    },
+    {
+      title: "score", 
+      id:"score",
+      render: (value) => <div className="bg-blue-200 rounded-md text-center p-[4px]">{value}</div>
+    },
+    {
+      title: "Email", 
+      id: 'empEmail'
+    },
+    {
+      title: "Action", 
+      id:"empId",
+      render: (value) => <Link to={`/${value}/reports`}><button className="bg-blue-400 text-white rounded-md px-3 py-1">View</button></Link>
+    },
   ]
+
   return (
      <div>
-        <Table headers={headers} data={reportees} isView={true}/>    
+        <Table headers={headers} data={reportees} maxHeight={88}/>    
      </div>
   )
 }

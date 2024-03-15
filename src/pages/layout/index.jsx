@@ -1,8 +1,10 @@
 import React from 'react'
 import Header from '../../components/header';
 import Sidebar from '../../components/sidebar';
+import LeftSidebar from '../../components/leftSidebar';
 
 function Layout({children}) {
+    const url = window.location.href;
     return (
         <div>
             <Header/>
@@ -11,6 +13,7 @@ function Layout({children}) {
                 <div className="bg-[#E9EDEE] w-full" style={{height:"88vh"}}>
                     {children}
                 </div>
+                {url.includes('/reports') && <LeftSidebar/>}
             </div>
         </div>
     )

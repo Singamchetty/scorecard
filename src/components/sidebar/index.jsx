@@ -1,41 +1,64 @@
 import React from "react";
-import {Link} from 'react-router-dom';
+import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
-import { useParams } from "react-router-dom";
-
 
 function Sidebar() {
-    const user = useSelector((state) => state.userDetails.user);
-    const reportees = useSelector((state) => state.reportees.reportees);
-    const url = window.location.href;
-    const {id} = useParams()
+  const user = useSelector((state) => state.userDetails.user);
 
   return (
-    <div className="w-[30%] flex items-center flex-col px-4">
-      <div>
-        <img src="/generic-male-avatar-rectangular.jpg" width="130px" height="130px" />
-      </div>
-      <div className="flex items-center flex-col mt-5">
-        <p className="text-lg font-semibold">{user.empName}</p>
-        <p>{user.designation}</p>
-      </div>
-      {
-        url.includes('/reports') && <div className="mt-5 border-t-2 border-gray-300 w-[-webkit-fill-available] flex flex-col ">
-        <p className="text-xl text-blue-400 font-semibold pl-4 mt-3">My Project Allocations</p>
-        <div className="p-2 bg-[#E9EDEE] mt-4 max-h-[49vh] overflow-auto">
-          {
-            reportees?.map(({empName, score, empId}) => (
-                <Link to={`/${empId}/reports`} className={`flex items-center bg-${Number(id) === empId ? "indigo-400" : "white"} p-2 justify-between mb-1 w-full`} key={empId}>
-                    <img src="/man.png" width="18px" height="18px" />
-                    <p className="w-[80%] text-left">{empName}</p>
-                    <p className="w-[10%] bg-blue-200 rounded-sm text-center">{score}</p>
-                </Link>
-            ))
-          }
-        </div>
-      </div>
-      }
-
+    <div className="w-[20%] flex items-center flex-col">
+      <nav
+        class="hs-accordion-group p-6 w-full flex flex-col flex-wrap"
+        data-hs-accordion-always-open
+      >
+        <ul class="space-y-1.5">
+          <li>
+            <Link
+              class={`flex items-center gap-x-3.5 py-2 px-2.5 bg-gray-100 text-sm text-slate-700 rounded-lg hover:bg-gray-100 dark:bg-gray-900 dark:text-white dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600`}
+              to={`/${user?.empId}/dashboard`}
+            >
+              <svg
+                class="size-4"
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+                <polyline points="9 22 9 12 15 12 15 22" />
+              </svg>
+              Dashboard
+            </Link>
+          </li>
+          <li>
+            <Link
+              class={`flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-slate-700 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-900 dark:text-slate-400 dark:hover:text-slate-300 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600`}
+            >
+              <svg
+                class="size-4"
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z" />
+                <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z" />
+              </svg>
+              Reports
+            </Link>
+          </li>
+        </ul>
+      </nav>
     </div>
   );
 }

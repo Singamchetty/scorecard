@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import AccordionTable from "./accordionTable";
+import Table from "../table";
+import moment from "moment";
 import ModalButton from "../modal/modalButton";
 import { useSelector ,useDispatch} from "react-redux";
 import { useEffect } from "react";
@@ -20,8 +21,8 @@ function Accordion({ title, data ,handleAddActivity}) {
 
   const headers = [
     { title: "Name", id: "aName", width: "30%" },
-    { title: "Date", id: "recorded_date", width: "20%" },
-    { title: "Score", id: "score", width: "10%" },
+    { title: "Date", id: "recorded_date", width: "20%", render: (value) => moment(value).format('DD-MM-YYYY') },
+    { title: "Score", id: "score", width: "10%", render: (value) => <div className="w-[35px] bg-blue-200 rounded-md text-center p-[4px]">{value}</div> },
     { title: "Comments", id: "comments", width: "40%" },
   ];
   return (
@@ -58,7 +59,7 @@ function Accordion({ title, data ,handleAddActivity}) {
         className={`${!open && "hidden"} mt-2`}
         aria-labelledby="accordion-collapse-heading-2"
       >
-        <AccordionTable headers={headers} data={data} />
+         <Table headers={headers} data={data} maxHeight={30}/>
         <div className="justify-end mr-4 flex align-items-center justify-items-center">
             <ModalButton type={`${title === "Default Activities:" ? "default" : "initiative"}`} handleAddActivity={handleAddActivity}/>
         </div>

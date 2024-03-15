@@ -17,8 +17,7 @@ const DateRangePicker = ({getReports}) => {
   }
 
   useEffect(()=>{
-     console.log(value.startDate) 
-    getReports({startDate:value.startDate?value.startDate:null,endDate:value.endDate?value.endDate:null} )
+    getReports(value.startDate?value.startDate:null,value.endDate?value.endDate:null )
   },[value])
 
   return (
