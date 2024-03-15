@@ -7,7 +7,6 @@ export default function MyModal({ visible, onClose ,type}) {
   const [activitiesList, setActivitiesList] = useState([])
   const [enableSubmit,setEnableSubmit]=useState(false)
   const [scoreType,setScoreType]=useState(1)
-  // const [score,setScore]=useState(0)
   const [activityData,setActivityData]=useState({aName:"",aId:"",type:type,score:0,comments:""})
 
   const  getActivitysList= async()=>{
@@ -40,12 +39,9 @@ export default function MyModal({ visible, onClose ,type}) {
   useEffect(()=>{handleScoreChange(activityData.score)},[scoreType])
 
   useEffect(() => {
-    console.log("activityData changed:", activityData);
     if (activityData.aName !== "" && activityData.aId !== "" && activityData.comments !== "" && activityData.score != 0 || -0) {
-      console.log("All conditions met. Enabling submit button.");
       setEnableSubmit(true);
     } else {
-      console.log("Some conditions not met. Disabling submit button.");
       setEnableSubmit(false);
     }
   }, [activityData]);
