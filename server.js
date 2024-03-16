@@ -19,15 +19,15 @@ connectToDb((err) => {
 });
 
 //to get all the employees data
-// app.get("/employees", (req, res) => {
-//   db.collection("employees")
-//     .find()
-//     .toArray()
-//     .then((result) => {
-//       res.send(result);
-//     })
-//     .catch((error) => res.status(401).send(error));
-// });
+app.get("/employees", (req, res) => {
+  db.collection("employees")
+    .find()
+    .toArray()
+    .then((result) => {
+      res.send(result);
+    })
+    .catch((error) => res.status(401).send(error));
+});
 
 //to get only individual employee data
 app.get("/employee/:id", (req, res) => {
@@ -44,6 +44,8 @@ app.get("/employee/:id", (req, res) => {
 });
 
 //login Check
+//require empId  
+//example {empId:41689}
 app.post('/login', async (req, res) => {
   const { empId } = req.body;
   try {
@@ -58,7 +60,7 @@ app.post('/login', async (req, res) => {
     }
   }
   catch (error) {
-    res.status(500).json({ error: 'Internal server error', details: error.message });
+    res.status(401).json({ error: 'Internal server error', details: error.message });
   }
 });
 
@@ -130,7 +132,7 @@ app.post("/getreportees", (req, res) => {
 //Example of post Data
 /*
 {
-    "empId":10000,
+    "empId":41689,
     "data":{
         "aName":"Approval of timesheet",
         "aId":"D001",
@@ -140,61 +142,128 @@ app.post("/getreportees", (req, res) => {
     }
 }
 */
-app.post('/createActivity', (req, res) => {
+// app.post('/createActivity',async (req, res) => {
+//   const empId = req.body.empId;
+//   if (!empId) {
+//     res.status(401).json({ "message": "Employee id is missing" });
+//     return
+//   } else {
+//     let { data } = req.body;
+
+//     //data validation
+//     if (!_.get(data, "aName", "") || !_.get(data, "aId", "") || !_.get(data, "type", "") || !_.get(data, "score", "")) {
+//       res.status(401).json({ "error": "Invalid Activity data" });
+//       return;
+//     }
+
+//     if (data.score === (0 || -0) || data.score > 5 || data.score < -5) {
+//       res.status(401).json({ "message": "Score Should be between 1 to 5 or -1 to -5 only" });
+//       return
+//     }
+//     if(data["comments"]===undefined){
+//       res.status(401).json({ "message": "need comments field" });
+//       return
+//     }
+
+//     data = { ...data, "recorded_date": new Date() };
+//     data = Object.assign(data, { "_id": new ObjectId() })
+
+//     let query = { empId: empId };
+//     await db.collection('performance_master').findOne(query).then(async(result) => {
+//       if (result) {
+//        await db.collection('performance_master').updateOne(query, { $push: { "activities": data } })
+//           .then(async (updateRes) => {
+//             await calculateAverage(query);
+//             res.status(201).json({ "reuslt": updateRes });
+
+//           })
+//           .catch((error) => {
+//             res.json({ "error": error });
+//           });
+//       } else {
+//         let insertData = { empId: empId, activities: [] };
+
+//         insertData.activities.push(data);
+//        await db.collection('performance_master').insertOne(insertData).then(async (result) => {
+//           await calculateAverage(query);
+//           res.status(201).json({ "result": result });
+
+//         }).catch((error) => {
+//           res.json({ "message": error })
+
+//         })
+//       }
+//     }).catch((error) => {
+//       console.log(error)
+//       res.send(query)
+//     })
+
+
+//   }
+// })
+
+app.post('/createActivity', async (req, res) => {
   const empId = req.body.empId;
   if (!empId) {
     res.status(401).json({ "message": "Employee id is missing" });
-    return
+    return;
   } else {
     let { data } = req.body;
 
-    //data validation
-    if (!_.get(data, "aName", "") || !_.get(data, "aId", "") || !_.get(data, "type", "") || !_.get(data, "score", "",) || !_.get(data, "comments", "")) {
+    // Data validation
+    if (
+      data === undefined ||
+      typeof data.aName !== 'string' || data.aName.trim() === '' ||
+      typeof data.aId !== 'string' || data.aId.trim() === '' ||
+      typeof data.type !== 'string' || data.type.trim() === '' ||
+      typeof data.score !== 'number'
+    ) {
       res.status(401).json({ "error": "Invalid Activity data" });
       return;
     }
 
-    if (data.score === (0 || -0) || data.score > 5 || data.score < -5) {
-      res.status(401).json({ "message": "Score Should be between 1 to 5 or -1 to -5 only" });
-      return
+    if (data.score === 0 || data.score === -0 || data.score > 5 || data.score < -5) {
+      res.status(401).json({ "message": "Score should be between 1 to 5 or -1 to -5 only" });
+      return;
+    }
+
+    if (data.comments === undefined) {
+      res.status(401).json({ "message": "Need comments field" });
+      return;
     }
 
     data = { ...data, "recorded_date": new Date() };
-    data = Object.assign(data, { "_id": new ObjectId() })
+    data = Object.assign(data, { "_id": new ObjectId() });
 
     let query = { empId: empId };
-    db.collection('performance_master').findOne(query).then((result) => {
+    await db.collection('performance_master').findOne(query).then(async (result) => {
       if (result) {
-        db.collection('performance_master').updateOne(query, { $push: { "activities": data } })
+        await db.collection('performance_master').updateOne(query, { $push: { "activities": data } })
           .then(async (updateRes) => {
-            await calculateAverage(query);
-            res.status(201).json({ "reuslt": updateRes });
-
+            await calculateAverage(result); // Pass result instead of query
+            res.status(201).json({ "result": updateRes });
           })
           .catch((error) => {
             res.json({ "error": error });
           });
       } else {
         let insertData = { empId: empId, activities: [] };
-
         insertData.activities.push(data);
-        db.collection('performance_master').insertOne(insertData).then(async (result) => {
-          await calculateAverage(query);
+        await db.collection('performance_master').insertOne(insertData).then(async (result) => {
+          await calculateAverage(result); // Pass result instead of query
           res.status(201).json({ "result": result });
-
         }).catch((error) => {
-          res.json({ "message": error })
-
-        })
+          res.json({ "message": error });
+        });
       }
     }).catch((error) => {
-      console.log(error)
-      res.send(query)
-    })
-
-
+      console.log(error);
+      res.send(error);
+    });
   }
-})
+});
+
+
 
 //calculating average score and updating into employees data
 const calculateAverage = (query) => {
