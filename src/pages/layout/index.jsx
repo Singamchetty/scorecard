@@ -13,7 +13,7 @@ function Layout({children}) {
                 <div className="bg-[#E9EDEE] w-full" style={{height:"88vh"}}>
                     {children}
                 </div>
-                {url.includes('/reports') && <LeftSidebar/>}
+                {url.includes('/viewreportee') && <LeftSidebar/>}
             </div>
         </div>
     )

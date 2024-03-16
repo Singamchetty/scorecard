@@ -1,15 +1,14 @@
 import React, { useEffect } from "react";
-import { useParams, Link } from "react-router-dom";
+import { Link ,useNavigate} from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchReportees } from "../../redux/reducers/reporteesSlice";
-import { fetchUser } from "../../redux/reducers/userSlice";
 import Table from '../../components/table';
 
 function Dashboard() {
   const dispatch = useDispatch();
+  const navigate=useNavigate();
   const reportees = useSelector((state) => state.reportees.reportees);
   const userDetails = useSelector((state) => state.userDetails);
-  const { id } = useParams();
   const reporteIds = userDetails.user.reportees || [];
 
   useEffect(() => {
@@ -25,9 +24,12 @@ function Dashboard() {
   }, [reporteIds]);
 
   useEffect(() => {
-    if(id !== undefined ||null)
-    dispatch(fetchUser(id));
-  }, [id]);
+    if(userDetails.user !== null){
+       navigate("/dashboard")
+    }else{
+      navigate("/")
+    }
+  }, [userDetails]);
 
   const headers = [
     {
@@ -55,7 +57,7 @@ function Dashboard() {
     {
       title: "Action", 
       id:"empId",
-      render: (value) => <Link to={`/${value}/reports`}><button className="bg-blue-400 text-white rounded-md px-3 py-1">View</button></Link>
+      render: (value) => <Link to={`/viewreportee/${value}`}><button className="bg-blue-400 text-white rounded-md px-3 py-1">View</button></Link>
     },
   ]
 

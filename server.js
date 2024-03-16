@@ -43,6 +43,26 @@ app.get("/employee/:id", (req, res) => {
     .catch((error) => res.status(401).send(error));
 });
 
+//login Check
+app.post('/login', async (req, res) => {
+  const { empId} = req.body;
+  try {
+    const user = await db.collection('employees').findOne({empId:empId},{ projection: { _id: false } })
+    if (!user) {
+      return res.status(401).json({ error: 'Authentication failed', message: 'User not found' });
+    }
+    if (empId === user.empId) { 
+      res.json({ message: 'Login successful', user });
+    } else {
+      res.status(401).json({ error: 'Authentication failed', message: 'Email and password do not match' });
+    }
+  }
+  catch (error) {
+    res.status(500).json({ error: 'Internal server error', details: error.message });
+  }
+});
+
+
 //to get activities to display
 app.get("/activities", (req, res) => {
   db.collection("activities_master")
@@ -186,7 +206,7 @@ const calculateAverage = (query) => {
           : (averageScore = score / activitiesLength);
 
           if (averageScore % 1 !== 0) {
-            averageScore = averageScore.toFixed(1);
+            averageScore = Number(averageScore).toFixed(1);
           }
           
         db.collection("employees")

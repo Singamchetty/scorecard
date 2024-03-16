@@ -3,7 +3,7 @@ import { base_url } from "../../utils/constants";
 import axios from "axios";
 
 const initialState = {
-  user: {},
+  user: null,
   loading: false,
   error: null,
 };
@@ -20,6 +20,9 @@ const userSlice = createSlice({
   reducers: {
     resetUser:() => {
       return initialState
+    },
+    loginUser:(state,action)=>{
+      return {...state,user:action.payload}
     }
   },
   extraReducers: (builder) => {
@@ -41,6 +44,6 @@ const userSlice = createSlice({
   },
 });
 
-export const {resetUser} = userSlice.actions;
+export const {resetUser,loginUser} = userSlice.actions;
 
 export default userSlice.reducer;

@@ -1,21 +1,40 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import axios from 'axios';
+import { base_url } from "../../utils/constants";
+import { loginUser } from "../../redux/reducers/userSlice";
+import {useDispatch} from 'react-redux'
 
 function Home() {
   const navigate = useNavigate();
+  const dispatch=useDispatch()
   const [id, setId] = useState(null);
+  const [errorMsg,setErrorMsg]=useState("")
+ 
 
   const handleNavigate = () => {
-    navigate(`${id}/dashboard`);
+    if(id!==null){
+      axios.post(`${base_url}/login`,{empId:Number(id)})
+      .then((res) => {
+        dispatch(loginUser(res.data.user))
+         navigate(`/dashboard`);
+      })
+      .catch((error)=>{  
+        setErrorMsg("Not Authorized");
+      })
+    }else{
+      navigate(`/`);
+    }
+
   };
 
   return (
     <div className="container py-10 px-10 mx-0 min-w-full h-screen flex items-center justify-center bg-blue-100 ">
-      <div class="">
-      <h1 class="text-4xl font-extrabold leading-none tracking-tight   md:text-5xl lg:text-6xl text-purple-900 mb-10 ">SCORE  CARD</h1>
+      <div className="">
+      <h1 className="text-4xl font-extrabold leading-none tracking-tight   md:text-5xl lg:text-6xl text-purple-900 mb-10 ">SCORE  CARD</h1>
       <div className="max-w-sm p-10 bg-white border border-gray-400 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 ">
         <label
-          for="email"
+          htmlFor="email"
           className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
         >
           Employee Id
@@ -28,6 +47,11 @@ function Home() {
           required
           onChange={(e) => setId(e.target.value)}
         />
+       <div>
+       {
+        errorMsg!==""? <span>{errorMsg}</span>:null
+       }
+       </div>
         <button
           className="bg-purple-900 text-white disabled:bg-purple-900 hover:bg-blue-400 font-bold py-2 px-4 mt-6  rounded text-center ml-15"
           onClick={handleNavigate}
