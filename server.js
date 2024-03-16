@@ -35,8 +35,8 @@ app.get("/employee/:id", (req, res) => {
   db.collection("employees")
     .findOne({ empId: Id }, { projection: { _id: false } })
     .then((result) => {
-      if(!result)
-      res.status(404).json({ message: "Employee not found" });
+      if (!result)
+        res.status(404).json({ message: "Employee not found" });
       else
         res.send(result);
     })
@@ -45,13 +45,13 @@ app.get("/employee/:id", (req, res) => {
 
 //login Check
 app.post('/login', async (req, res) => {
-  const { empId} = req.body;
+  const { empId } = req.body;
   try {
-    const user = await db.collection('employees').findOne({empId:empId},{ projection: { _id: false } })
+    const user = await db.collection('employees').findOne({ empId: empId }, { projection: { _id: false } })
     if (!user) {
       return res.status(401).json({ error: 'Authentication failed', message: 'User not found' });
     }
-    if (empId === user.empId) { 
+    if (empId === user.empId) {
       res.json({ message: 'Login successful', user });
     } else {
       res.status(401).json({ error: 'Authentication failed', message: 'Email and password do not match' });
@@ -118,9 +118,9 @@ app.post("/getreportees", (req, res) => {
     .toArray()
     .then((result) => {
       if (result && result.length) {
-        res.json({ ...result[0] });
+        res.status(201).json({ ...result[0] });
       } else {
-        res.json({ data: [], totalCount: { count: 0 } });
+        res.status(404).json({ data: [], totalCount: { count: 0 } });
       }
     })
     .catch((error) => res.status(401).send(error));
@@ -140,55 +140,60 @@ app.post("/getreportees", (req, res) => {
     }
 }
 */
-app.post('/createActivity',(req,res)=>{
-    const empId = req.body.empId;
-    if(!empId){
-        res.status(401).json({"message":"Employee id is missing"});
-        return
-    }else{
-        let {data} = req.body;
-        data = {...data, "recorded_date": new Date() };
-        data = Object.assign(data, {"_id":new ObjectId()})   
-        
-        if(!_.get(data,"aName", "") || !_.get(data,"aId", "")  ||  !_.get(data,"type", "") ||  !_.get(data,"score", "")  ){
-            res.json({"error":"Invalied Activity data"});
-            return;
-           
-        }  
-        let query = {empId:empId };
-        db.collection('performance_master').findOne(query).then( (result)=>{                      
-            if(result){
-                db.collection('performance_master').updateOne(query,{ $push: { "activities":data  } })
-                .then(async (updateRes)=>{
-                    await calculateAverage(query);
-                    res.json({"reuslt":updateRes});
-                    
-                })
-                .catch((error)=>{
-                    res.json({"error":error});
-                });             
-            }else{
-                let insertData =  { empId:empId, activities:[]}; 
-                          
-                insertData.activities.push(data);
-                db.collection('performance_master').insertOne(insertData).then(async (result)=>{
-                    await calculateAverage(query);
-                    res.json({"result":result});
+app.post('/createActivity', (req, res) => {
+  const empId = req.body.empId;
+  if (!empId) {
+    res.status(401).json({ "message": "Employee id is missing" });
+    return
+  } else {
+    let { data } = req.body;
 
-                }).catch((error)=>{
-                    res.json({"message":error})
-
-                })               
-            } 
-        }).catch((error)=>{
-            console.log(error)
-           res.send(query)
-        })
-
-
+    //data validation
+    if (!_.get(data, "aName", "") || !_.get(data, "aId", "") || !_.get(data, "type", "") || !_.get(data, "score", "",) || !_.get(data, "comments", "")) {
+      res.status(401).json({ "error": "Invalid Activity data" });
+      return;
     }
 
+    if (data.score === (0 || -0) || data.score > 5 || data.score < -5) {
+      res.status(401).json({ "message": "Score Should be between 1 to 5 or -1 to -5 only" });
+      return
+    }
 
+    data = { ...data, "recorded_date": new Date() };
+    data = Object.assign(data, { "_id": new ObjectId() })
+
+    let query = { empId: empId };
+    db.collection('performance_master').findOne(query).then((result) => {
+      if (result) {
+        db.collection('performance_master').updateOne(query, { $push: { "activities": data } })
+          .then(async (updateRes) => {
+            await calculateAverage(query);
+            res.status(201).json({ "reuslt": updateRes });
+
+          })
+          .catch((error) => {
+            res.json({ "error": error });
+          });
+      } else {
+        let insertData = { empId: empId, activities: [] };
+
+        insertData.activities.push(data);
+        db.collection('performance_master').insertOne(insertData).then(async (result) => {
+          await calculateAverage(query);
+          res.status(201).json({ "result": result });
+
+        }).catch((error) => {
+          res.json({ "message": error })
+
+        })
+      }
+    }).catch((error) => {
+      console.log(error)
+      res.send(query)
+    })
+
+
+  }
 })
 
 //calculating average score and updating into employees data
@@ -199,18 +204,18 @@ const calculateAverage = (query) => {
       .then((result) => {
         let activitiesList = result.activities;
         let activitiesLength = activitiesList.length;
-        let score = activitiesList.reduce((acc, curr) => { return acc + curr.score}, 0);
+        let score = activitiesList.reduce((acc, curr) => { return acc + curr.score }, 0);
         let averageScore = 0;
         score < 0
           ? (averageScore = 0)
           : (averageScore = score / activitiesLength);
 
-          if (averageScore % 1 !== 0) {
-            averageScore = Number(averageScore).toFixed(1);
-          }
-          
+        if (averageScore % 1 !== 0) {
+          averageScore = averageScore.toFixed(1);
+        }
+
         db.collection("employees")
-          .updateOne(query, { $set: { score: averageScore } })
+          .updateOne(query, { $set: { score: Number(averageScore) } })
           .then((result) => {
             res(result);
           })
@@ -232,19 +237,19 @@ const calculateAverage = (query) => {
 */
 app.post("/getActivities", (req, res) => {
   let { empId, fromDate, toDate, today } = req.body;
-  if (!empId || typeof empId=="string") {
-    res.status(401).json({ message: "Employee id is missing/ EmpId should be string only" });
+  if (!empId || typeof empId == "string") {
+    res.status(401).json({ message: "Employee id is missing / EmpId should be string only" });
     return;
   } else {
     let query = {
       empId: empId,
     };
     if (fromDate && toDate) {
-        fromDate =  new Date(fromDate)
-        toDate = new Date(toDate);
-        toDate.setHours(23);
-        toDate.setMinutes(59);
-        toDate.setSeconds(59);
+      fromDate = new Date(fromDate)
+      toDate = new Date(toDate);
+      toDate.setHours(23);
+      toDate.setMinutes(59);
+      toDate.setSeconds(59);
       query["activities.recorded_date"] = {
         $gte: new Date(fromDate),
         $lte: new Date(toDate),
@@ -259,11 +264,10 @@ app.post("/getActivities", (req, res) => {
     db.collection("performance_master")
       .findOne(query)
       .then((results) => {
-        res.json(results);
+        res.status(201).json(results);
       })
       .catch((error) => {
-        console.error("Error fetching data:", error);
-        res.status(500).json({ message: "Error fetching data" });
+        res.status(401).json({ message: "Error fetching data" }, error);
       });
   }
 });
