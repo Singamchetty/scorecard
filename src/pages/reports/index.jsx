@@ -64,16 +64,16 @@ function Reports() {
   
     }
 
-  const handleAddActivity = (activityData) => {
+  const handleAddActivity = async(activityData) => {
     if (id) {
       let newData = {
         "empId": empId,
         "data": activityData
       }
-      axios.post(`${base_url}/createActivity`, newData)
-        .then((result) => {
-          getReports()
-          fetchLatestReporteesData()
+      await axios.post(`${base_url}/createActivity`, newData)
+        .then(async(result) => {
+          await getReports()
+         await fetchLatestReporteesData()
         })
     } else {
       alert("Please login")
