@@ -19,8 +19,8 @@ connectToDb((err) => {
 });
 
 //to get all the employees data
-app.get("/employees", (req, res) => {
-  db.collection("employees")
+app.get("/employees", async(req, res) => {
+  await db.collection("employees")
     .find()
     .toArray()
     .then((result) => {
@@ -30,9 +30,9 @@ app.get("/employees", (req, res) => {
 });
 
 //to get only individual employee data
-app.get("/employee/:id", (req, res) => {
+app.get("/employee/:id", async(req, res) => {
   let Id = parseInt(req.params.id);
-  db.collection("employees")
+  await db.collection("employees")
     .findOne({ empId: Id }, { projection: { _id: false } })
     .then((result) => {
       if (!result)
@@ -44,8 +44,6 @@ app.get("/employee/:id", (req, res) => {
 });
 
 //login Check
-//require empId  
-//example {empId:41689}
 app.post('/login', async (req, res) => {
   const { empId } = req.body;
   try {
@@ -66,8 +64,8 @@ app.post('/login', async (req, res) => {
 
 
 //to get activities to display
-app.get("/activities", (req, res) => {
-  db.collection("activities_master")
+app.get("/activities", async(req, res) => {
+  await db.collection("activities_master")
     .find()
     .toArray()
     .then((result) => {
@@ -84,7 +82,7 @@ Example of post Data
     ,"page":1,"perPage":10,
     "searchText":"eng"
 }*/
-app.post("/getreportees", (req, res) => {
+app.post("/getreportees",async (req, res) => {
   let reporteesArray = req.body.reportees || [];
   let sortBy = req.body.sort ? req.body.sort.type || "_id" : "_id";
   let sortByOrder = req.body.sort ? parseInt(req.body.sort.order) || 1 : 1;
@@ -115,7 +113,7 @@ app.post("/getreportees", (req, res) => {
   };
   aggre.push({ $facet: facet });
   aggre.push({ $unwind: { path: "$totalCount" } });
-  db.collection("employees")
+  await db.collection("employees")
     .aggregate(aggre)
     .toArray()
     .then((result) => {
@@ -132,7 +130,7 @@ app.post("/getreportees", (req, res) => {
 //Example of post Data
 /*
 {
-    "empId":41689,
+    "empId":10000,
     "data":{
         "aName":"Approval of timesheet",
         "aId":"D001",
@@ -142,135 +140,72 @@ app.post("/getreportees", (req, res) => {
     }
 }
 */
-// app.post('/createActivity',async (req, res) => {
-//   const empId = req.body.empId;
-//   if (!empId) {
-//     res.status(401).json({ "message": "Employee id is missing" });
-//     return
-//   } else {
-//     let { data } = req.body;
-
-//     //data validation
-//     if (!_.get(data, "aName", "") || !_.get(data, "aId", "") || !_.get(data, "type", "") || !_.get(data, "score", "")) {
-//       res.status(401).json({ "error": "Invalid Activity data" });
-//       return;
-//     }
-
-//     if (data.score === (0 || -0) || data.score > 5 || data.score < -5) {
-//       res.status(401).json({ "message": "Score Should be between 1 to 5 or -1 to -5 only" });
-//       return
-//     }
-//     if(data["comments"]===undefined){
-//       res.status(401).json({ "message": "need comments field" });
-//       return
-//     }
-
-//     data = { ...data, "recorded_date": new Date() };
-//     data = Object.assign(data, { "_id": new ObjectId() })
-
-//     let query = { empId: empId };
-//     await db.collection('performance_master').findOne(query).then(async(result) => {
-//       if (result) {
-//        await db.collection('performance_master').updateOne(query, { $push: { "activities": data } })
-//           .then(async (updateRes) => {
-//             await calculateAverage(query);
-//             res.status(201).json({ "reuslt": updateRes });
-
-//           })
-//           .catch((error) => {
-//             res.json({ "error": error });
-//           });
-//       } else {
-//         let insertData = { empId: empId, activities: [] };
-
-//         insertData.activities.push(data);
-//        await db.collection('performance_master').insertOne(insertData).then(async (result) => {
-//           await calculateAverage(query);
-//           res.status(201).json({ "result": result });
-
-//         }).catch((error) => {
-//           res.json({ "message": error })
-
-//         })
-//       }
-//     }).catch((error) => {
-//       console.log(error)
-//       res.send(query)
-//     })
-
-
-//   }
-// })
-
-app.post('/createActivity', async (req, res) => {
+app.post('/createActivity',async (req, res) => {
   const empId = req.body.empId;
   if (!empId) {
     res.status(401).json({ "message": "Employee id is missing" });
-    return;
+    return
   } else {
     let { data } = req.body;
 
-    // Data validation
-    if (
-      data === undefined ||
-      typeof data.aName !== 'string' || data.aName.trim() === '' ||
-      typeof data.aId !== 'string' || data.aId.trim() === '' ||
-      typeof data.type !== 'string' || data.type.trim() === '' ||
-      typeof data.score !== 'number'
-    ) {
+    //data validation
+    if (!_.get(data, "aName", "") || !_.get(data, "aId", "") || !_.get(data, "type", "") || !_.get(data, "score", "")) {
       res.status(401).json({ "error": "Invalid Activity data" });
       return;
     }
 
-    if (data.score === 0 || data.score === -0 || data.score > 5 || data.score < -5) {
-      res.status(401).json({ "message": "Score should be between 1 to 5 or -1 to -5 only" });
-      return;
+    if (data.score === (0 || -0) || data.score > 5 || data.score < -5) {
+      res.status(401).json({ "message": "Score Should be between 1 to 5 or -1 to -5 only" });
+      return
     }
-
-    if (data.comments === undefined) {
-      res.status(401).json({ "message": "Need comments field" });
-      return;
+    if(data["comments"]===undefined){
+      res.status(401).json({ "message": "need comments field" });
+      return
     }
 
     data = { ...data, "recorded_date": new Date() };
-    data = Object.assign(data, { "_id": new ObjectId() });
+    data = Object.assign(data, { "_id": new ObjectId() })
 
     let query = { empId: empId };
-    await db.collection('performance_master').findOne(query).then(async (result) => {
+    await db.collection('performance_master').findOne(query).then(async(result) => {
       if (result) {
-        await db.collection('performance_master').updateOne(query, { $push: { "activities": data } })
+       await db.collection('performance_master').updateOne(query, { $push: { "activities": data } })
           .then(async (updateRes) => {
-            await calculateAverage(result); // Pass result instead of query
-            res.status(201).json({ "result": updateRes });
+            await calculateAverage(query);
+            res.status(201).json({ "reuslt": updateRes });
+
           })
           .catch((error) => {
             res.json({ "error": error });
           });
       } else {
         let insertData = { empId: empId, activities: [] };
+
         insertData.activities.push(data);
-        await db.collection('performance_master').insertOne(insertData).then(async (result) => {
-          await calculateAverage(result); // Pass result instead of query
+       await db.collection('performance_master').insertOne(insertData).then(async (result) => {
+          await calculateAverage(query);
           res.status(201).json({ "result": result });
+
         }).catch((error) => {
-          res.json({ "message": error });
-        });
+          res.json({ "message": error })
+
+        })
       }
     }).catch((error) => {
-      console.log(error);
-      res.send(error);
-    });
+      console.log(error)
+      res.send(query)
+    })
+
+
   }
-});
-
-
+})
 
 //calculating average score and updating into employees data
-const calculateAverage = (query) => {
-  return new Promise((res, rej) => {
-    db.collection("performance_master")
+const calculateAverage = async(query) => {
+  return await new Promise(async(res, rej) => {
+    await db.collection("performance_master")
       .findOne(query)
-      .then((result) => {
+      .then(async(result) => {
         let activitiesList = result.activities;
         let activitiesLength = activitiesList.length;
         let score = activitiesList.reduce((acc, curr) => { return acc + curr.score }, 0);
@@ -283,7 +218,7 @@ const calculateAverage = (query) => {
           averageScore = averageScore.toFixed(1);
         }
 
-        db.collection("employees")
+        await db.collection("employees")
           .updateOne(query, { $set: { score: Number(averageScore) } })
           .then((result) => {
             res(result);
@@ -304,7 +239,7 @@ const calculateAverage = (query) => {
     "toDate":"2024-03-14"
 }
 */
-app.post("/getActivities", (req, res) => {
+app.post("/getActivities", async(req, res) => {
   let { empId, fromDate, toDate, today } = req.body;
   if (!empId || typeof empId == "string") {
     res.status(401).json({ message: "Employee id is missing / EmpId should be string only" });
@@ -330,7 +265,7 @@ app.post("/getActivities", (req, res) => {
         $lte: moment().toDate(),
       };
     }
-    db.collection("performance_master")
+    await db.collection("performance_master")
       .findOne(query)
       .then((results) => {
         res.status(201).json(results);

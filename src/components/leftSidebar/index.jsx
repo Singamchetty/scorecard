@@ -2,20 +2,21 @@ import React,{useEffect,useState} from "react";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
+import Loading from "../loading Component/Loading";
 
 function LeftSidebar() {
-    const reportees = useSelector((state) => state.reportees.reportees);
+    const {reportees,loading} = useSelector((state) => state.reportees);
     const {id} = useParams()
-    // const [refresh,setRefresh]=useState(false)
-
-    // useEffect(()=>{   setRefresh(!refresh)},[reportees])
+   
   return (
 
       <div className="mt-2  w-[30%] flex flex-col px-[5px]">
         <p className="text-xl text-blue-400 font-semibold pl-4 mt-3">
           My Reportees
         </p>
-        <div className="p-2 bg-[#E9EDEE] mt-4 max-h-[80vh] overflow-auto">
+        {
+          (loading)? <Loading/>:
+          <div className="p-2 bg-[#E9EDEE] mt-4 max-h-[80vh] overflow-auto">
           {reportees?.map(({ empName, score, empId }) => (
             <Link
               to={`/viewreportee/${empId}`}
@@ -32,6 +33,8 @@ function LeftSidebar() {
             </Link>
           ))}
         </div>
+        }
+        
       </div>
   );
 }

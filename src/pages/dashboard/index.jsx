@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Link ,useNavigate} from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchReportees } from "../../redux/reducers/reporteesSlice";
@@ -7,9 +7,10 @@ import Table from '../../components/table';
 function Dashboard() {
   const dispatch = useDispatch();
   const navigate=useNavigate();
-  const reportees = useSelector((state) => state.reportees.reportees);
+  const {reportees,loading} = useSelector((state) => state.reportees);
   const userDetails = useSelector((state) => state.userDetails);
-  const reporteIds = userDetails.user.reportees || [];
+  const [reporteIds,setReporteIds] =useState([]);
+  //  userDetails.user.reportees || [];
 
   useEffect(() => {
     if (reporteIds.length > 0) {
@@ -24,7 +25,8 @@ function Dashboard() {
   }, [reporteIds]);
 
   useEffect(() => {
-    if(userDetails.user !== null){
+    if(userDetails.user){
+      setReporteIds(userDetails.user.reportees)
        navigate("/dashboard")
     }else{
       navigate("/")
@@ -63,7 +65,7 @@ function Dashboard() {
 
   return (
      <div>
-        <Table headers={headers} data={reportees} maxHeight={88}/>    
+        <Table headers={headers} data={reportees} loading={loading} maxHeight={88}/>    
      </div>
   )
 }
