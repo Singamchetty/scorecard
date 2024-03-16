@@ -32,8 +32,8 @@ const reportSlice = createSlice({
     calculateInitiativeScore:(state,action)=>{
       const defaultItems = action.payload?.filter(item => item.type === "initiative");
       const totalDefaultScore = defaultItems?.reduce((acc, curr) => acc+ curr.score, 0);
-      const defaultAvgScore = totalDefaultScore > 0 ? totalDefaultScore / defaultItems.length : 0;
-      return {...state,initiativeAvgScore :defaultAvgScore.toFixed(1)}
+      const initialAvgScore = totalDefaultScore > 0 ? totalDefaultScore / defaultItems.length : 0;
+      return {...state,initiativeAvgScore :initialAvgScore.toFixed(1)}
     },
 
   },

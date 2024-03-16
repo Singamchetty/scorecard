@@ -8,9 +8,8 @@ const initialState = {
   error: null,
 };
 
-export const fetchReportees = createAsyncThunk("getReportees", async (data) => {
-  return await axios
-    .post(`${base_url}/getreportees`, data)
+export const fetchReportees = createAsyncThunk("getreportees", async (data) => {
+  return await axios.post(`${base_url}/getreportees`, data)
     .then((response) => response.data);
 });
 

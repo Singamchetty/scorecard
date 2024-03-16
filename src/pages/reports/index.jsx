@@ -4,17 +4,20 @@ import { useParams } from "react-router";
 import { base_url } from "../../utils/constants";
 import axios from 'axios';
 import { fetchReports } from "../../redux/reducers/reportSlice";
+import { fetchReportees } from "../../redux/reducers/reporteesSlice";
 import Accordion from "../../components/accordion";
-import DateRangePicker from "../../components/DateRangePicker";
+import DateRangePicker from "../../components/dateRangePicker/DateRangePicker";
 
 function Reports() {
+  const dispatch = useDispatch();
   const { id } = useParams();
   const empId = Number(id)
-  const dispatch = useDispatch();
   const reportees = useSelector((state) => state.reportees.reportees);
+  const user=useSelector((state)=>state.userDetails.user)
   const [empDetails, setEmpDetails] = useState(null);
   const { reports } = useSelector((state) => state.reports);
   const [open, setOpen] = useState({"accordianOne":true,"accordianTwo":false});
+
 
 
   /*Example post data
@@ -29,7 +32,7 @@ function Reports() {
       const filtered = Object.groupBy(reports, ({ type }) => type);
       return filtered;
     }
-  }, [reports]);
+  }, [reports,id]);
 
   const handleAccordian=(value)=>{
     switch (value){
@@ -48,6 +51,18 @@ function Reports() {
     const data = { "empId": empId, "fromDate": startDate, "toDate": endDate }
     dispatch(fetchReports(data))
   }
+  const fetchLatestReporteesData=()=>{
+    if(user){
+      const data = {
+        reportees: user.reportees,
+        sort: { type: "empId", order: 1 },
+        page: 1,
+        perPage: 10,
+      };
+      dispatch(fetchReportees(data));
+    }
+  
+    }
 
   const handleAddActivity = (activityData) => {
     if (id) {
@@ -58,6 +73,7 @@ function Reports() {
       axios.post(`${base_url}/createActivity`, newData)
         .then((result) => {
           getReports()
+          fetchLatestReporteesData()
         })
     } else {
       alert("Please login")
@@ -70,18 +86,21 @@ function Reports() {
       setEmpDetails(emp[0]);
       const data = {
         "empId": Number(id),
-        "fromDate": "2024-03-10",
-        "toDate": "2024-03-15"
+        "fromDate": "",
+        "toDate": ""
       }
       dispatch(fetchReports(data))
     }
     return (() => {
       setEmpDetails(null)
     })
-  }, [id]);
+  }, [id,reportees]);
+
+
+
 
   return (
-    <div className="p-4">
+    <div className="p-4" >
       <div className=" bg-white p-3">
         <div className="flex">
           {/* <img src="/generic-male-avatar-rectangular.jpg" width="100px" height="100px" /> */}

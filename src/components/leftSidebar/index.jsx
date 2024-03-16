@@ -1,4 +1,4 @@
-import React from "react";
+import React,{useEffect,useState} from "react";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
@@ -6,6 +6,9 @@ import { useParams } from "react-router-dom";
 function LeftSidebar() {
     const reportees = useSelector((state) => state.reportees.reportees);
     const {id} = useParams()
+    // const [refresh,setRefresh]=useState(false)
+
+    // useEffect(()=>{   setRefresh(!refresh)},[reportees])
   return (
 
       <div className="mt-2  w-[30%] flex flex-col px-[5px]">
@@ -15,9 +18,9 @@ function LeftSidebar() {
         <div className="p-2 bg-[#E9EDEE] mt-4 max-h-[80vh] overflow-auto">
           {reportees?.map(({ empName, score, empId }) => (
             <Link
-              to={`/${empId}/reports`}
+              to={`/viewreportee/${empId}`}
               className={`flex items-center bg-${
-                Number(id) === empId ? "indigo-400" : "white"
+                Number(id) === empId ? "blue-200" : "white"
               } p-2 justify-between mb-1 w-full`}
               key={empId}
             >

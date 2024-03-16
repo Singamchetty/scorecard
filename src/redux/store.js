@@ -1,7 +1,8 @@
-import { configureStore } from '@reduxjs/toolkit';
+import { configureStore,Tuple } from '@reduxjs/toolkit';
 import rootReducer from './reducers/rootReducer';
 import sessionStorage from 'redux-persist/es/storage/session'
 import { persistReducer, persistStore } from 'redux-persist';
+import { thunk } from 'redux-thunk'
 
 
 const persistConfig={
@@ -12,8 +13,9 @@ const persistConfig={
 const persistState=persistReducer(persistConfig, rootReducer)
 
 const store = configureStore({
-  reducer: persistState,
-});
+  reducer: persistState,middleware:()=>new Tuple(thunk)
+},
+);
 
 export const  persistor = persistStore(store);
 
