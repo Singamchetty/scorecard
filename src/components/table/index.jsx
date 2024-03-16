@@ -1,7 +1,8 @@
 import React from "react";
+import Loading from "../loading Component/Loading";
 
-function Table({headers, data, maxHeight}) {
-  
+function Table({headers, data,loading, maxHeight}) {
+  if(loading) return <Loading/>
   return (
     <div className={` overflow-x-auto sm:rounded-lg p-4 max-h-[${maxHeight}vh]`}>
       <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 bg-transparent justify-center border-separate border-spacing-y-2">

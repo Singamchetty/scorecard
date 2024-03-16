@@ -3,7 +3,7 @@ import { base_url } from "../../utils/constants";
 import axios from "axios";
 
 const initialState = {
-  reports: [],
+  reports: null,
   defaultAvgScore:0,
   initiativeAvgScore:0,
   loading: false,
@@ -39,13 +39,13 @@ const reportSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder.addCase(fetchReports.pending, (state) => {
-      return {...state,loading :true,error :"pending"}
+      return {...state,loading :true,error :"loading"}
     });
     builder.addCase(fetchReports.fulfilled, (state, action) => {
       return {...state,loading :false,error :"",reports:action.payload?.activities}
     });
     builder.addCase(fetchReports.rejected, (state, action) => {
-      return {...state,loading :false,error :action.error || "Something went wrong!",reports:[]}
+      return {...state,loading :false,error :action.error || "Something went wrong!",reports:null}
     });
   },
 });

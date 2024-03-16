@@ -6,7 +6,6 @@ const DateRangePicker = ({getReports}) => {
   const [value, setValue] = useState({
     startDate: "",
     endDate: ""
-
   });
 
   const handleStartChange = (newValue) => {
@@ -17,7 +16,9 @@ const DateRangePicker = ({getReports}) => {
   }
 
   useEffect(()=>{
+    if(value.startDate!=="" & value.endDate!==""){
     getReports(value.startDate?value.startDate:null,value.endDate?value.endDate:null )
+    }
   },[value])
 
   return (

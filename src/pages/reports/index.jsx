@@ -15,7 +15,7 @@ function Reports() {
   const reportees = useSelector((state) => state.reportees.reportees);
   const user=useSelector((state)=>state.userDetails.user)
   const [empDetails, setEmpDetails] = useState(null);
-  const { reports } = useSelector((state) => state.reports);
+  const { reports ,loading,error} = useSelector((state) => state.reports);
   const [open, setOpen] = useState({"accordianOne":true,"accordianTwo":false});
 
 
@@ -28,7 +28,7 @@ function Reports() {
 }
 */
   const activities = useMemo(() => {
-    if (reports !== undefined) {
+    if (reports) {
       const filtered = Object.groupBy(reports, ({ type }) => type);
       return filtered;
     }
@@ -96,9 +96,6 @@ function Reports() {
     })
   }, [id,reportees]);
 
-
-
-
   return (
     <div className="p-4" >
       <div className=" bg-white p-3">
@@ -142,6 +139,7 @@ function Reports() {
       </div>
     </div>
   );
+  // }
 }
 
 
