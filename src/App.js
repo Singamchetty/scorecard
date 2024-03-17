@@ -13,7 +13,7 @@ function App() {
         <Route path='/' element={<Home />}/>
         <Route path="/dashboard" element={<Layout><Dashboard/></Layout>}/>
         <Route path="/viewreportee/:id" element={<Layout><Reports/></Layout>}/>
-        <Route path="/*" element={<Layout><PageNotFound/></Layout>}/>
+        <Route path="/*" element={<PageNotFound/>}/>
       </Routes>
     </BrowserRouter>
   );

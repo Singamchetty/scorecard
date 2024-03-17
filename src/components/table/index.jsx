@@ -37,7 +37,7 @@ function Table({headers, data,loading, maxHeight}) {
   );
   else
   return <div className="w-full h-full">
-     <p className="text-center align-middle mt-14 mb-14 text-blue-500">No records to display</p>
+     <p className="text-center align-middle pt-14 pb-14 text-blue-500">No records to display</p>
   </div>
 }
 

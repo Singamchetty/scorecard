@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import axios from 'axios';
 import { base_url } from "../../utils/constants";
 import { loginUser } from "../../redux/reducers/userSlice";
-import {useDispatch} from 'react-redux'
+import {useDispatch,useSelector} from 'react-redux'
 import Loading from '../../components/loading Component/Loading'
 
 function Home() {
@@ -12,6 +12,7 @@ function Home() {
   const [id, setId] = useState(null);
   const [errorMsg,setErrorMsg]=useState("")
   const [loading,setLoading]=useState(true)
+  const userDetails = useSelector((state) => state.userDetails);
  
 
   const handleNavigate = async () => {
@@ -36,6 +37,12 @@ function Home() {
   useEffect(()=>{
      setLoading(false)
   },[])
+  useEffect(()=>{
+    if (userDetails?.user!=null)
+    navigate("/dashboard")
+    else
+    navigate("/")
+  },[userDetails])
 
   return (
     <div className="container py-10 px-10 mx-0 min-w-full h-screen flex items-center justify-center bg-blue-100 ">
