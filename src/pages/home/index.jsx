@@ -37,13 +37,12 @@ function Home() {
      setLoading(false)
   },[])
 
-  if(loading) {return <Loading/>}
-  else
   return (
     <div className="container py-10 px-10 mx-0 min-w-full h-screen flex items-center justify-center bg-blue-100 ">
       <div className="">
       <h1 className="text-4xl font-extrabold leading-none tracking-tight   md:text-5xl lg:text-6xl text-purple-900 mb-10 ">SCORE  CARD</h1>
-      <div className="max-w-sm p-10 bg-white border border-gray-400 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 ">
+      {
+        (loading)?<Loading/>:<div className="max-w-sm p-10 bg-white border border-gray-400 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 ">
         <label
           htmlFor="email"
           className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
@@ -71,6 +70,7 @@ function Home() {
           Submit
         </button>
       </div>
+      }
       </div>
     </div>
   );
