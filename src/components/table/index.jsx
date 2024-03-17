@@ -3,6 +3,7 @@ import Loading from "../loading Component/Loading";
 
 function Table({headers, data,loading, maxHeight}) {
   if(loading) return <Loading/>
+  if(data?.length)
   return (
     <div className={` overflow-x-auto sm:rounded-lg p-4 max-h-[${maxHeight}vh]`}>
       <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 bg-transparent justify-center border-separate border-spacing-y-2">
@@ -34,6 +35,10 @@ function Table({headers, data,loading, maxHeight}) {
       </div>
     </div>
   );
+  else
+  return <div className="w-full h-full">
+     <p className="text-center align-middle mt-28 text-blue-500">No records to display</p>
+  </div>
 }
 
 export default Table;
