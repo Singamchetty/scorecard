@@ -18,7 +18,7 @@ function Table({headers, data,loading, maxHeight}) {
         <tbody>
             {
               data?.map((item, index) => (
-                  <tr className="bg-white dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                  <tr className="bg-white dark:bg-gray-800 dark:border-gray-700 dark:text-white hover:bg-gray-50 dark:hover:bg-gray-600">
                       {
                         headers?.map(({render, id}) => (
                           <td   className="px-6 py-4 listData" >{render ? render(item[id]) : item[id] === "" ? "NA" : item[id] }</td>
