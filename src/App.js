@@ -4,6 +4,7 @@ import Dashboard from './pages/dashboard';
 import Layout from './pages/layout';
 import Reports from './pages/reports';
 import './App.css';
+import PageNotFound from './pages/pagenotfound/PageNotFound';
 
 function App() {
   return (
@@ -12,6 +13,7 @@ function App() {
         <Route path='/' element={<Home />}/>
         <Route path="/dashboard" element={<Layout><Dashboard/></Layout>}/>
         <Route path="/viewreportee/:id" element={<Layout><Reports/></Layout>}/>
+        <Route path="/*" element={<Layout><PageNotFound/></Layout>}/>
       </Routes>
     </BrowserRouter>
   );
