@@ -58,7 +58,7 @@ function Home() {
           required
           onChange={(e) => setId(e.target.value)}
         />
-       <div>
+       <div className="dark:text-white text-red-600">
        {
         errorMsg!==""? <span>{errorMsg}</span>:null
        }

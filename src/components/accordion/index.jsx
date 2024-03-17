@@ -55,7 +55,7 @@ function Accordion({ title, data ,handleAddActivity,open,handleAccordian}) {
         <button           
           onClick={handleClick}
           type="button"
-          className="flex items-center rounded-lg   w-full py-2 px-2 mt-4 font-medium rtl:text-right bg-white text-gray-500 border border-[#B7B7B7] focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-800 dark:border-gray-700 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 gap-3" data-accordion-target="#accordion-collapse-body-2" aria-expanded="false" aria-controls="accordion-collapse-body-2" >
+          className="flex items-center rounded-lg  w-full py-2 px-2 mt-4 font-medium rtl:text-right bg-white text-gray-500 border border-[#B7B7B7] focus:ring-4  dark:border-gray-700  hover:bg-gray-100 gap-3" data-accordion-target="#accordion-collapse-body-2" aria-expanded="false" aria-controls="accordion-collapse-body-2" >
           <div className="w-1/2 text-start ms-2">{title}</div>
           <div className="w-1/2 flex justify-between">
             Average Score :{title === "Default" ? defaultAvgScore : initiativeAvgScore}
