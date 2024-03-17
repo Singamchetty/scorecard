@@ -1,33 +1,44 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from 'axios';
 import { base_url } from "../../utils/constants";
 import { loginUser } from "../../redux/reducers/userSlice";
 import {useDispatch} from 'react-redux'
+import Loading from '../../components/loading Component/Loading'
 
 function Home() {
   const navigate = useNavigate();
   const dispatch=useDispatch()
   const [id, setId] = useState(null);
   const [errorMsg,setErrorMsg]=useState("")
+  const [loading,setLoading]=useState(true)
  
 
-  const handleNavigate = () => {
+  const handleNavigate = async () => {
+    setLoading(true)
     if(id!==null){
-      axios.post(`${base_url}/login`,{empId:Number(id)})
+     await axios.post(`${base_url}/login`,{empId:Number(id)})
       .then((res) => {
+        setLoading(false)
         dispatch(loginUser(res.data.user))
          navigate(`/dashboard`);
       })
       .catch((error)=>{  
+        setLoading(false)
         setErrorMsg("Not Authorized");
       })
     }else{
+      setLoading(false)
       navigate(`/`);
     }
 
   };
+  useEffect(()=>{
+     setLoading(false)
+  },[])
 
+  if(loading) {return <Loading/>}
+  else
   return (
     <div className="container py-10 px-10 mx-0 min-w-full h-screen flex items-center justify-center bg-blue-100 ">
       <div className="">
