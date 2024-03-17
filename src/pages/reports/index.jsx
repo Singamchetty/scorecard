@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useMemo } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { useParams } from "react-router";
+import { useParams,useNavigate } from "react-router";
 import { base_url } from "../../utils/constants";
 import axios from 'axios';
 import { fetchReports } from "../../redux/reducers/reportSlice";
@@ -10,6 +10,7 @@ import DateRangePicker from "../../components/dateRangePicker/DateRangePicker";
 
 function Reports() {
   const dispatch = useDispatch();
+  const navigate=useNavigate();
   const { id } = useParams();
   const empId = Number(id)
   const reportees = useSelector((state) => state.reportees.reportees);
@@ -95,6 +96,14 @@ function Reports() {
       setEmpDetails(null)
     })
   }, [id,reportees]);
+
+  useEffect(() => {
+    if(user){
+       navigate("/dashboard")
+    }else{
+      navigate("/")
+    }
+  }, [user]);
 
   return (
     <div className="p-4" >
