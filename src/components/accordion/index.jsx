@@ -16,18 +16,18 @@ function Accordion({ title, data ,handleAddActivity,open,handleAccordian}) {
   const { reports,defaultAvgScore,initiativeAvgScore ,loading} = useSelector((state) => state.reports);
   const userDetails = useSelector((state) => state.userDetails);
 
-
-  useEffect(()=>{
-     if(userDetails.user!==null){
-      const data = {
-        reportees: userDetails.user.reportees,
-        sort: { type: "empId", order: 1 },
-        page: 1,
-        perPage: 10,
-      }
-      dispatch(fetchReportees(data)) 
-     }
-  },[userDetails,id])
+  //commented due to excess api calls by this method.
+  // useEffect(()=>{
+  //    if(userDetails.user!==null){
+  //     const data = {
+  //       reportees: userDetails.user.reportees,
+  //       sort: { type: "empId", order: 1 },
+  //       page: 1,
+  //       perPage: 10,
+  //     }
+  //     dispatch(fetchReportees(data)) 
+  //    }
+  // },[userDetails,id])
 
   useEffect(()=>{
     if(reports !==null){

@@ -72,9 +72,10 @@ function Reports() {
         "data": activityData
       }
       await axios.post(`${base_url}/createActivity`, newData)
-        .then(async(result) => {
-          await getReports()
-         await fetchLatestReporteesData()
+        .then(async (result) => {
+          fetchLatestReporteesData()
+           getReports()
+          
         })
     } else {
       alert("Please login")
@@ -82,7 +83,7 @@ function Reports() {
   }
 
   useEffect(() => {
-    if (id !== undefined || null) {
+    if (id !== undefined || null && reportees.length>0) {
       const emp = reportees?.filter((item) => item.empId === Number(id));
       setEmpDetails(emp[0]);
       const data = {
@@ -103,52 +104,56 @@ function Reports() {
     }else{
       navigate("/")
     }
-  }, [user,id]);
+  }, [id]);
 
-  return (
-    <div className="p-4" >
-      <div className=" bg-white p-3">
-        <div className="flex">
-          {/* <img src="/generic-male-avatar-rectangular.jpg" width="100px" height="100px" /> */}
-          <div className="w-1/2">
-            <p>
-                <span className="font-medium">Employee Name : </span> {empDetails?.empName}
-            </p>
-            <p>
-                <span className="font-medium">Designation : </span> {empDetails?.designation}
-            </p>
-            <p>
-                <span className="font-medium">Email Id:  </span> {empDetails?.empEmail}
-            </p>
-          </div>
-          <div  className="w-1/2">
-            <p>
-            <span className="font-medium">Employee Id:  </span> {empDetails?.empId}
-            </p>
-            <p>
-            <span className="font-medium">Average Score : </span> {empDetails?.score}
-            </p>
-            <p>
-            <span className="font-medium">Allocated To : </span> {empDetails?.project}
-            </p>
-              
-          </div>
+if(reportees.length && empDetails)
+return (
+  <div className="p-4" >
+    <div className="bg-white p-3">
+      <div className="flex">
+        {/* <img src="/generic-male-avatar-rectangular.jpg" width="100px" height="100px" /> */}
+        <div className="w-1/2">
+          <p>
+              <span className="font-medium">Employee Name : </span> {empDetails?.empName}
+          </p>
+          <p>
+              <span className="font-medium">Designation : </span> {empDetails?.designation}
+          </p>
+          <p>
+              <span className="font-medium">Email Id:  </span> {empDetails?.empEmail}
+          </p>
         </div>
-      </div>
-      <div className="max-h-[70vh] overflow-auto">
-        <div className="container mx-auto mt-4 flex justify-end pe-4">
-          <DateRangePicker getReports={getReports} />
+        <div  className="w-1/2">
+          <p>
+          <span className="font-medium">Employee Id:  </span> {empDetails?.empId}
+          </p>
+          <p>
+          <span className="font-medium">Average Score : </span> {empDetails?.score}
+          </p>
+          <p>
+          <span className="font-medium">Allocated To : </span> {empDetails?.project}
+          </p>
+            
         </div>
-        <div className="max-h-[50vh] overflow-auto">
-            <Accordion title="Default" open={open.accordianOne} handleAccordian={handleAccordian} data={activities?.default} handleAddActivity={handleAddActivity} />
-        </div>
-       <div className="max-h-[50vh] overflow-auto">
-          <Accordion title="Initiative" open={open.accordianTwo} handleAccordian={handleAccordian} data={activities?.initiative} handleAddActivity={handleAddActivity} />
-       </div>
       </div>
     </div>
-  );
-  // }
+    <div className="max-h-[70vh] overflow-auto">
+      <div className="container mx-auto mt-4 flex justify-end pe-4">
+        <DateRangePicker getReports={getReports} />
+      </div>
+      <div className="max-h-[50vh] overflow-auto">
+          <Accordion title="Default" open={open.accordianOne} handleAccordian={handleAccordian} data={activities?.default} handleAddActivity={handleAddActivity} />
+      </div>
+     <div className="max-h-[50vh] overflow-auto">
+        <Accordion title="Initiative" open={open.accordianTwo} handleAccordian={handleAccordian} data={activities?.initiative} handleAddActivity={handleAddActivity} />
+     </div>
+    </div>
+  </div>
+);
+// else
+return  <div className="w-full h-full">
+<p className="text-center align-middle mt-14 mb-14 text-blue-500">The Employee data you are trying to access <br/> is not under you reportees so data is hidden.</p>
+</div>
 }
 
 
