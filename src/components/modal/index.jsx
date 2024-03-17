@@ -64,12 +64,12 @@ export default function MyModal({ visible, onClose ,type,handleAddActivity}) {
   if (!visible) return null;
 
   return (
-    <div className="absolute w-full h-full inset-0 bg-black bg-opacity-25 backdrop-blur-sm   flex items-center justify-center">
+    <div className="absolute w-full h-full inset-0 bg-black bg-opacity-25 backdrop-blur-sm   flex items-center justify-center" onClick={(e) => e.stopPropagation()}>
       <div className="bg-white rounded lg:w-4/12 sm:w-100">
         <div className=" text-white py-3 pl-2 bg-blue-500 ">{activityType} Activity</div>
         <div>
           <div>
-            <form className=" p-2 max-w-sm mx-auto">
+            <form className=" p-2 max-w-sm mx-auto" onClick={(e) => e.stopPropagation()}>
               <div className="flex items-center  my-5">
               <label htmlFor="countries">Select Activity: </label>
               <select  className="bg-gray-50 ml-2 w-7/12 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" onChange={(e)=>handleActivityName(e)}>
@@ -112,8 +112,6 @@ export default function MyModal({ visible, onClose ,type,handleAddActivity}) {
           </div>
 
             </form>
-            
-
           </div>      
         </div>
       </div>

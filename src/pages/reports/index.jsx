@@ -17,7 +17,7 @@ function Reports() {
   const user=useSelector((state)=>state.userDetails.user)
   const [empDetails, setEmpDetails] = useState(null);
   const { reports ,loading,error} = useSelector((state) => state.reports);
-  const [open, setOpen] = useState({"accordianOne":true,"accordianTwo":false});
+  const [open, setOpen] = useState({"accordianOne":false,"accordianTwo":false});
 
 
 
@@ -35,18 +35,18 @@ function Reports() {
     }
   }, [reports,id]);
 
-  const handleAccordian=(value)=>{
-    switch (value){
-        case "Default":
-            setOpen({...open,"accordianOne":!open["accordianOne"], "accordianTwo": !open["accordianTwo"]})
-            break;
-        case "Initiative":
-            setOpen({...open,"accordianOne":!open["accordianOne"], "accordianTwo": !open["accordianTwo"]})
-            break;
-        default:
-          setOpen({"accordianOne":true,"accordianTwo":false})
+  const handleAccordian = (value) => {
+    switch (value) {
+      case "Default":
+        setOpen({ ...open, "accordianOne": !open["accordianOne"], "accordianTwo": false });
+        break;
+      case "Initiative":
+        setOpen({ ...open, "accordianOne": false, "accordianTwo": !open["accordianTwo"] });
+        break;
+      default:
+        setOpen({ "accordianOne": false, "accordianTwo": false });
+    }
   }
-}
 
   const getReports = (startDate = null, endDate = null) => {
     const data = { "empId": empId, "fromDate": startDate, "toDate": endDate }
@@ -106,7 +106,7 @@ function Reports() {
     }
   }, [id]);
 
-if(reportees.length && empDetails)
+if( empDetails && reportees.length)
 return (
   <div className="p-4" >
     <div className="bg-white p-3">
