@@ -99,11 +99,11 @@ function Reports() {
 
   useEffect(() => {
     if(user){
-       navigate("/dashboard")
+       navigate(`/viewreportee/${id}`)
     }else{
       navigate("/")
     }
-  }, [user]);
+  }, [user,id]);
 
   return (
     <div className="p-4" >
