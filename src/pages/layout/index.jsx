@@ -6,7 +6,7 @@ import LeftSidebar from '../../components/leftSidebar';
 function Layout({children}) {
     const url = window.location.href;
     return (
-        <div>
+        <div className='max-h-[84vh]'>
             <Header/>
             <div className="flex">
                 <Sidebar/>

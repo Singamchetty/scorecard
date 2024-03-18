@@ -10,7 +10,7 @@ export default function ModalButton({type,handleAddActivity}) {
           <button
           onClick={() => setShowMyModal(true)}
           className="bg-blue-400 text-white px-2 py-1 rounded hover:scale-95 transition text-sm">
-            Add Activity
+            Add Score
           </button>
       <MyModal onClose={handleOnClose} visible={showMyModal} handleAddActivity={handleAddActivity} type={type}/>
     </div>
