@@ -152,7 +152,7 @@ return (
 );
 else
 return  <div className="w-full h-full">
-<p className="text-center align-middle pt-14 pb-14 text-blue-500">The Employee data you are trying to access <br/> is not under you reportees so data is hidden.</p>
+<p className="text-center align-middle pt-14 pb-14 text-blue-500 font-bold">Employee Details Not Found</p>
 </div>
 }
 

@@ -29,6 +29,7 @@ export default function MyModal({ visible, onClose ,type,handleAddActivity}) {
   }
 
   const handleComments=(e)=>{
+    // e.stopPropagation()
     setActivityData({...activityData,comments:e.target.value})
   }
 
@@ -100,7 +101,22 @@ export default function MyModal({ visible, onClose ,type,handleAddActivity}) {
 
               <div className="flex items-center my-5">
               <label htmlFor="comments" className="block w-3/12 mb-20 text-sm font-medium text-gray-900 dark:text-white">Comments :</label>
-              <textarea id="comments" rows="4" className="block ml-2 p-2.5 w-9/12 text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="activity comments" onChange={(e)=>handleComments(e)}></textarea>
+              <textarea id="comments" rows="4" className="block ml-2 p-2.5 w-9/12 text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="activity comments" onChange={(e)=>handleComments(e)}
+                onClick={(e) => e.stopPropagation()}
+                onKeyDown={(e) => {
+                  // Prevent propagation of space key press
+                  if (e.key === " ") {
+                    // e.preventDefault()
+                    e.stopPropagation();
+                  }
+                }}
+                onKeyUp={(e) => {
+                  // Prevent propagation of space key release
+                  if (e.key === " ") {
+                    e.preventDefault()
+                    e.stopPropagation();
+                  }
+                }}></textarea>
               </div>
               <div className="flex items-center justify-end mb-3">
             <button onClick={onClose} className="px-3 py-2 bg-gray-700 text-white rounded">Cancel</button>

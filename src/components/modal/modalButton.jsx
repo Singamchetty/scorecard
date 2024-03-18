@@ -6,7 +6,7 @@ export default function ModalButton({type,handleAddActivity}) {
  
   const handleOnClose = () => setShowMyModal(false);
   return (
-    <div className="bg-blue-400 bg-opacity-30">
+    <div className="bg-blue-400 bg-opacity-30" onClick={(e) => e.stopPropagation()}>
           <button
           onClick={() => setShowMyModal(true)}
           className="bg-blue-400 text-white px-2 py-1 rounded hover:scale-95 transition text-sm">

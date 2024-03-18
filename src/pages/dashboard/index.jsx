@@ -64,7 +64,7 @@ function Dashboard() {
   ]
 
   return (
-     <div>
+     <div className="max-h-[87vh] ">  
         <Table headers={headers} data={reportees} loading={loading} maxHeight={88}/>    
      </div>
   )
