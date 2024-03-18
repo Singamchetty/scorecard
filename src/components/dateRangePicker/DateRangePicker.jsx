@@ -23,10 +23,10 @@ const DateRangePicker = ({getReports}) => {
 
   return (
     <div>
-      <label htmlFor="start" className="font-bold">From:</label>
-      <input type="date" id="start" name="start" onChange={(e)=>handleStartChange(e.target.value)} />
-      <label htmlFor="end"  className="font-bold">To:</label>
-      <input type="date" id="end" name="end" onChange={(e)=>handleEndChange(e.target.value)}/>
+      <label htmlFor="start" className="font-bold ps-2">From:</label>
+      <input type="date" id="start" name="start"  placeholder="MM-DD-YYYY" className="rounded-md font-semibold ms-1 ps-2 text-[#555]" onChange={(e)=>handleStartChange(e.target.value)} />
+      <label htmlFor="end"  className="font-bold ps-2">To:</label>
+      <input type="date" id="end" name="end" placeholder="MM-DD-YYYY" className="rounded-md font-semibold ms-1 ps-2 text-[#555]" onChange={(e)=>handleEndChange(e.target.value)}/>
 
     </div>
   )
