@@ -27,9 +27,9 @@ function LeftSidebar() {
                 <img src="/man.png" width="18px" height="18px" />
                 <p className="w-[80%] text-left">{empName}</p>
                 <p className={`w-[30px] h-[30px] rounded-full flex items-center text-white justify-center 
-      ${score === 0 ? 'bg-red-500 ' : ''}
-      ${score >= 1 && score < 2 ? 'bg-red-500' : ''}
-      ${score >= 2 && score < 3 ? 'bg-yellow-500' : ''}
+      ${score === 0 && score<1 ? 'bg-red-400 ' : ''}
+      ${score >= 1 && score < 2 ? 'bg-red-300' : ''}
+      ${score >= 2 && score < 3 ? 'bg-green-400' : ''}
       ${score >= 3 && score < 4 ? 'bg-green-500 ' : ''}
       ${score >= 4 && score < 5 ? 'bg-green-600 ' : ''}
       ${score >= 5 ? 'bg-green-600 ' : ''}`}>
