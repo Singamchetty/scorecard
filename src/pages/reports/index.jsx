@@ -140,7 +140,7 @@ function Reports() {
             </div>
             <div className="flex flex-col justify-center items-center">
               <div className={`w-[40px] h-[40px] rounded-full flex items-center text-white justify-center 
-                ${empDetails?.score ===  0 && empDetails?.score<1 ? 'bg-red-400 ' : ''}
+                ${empDetails?.score ===  0 || empDetails?.score<1 ? 'bg-red-400 ' : ''}
                 ${empDetails?.score >= 1 && empDetails?.score < 2 ? 'bg-red-300' : ''}
                 ${empDetails?.score >= 2 && empDetails?.score < 3 ? 'bg-green-400' : ''}
                 ${empDetails?.score >= 3 && empDetails?.score < 4 ? 'bg-green-500 ' : ''}
