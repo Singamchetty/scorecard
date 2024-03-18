@@ -42,7 +42,7 @@ function Accordion({ title, data ,handleAddActivity,open,handleAccordian}) {
   const headers = [
     { title: "Activity Name", id: "aName", width: "30%" },
     { title: "Date", id: "recorded_date", width: "20%", render: (value) => moment(value).format('DD-MM-YYYY') },
-    { title: "Score", id: "score", width: "10%", render: (value) => <div className="w-[35px] bg-blue-200 rounded-md text-center p-[4px]">{value}</div> },
+    { title: "Score", id: "score", width: "10%", render: (value) => <div className="w-[35px] bg-blue-400 rounded-full text-white font-bold text-center p-[4px]">{value}</div> },
     { title: "Comments", id: "comments", width: "40%" },
   ];
   

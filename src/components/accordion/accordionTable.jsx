@@ -26,9 +26,9 @@ function AccordionTable({ headers, data }) {
                 <td
                   className={`border-2 p-2 border-[#B7B7B7] bg-${
                     header.id === "aName" ? "[#D9D9D9]" : "white"
-                  }`}
+                  }`} 
                 >
-                  {header?.id === 'recorded_date' ? <span>{getDate(item[header?.id])}</span> : <span>{item[header?.id]}</span>}
+                  {header?.id === 'recorded_date' ? <span>{getDate(item[header?.id])}</span> : <span className="truncate overflow-hidden whitespace-nowrap overflow-ellipsis">{item[header?.id]}</span>}
                 </td>
               ))}
             </tr>

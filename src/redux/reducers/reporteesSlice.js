@@ -4,6 +4,7 @@ import axios from "axios";
 
 const initialState = {
   reportees: [],
+  totalCount:0,
   loading: false,
   error: null,
 };
@@ -29,6 +30,7 @@ const reporteesSlice = createSlice({
     builder.addCase(fetchReportees.fulfilled, (state, action) => {
       state.loading = false;
       state.reportees = action.payload.data;
+      state.totalCount = action.payload.totalCount.count;
       state.error = "";
     });
     builder.addCase(fetchReportees.rejected, (state, action) => {
