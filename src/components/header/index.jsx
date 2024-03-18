@@ -1,9 +1,9 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {useNavigate, Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import clearStore from '../../utils/clearStore';
 
-function Header() {
+function Header({isOpen}) {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const user = useSelector((state) => state.userDetails.user);
@@ -13,9 +13,14 @@ function Header() {
         navigate('/');
         clearStore(dispatch)
     }
+    useEffect(()=>{
+        if(open!==false)
+        setOpen(isOpen)
+
+    },[isOpen])
 
     return (
-        <div className="flex items-center justify-between py-5 px-10">
+        <div className="flex items-center justify-between py-5 px-10" onClick={() => setOpen(!open)}>
             <img src="/logo.png"/>
             <div className="flex items-center relative">
                 <button className=" -mt-1 text-2xl flex" onClick={() => setOpen(!open)}>
