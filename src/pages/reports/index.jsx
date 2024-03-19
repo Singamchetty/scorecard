@@ -38,10 +38,10 @@ function Reports() {
 
   const handleAccordian = (value) => {
     switch (value) {
-      case "Default":
+      case "Duties":
         setOpen({ ...open, "accordianOne": !open["accordianOne"], "accordianTwo": false });
         break;
-      case "Initiative":
+      case "Initiatives":
         setOpen({ ...open, "accordianOne": false, "accordianTwo": !open["accordianTwo"] });
         break;
       default:
@@ -151,14 +151,11 @@ function Reports() {
           </div>
         </div>
         <div className="">
-          {/* <div className="container mx-auto mt-4 flex justify-end pe-4">
-            <DateRangePicker getReports={getReports} />
-          </div> */}
           <div className="">
-            <Accordion title="Default" open={open.accordianOne} handleAccordian={handleAccordian} data={activities?.default} handleAddActivity={handleAddActivity} />
+            <Accordion title="Duties" open={open.accordianOne} handleAccordian={handleAccordian} data={activities?.duties} handleAddActivity={handleAddActivity} />
           </div>
           <div className="">
-            <Accordion title="Initiative" open={open.accordianTwo} handleAccordian={handleAccordian} data={activities?.initiative} handleAddActivity={handleAddActivity} />
+            <Accordion title="Initiatives" open={open.accordianTwo} handleAccordian={handleAccordian} data={activities?.initiative} handleAddActivity={handleAddActivity} />
           </div>
         </div>
       </div>

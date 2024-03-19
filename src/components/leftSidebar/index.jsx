@@ -12,7 +12,7 @@ function LeftSidebar() {
   return (
 
     <div className="  w-[33%] flex flex-col px-[5px]">
-      <p className="text-xl text-blue-400 font-semibold pl-4 mt-3">
+      <p className="text-xl text-blue-400 font-semibold">
         My Reportees
       </p>
       {
@@ -21,11 +21,11 @@ function LeftSidebar() {
             {reportees?.map(({ empName, score, empId }) => (
               <Link
                 to={`/viewreportee/${empId}`}
-                className={`flex items-center hover:bg-indigo-500 hover:text bg-${Number(id) == empId ? "indigo-200" : "white"
+                className={`flex items-center hover:bg-blue-400 hover:text-white hover:rounded-2xl bg-${Number(id) == empId ? "indigo-200" : "white"
                   } p-2 justify-between mb-1 w-full`}
                 key={empId}
               >
-                <img src="/man.png" width="18px" height="18px" />
+                {/* <img src="/man.png" width="18px" height="18px" /> */}
                 <p className="w-[80%] text-left">{empName}</p>
                 <p className={`w-[30px] h-[30px] rounded-full flex items-center text-white justify-center ${scoreColor(score)}`}>
                   {score}
