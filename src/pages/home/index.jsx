@@ -82,7 +82,7 @@ function Home() {
           Submit
         </button>
         {
-          (loading)?<img src="/Loader2.gif" className="mt-2" width={100} height={100}/>:null
+          (loading)?<img src="/Loader2.gif" className="" width={100} height={100}/>:null
         }
         </div>
       </div>
