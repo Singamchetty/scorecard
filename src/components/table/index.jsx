@@ -3,7 +3,7 @@ import Loading from "../loading Component/Loading";
 
 function Table({headers, data,loading, maxHeight}) {
   if(loading) return <Loading/>
-  if(data?.length)
+
   return (
     <div className={` overflow-auto sm:rounded-lg p-4 max-h-[${maxHeight}vh] bg-gray-100`}>
       <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 bg-transparent justify-center border-separate border-spacing-y-2">
@@ -16,29 +16,33 @@ function Table({headers, data,loading, maxHeight}) {
             ))}
           </tr>
         </thead>
-        <tbody>
-            {
-              data?.map((item, index) => (
-                  <tr className="bg-white dark:bg-gray-800 dark:border-gray-700 dark:text-white hover:bg-gray-50 dark:hover:bg-gray-600">
-                      {
-                        headers?.map(({render, id}) => (
-                          <td   className="px-6 py-4 listData" >{render ? render(item[id]) : item[id] === "" ? "NA" : item[id] }</td>
-                        ))
-                      }
-                  </tr>
-              ))
-            }
-        </tbody>
+       { (data?.length)?
+         <tbody>
+         {
+           data?.map((item, index) => (
+               <tr className="bg-white dark:bg-gray-800 dark:border-gray-700 dark:text-white hover:bg-gray-50 dark:hover:bg-gray-600">
+                   {
+                     headers?.map(({render, id}) => (
+                       <td   className="px-6 py-4 listData" >{render ? render(item[id]) : item[id] === "" ? "NA" : item[id] }</td>
+                     ))
+                   }
+               </tr>
+           ))
+         }
+     </tbody>:null
+       }
       </table>
-      <div className={`w-full h-[30vh] justify-center bg-white mt-3 flex items-center rounded ${data?.lenght !== 0 && 'hidden'}`}>
-        <p className="text-lg">Reportees not assigned</p>
-      </div>
+      {
+        (!data?.length)?<div className="w-full h-full">
+        <p className="text-center align-middle pt-14 pb-14 text-blue-500  font-bold">No records to display</p>
+     </div>:null
+      }
     </div>
   );
-  else
-  return <div className="w-full h-full">
-     <p className="text-center align-middle pt-14 pb-14 text-blue-500  font-bold">No records to display</p>
-  </div>
+  // else
+//   return <div className="w-full h-full">
+//      <p className="text-center align-middle pt-14 pb-14 text-blue-500  font-bold">No records to display</p>
+//   </div>
 }
 
 export default Table;

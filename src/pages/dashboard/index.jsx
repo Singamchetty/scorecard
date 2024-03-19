@@ -61,7 +61,9 @@ function Dashboard() {
     {
       title: "Employee Name",
       id: "empName",
-      render: (value) => <span className="flex items-center"><img className="pr-2" src="/man.png" width="30px" height="30px" />{value}</span>
+      render: (value) => <span className="flex items-center">
+        {/* <img className="pr-2" src="/man.png" width="30px" height="30px" /> */}
+        {value}</span>
     },
     {
       title: "Emp.Id",
