@@ -48,10 +48,10 @@ function Reports() {
     }
   }
 
-  const getReports = (startDate = null, endDate = null) => {
-    const data = { "empId": empId, "fromDate": startDate, "toDate": endDate }
-    dispatch(fetchReports(data))
-  }
+  // const getReports = (startDate = null, endDate = null) => {
+  //   const data = { "empId": empId, "fromDate": startDate, "toDate": endDate }
+  //   dispatch(fetchReports(data))
+  // }
   const fetchLatestReporteesData = () => {
     if (user) {
       const data = {
@@ -74,7 +74,7 @@ function Reports() {
       await axios.post(`${base_url}/createActivity`, newData)
         .then(async (result) => {
           fetchLatestReporteesData()
-          getReports()
+          // getReports()
 
         })
     } else {
@@ -156,14 +156,14 @@ function Reports() {
 
           </div>
         </div>
-        <div className="max-h-[70vh] overflow-auto">
-          <div className="container mx-auto mt-4 flex justify-end pe-4">
+        <div className="">
+          {/* <div className="container mx-auto mt-4 flex justify-end pe-4">
             <DateRangePicker getReports={getReports} />
-          </div>
-          <div className="max-h-[50vh] overflow-auto">
+          </div> */}
+          <div className="">
             <Accordion title="Default" open={open.accordianOne} handleAccordian={handleAccordian} data={activities?.default} handleAddActivity={handleAddActivity} />
           </div>
-          <div className="max-h-[50vh] overflow-auto">
+          <div className="">
             <Accordion title="Initiative" open={open.accordianTwo} handleAccordian={handleAccordian} data={activities?.initiative} handleAddActivity={handleAddActivity} />
           </div>
         </div>
