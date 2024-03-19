@@ -126,7 +126,7 @@ function Reports() {
             </div>
             <div className="my-1">
               <p>
-                <span className="font-medium">Email : </span> {empDetails?.empEmail}
+                <span className="font-medium">Role : </span> {empDetails?.techStack}
               </p>
               <p>
                 <span className="font-medium">Employee Id:  </span> {empDetails?.empId}
