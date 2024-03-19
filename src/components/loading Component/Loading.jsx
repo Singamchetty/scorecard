@@ -8,8 +8,6 @@ const Loading = memo(() => {
         <div className='w-100'>
             <p className='text-blue-500 flex justify-center items-center h-full mt-28'>
                 <img src={Spin} alt="Loading" width={100} height={100} />
-                
-                {/* loading */}
             </p>
         </div>
     );

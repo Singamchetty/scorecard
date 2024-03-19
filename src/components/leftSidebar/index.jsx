@@ -21,7 +21,7 @@ function LeftSidebar() {
             {reportees?.map(({ empName, score, empId }) => (
               <Link
                 to={`/viewreportee/${empId}`}
-                className={`flex items-center hover:bg-blue-400 hover:text-white hover:rounded-2xl bg-${Number(id) == empId ? "indigo-200" : "white"
+                className={`flex items-center hover:bg-blue-400 hover:text-white hover:rounded-2xl bg-${Number(id) == empId ? "blue-400 text-white rounded-2xl" : "white"
                   } p-2 justify-between mb-1 w-full`}
                 key={empId}
               >

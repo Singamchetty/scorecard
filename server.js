@@ -149,7 +149,7 @@ app.post('/createActivity',async (req, res) => {
     let { data } = req.body;
 
     //data validation
-    if (!_.get(data, "aName", "") || !_.get(data, "aId", "") || !_.get(data, "type", "") || !_.get(data, "score", "") || !_.get(data,"comments","")) {
+    if (!_.get(data, "aName", "") || !_.get(data, "aId", "") || !_.get(data, "type", "") || !_.get(data, "score", "") || !_.get(data,"comments","") ||!_.get(data,"ratedBy","") ) {
       res.status(401).json({ "error": "Invalid Activity data" });
       return;
     }

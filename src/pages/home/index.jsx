@@ -48,36 +48,45 @@ function Home() {
     <div className="container py-10 px-10 mx-0 min-w-full h-screen flex items-center justify-center bg-blue-100 ">
       <div className="">
       <h1 className="text-4xl font-extrabold leading-none tracking-tight   md:text-5xl lg:text-6xl text-purple-900 mb-10 ">SCORE  CARD</h1>
-      {
-        (loading)?<Loading/>:<div className="max-w-sm p-10 bg-white border border-gray-400 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 ">
+      {/* {
+        (loading)?<Loading/>: */}
+        <div className="max-w-sm p-10 bg-white border border-gray-400 rounded-lg shadow ">
         <label
           htmlFor="email"
-          className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+          className="block mb-2 text-sm font-medium text-gray-900 "
         >
           Employee Id
         </label>
         <input
           type="text"
           id="email"
-          className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-          placeholder=""
+          className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 "
+          placeholder="Enter Employee ID"
           required
           onChange={(e) => setId(e.target.value)}
         />
-       <div className="dark:text-white text-red-600">
+        {
+
+        }
+       <div className=" text-red-600">
        {
         errorMsg!==""? <span>{errorMsg}</span>:null
        }
        </div>
+        <div className="flex justify-between">
         <button
-          className="bg-purple-900 text-white disabled:bg-purple-900 hover:bg-blue-400 font-bold py-2 px-4 mt-6  rounded text-center ml-15"
+          className="bg-purple-900 text-white disabled:bg-purple-900 hover:bg-blue-400 font-bold py-2 px-4 mt-6  rounded text-center"
           onClick={handleNavigate}
           disabled={!id}
         >
           Submit
         </button>
+        {
+          (loading)?<img src="/Loader2.gif" className="mt-2" width={100} height={100}/>:null
+        }
+        </div>
       </div>
-      }
+      {/* } */}
       </div>
     </div>
   );

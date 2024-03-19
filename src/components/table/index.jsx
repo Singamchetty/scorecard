@@ -6,8 +6,8 @@ function Table({headers, data,loading, maxHeight}) {
   else
   return (
     <div className={` overflow-auto sm:rounded-lg p-4 bg-gray-100`}>
-      <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 bg-transparent justify-center border-separate border-spacing-y-2">
-        <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700  dark:text-white">
+      <table className="w-full text-sm text-left rtl:text-right text-gray-500 bg-transparent justify-center border-separate border-spacing-y-2">
+        <thead className="text-xs text-gray-700 uppercase bg-gray-50">
           <tr className="mb-2">
             {headers?.map((item,index) => (
               <th key={index} scope="col" className={`px-6 py-4 w-[${item.width}]`} > 
@@ -17,13 +17,15 @@ function Table({headers, data,loading, maxHeight}) {
           </tr>
         </thead>
        { 
-       (data?.length)?<tbody>
+       (data?.length)?<tbody >
          {
            data?.map((item, index) => (
-               <tr key={item.id} className="bg-white dark:bg-gray-800 dark:border-gray-700 dark:text-white hover:bg-gray-50 dark:hover:bg-gray-600">
+               <tr key={item.id} className="bg-white  hover:bg-gray-300 " >
                    {
                      headers?.map(({render, id}) => (
-                       <td key={`${item.id}_${id}`}  className="px-6 py-4 listData" >{render ? render(item[id]) : item[id] === "" ? "NA" : item[id] }</td>
+                       <td key={`${item.id}_${id}`}  className="px-6 py-2 "  >
+                        <span title={(id=="comments")?item[id]:null} className="listData">{render ? render(item[id]) : item[id] === "" ? "NA" : item[id] }</span>
+                        </td>
                      ))
                    }
                </tr>
