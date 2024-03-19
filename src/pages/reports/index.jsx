@@ -49,10 +49,6 @@ function Reports() {
     }
   }
 
-  // const getReports = (startDate = null, endDate = null) => {
-  //   const data = { "empId": empId, "fromDate": startDate, "toDate": endDate }
-  //   dispatch(fetchReports(data))
-  // }
   const fetchLatestReporteesData = () => {
     if (user) {
       const data = {
@@ -75,8 +71,6 @@ function Reports() {
       await axios.post(`${base_url}/createActivity`, newData)
         .then(async (result) => {
           fetchLatestReporteesData()
-          // getReports()
-
         })
     } else {
       alert("Please login")
@@ -102,6 +96,7 @@ function Reports() {
   useEffect(() => {
     if (user) {
       navigate(`/viewreportee/${id}`)
+      setOpen({ "accordianOne": false, "accordianTwo": false })
     } else {
       navigate("/")
     }

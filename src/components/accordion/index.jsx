@@ -40,10 +40,11 @@ function Accordion({ title, data ,handleAddActivity,open,handleAccordian}) {
     handleAccordian(title)
   }
   const headers = [
-    { title: "Activity Name", id: "aName", width: "30%" },
+    { title: "Activity Name", id: "aName", width: "25%" },
     { title: "Date", id: "recorded_date", width: "20%", render: (value) => moment(value).format('DD-MM-YYYY') },
+    {title: "Rated By", id: "ratedBy", width: "25%"},
     { title: "Score", id: "score", width: "10%", render: (value) => <div className="w-[35px] bg-blue-400 rounded-full text-white font-bold text-center p-[4px]">{value}</div> },
-    { title: "Comments", id: "comments", width: "40%" },
+    { title: "Comments", id: "comments", width: "30%" },
   ];
   
   if(loading && title =="Duties")return <Loading/>
@@ -55,7 +56,7 @@ function Accordion({ title, data ,handleAddActivity,open,handleAccordian}) {
         <button           
           onClick={handleClick}
           type="button"
-          className="flex items-center rounded-lg  w-full py-2 px-2 mt-4 font-medium rtl:text-right bg-white text-gray-500 border border-[#B7B7B7] focus:ring-4  dark:border-gray-700  hover:bg-gray-100 gap-3" data-accordion-target="#accordion-collapse-body-2" aria-expanded="false" aria-controls="accordion-collapse-body-2" >
+          className="flex items-center rounded-lg  w-full py-2 px-2 mt-4 font-medium rtl:text-right bg-white text-gray-500 border border-[#B7B7B7] focus:ring-4   hover:bg-gray-100 gap-3" data-accordion-target="#accordion-collapse-body-2" aria-expanded="false" aria-controls="accordion-collapse-body-2" >
           <span className="w-1/2 text-start ms-2">{title}</span>
           <span className="w-1/2 flex justify-between">
             Average Score :{title === "Duties" ? defaultAvgScore : initiativeAvgScore}
@@ -75,7 +76,7 @@ function Accordion({ title, data ,handleAddActivity,open,handleAccordian}) {
           className={`${!open && "hidden"} mt-2`}
           aria-labelledby="accordion-collapse-heading-2"
         >
-           <Table headers={headers} loading={loading} data={data} maxHeight={10}/>
+           <Table headers={headers} loading={loading} data={data} />
         </div>
       </div>
     );

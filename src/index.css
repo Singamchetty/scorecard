@@ -6,11 +6,22 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
-/* .listData:nth-child(4) {
-  padding-left: 35px;
-} */
+
+
+
 .active{
   background: rgb(96 165 250);
   color:white;
   border-radius:50%
 }
+
+.listData {
+  white-space: nowrap; 
+  width: 100px; 
+  overflow: hidden;
+  text-overflow: ellipsis; 
+  display: inline-block;
+}
+
+
+
