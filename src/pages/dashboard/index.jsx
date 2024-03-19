@@ -81,8 +81,8 @@ function Dashboard() {
       render: (value) => <span className={`w-[30px] h-[30px] rounded-full flex items-center text-white justify-center ${scoreColor(value)}`}>{value}</span>
     },
     {
-      title: "Email",
-      id: 'empEmail'
+      title: "Role",
+      id: 'techStack'
     },
     {
       title: "Action",
