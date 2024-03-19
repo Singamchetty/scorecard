@@ -149,7 +149,7 @@ app.post('/createActivity',async (req, res) => {
     let { data } = req.body;
 
     //data validation
-    if (!_.get(data, "aName", "") || !_.get(data, "aId", "") || !_.get(data, "type", "") || !_.get(data, "score", "")) {
+    if (!_.get(data, "aName", "") || !_.get(data, "aId", "") || !_.get(data, "type", "") || !_.get(data, "score", "") || !_.get(data,"comments","")) {
       res.status(401).json({ "error": "Invalid Activity data" });
       return;
     }
@@ -158,10 +158,10 @@ app.post('/createActivity',async (req, res) => {
       res.status(401).json({ "message": "Score Should be between 1 to 5 or -1 to -5 only" });
       return
     }
-    if(data["comments"]===undefined){
-      res.status(401).json({ "message": "need comments field" });
-      return
-    }
+    // if(data["comments"]===undefined){
+    //   res.status(401).json({ "message": "need comments field" });
+    //   return
+    // }
 
     data = { ...data, "recorded_date": new Date() };
     data = Object.assign(data, { "_id": new ObjectId() })
@@ -208,15 +208,15 @@ const calculateAverage = async(query) => {
       .then(async(result) => {
         let activitiesList = result.activities;
         let activitiesLength = activitiesList.length;
-        let score = activitiesList.reduce((acc, curr) => { return acc + curr.score }, 0);
-        let averageScore = 0;
-        score < 0
-          ? (averageScore = 0)
-          : (averageScore = score / activitiesLength);
+        let score = activitiesList.reduce((acc, curr) => { return acc + Number(curr.score) }, 0);
+        let averageScore = score / activitiesLength;
+        // score < 0
+        //   ? (averageScore = 0)
+        //   : (averageScore = score / activitiesLength);
 
-        if (averageScore % 1 !== 0) {
-          averageScore = averageScore.toFixed(1);
-        }
+        // if (averageScore % 1 !== 0) {
+          averageScore = Number(averageScore).toFixed(1);
+        // }
 
         await db.collection("employees")
           .updateOne(query, { $set: { score: Number(averageScore) } })

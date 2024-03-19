@@ -1,5 +1,5 @@
 const scoreColor = (value) => {
-    if (value >= 0 && value < 1) {
+    if (value < 1) {
       return 'bg-red-400';
     } else if (value >= 1 && value < 2) {
       return 'bg-red-300';
