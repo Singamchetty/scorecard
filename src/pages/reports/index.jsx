@@ -6,6 +6,7 @@ import axios from 'axios';
 import { fetchReports } from "../../redux/reducers/reportSlice";
 import { fetchReportees } from "../../redux/reducers/reporteesSlice";
 import Accordion from "../../components/accordion";
+import scoreColor from '../../utils/scoreColor';
 import DateRangePicker from "../../components/dateRangePicker/DateRangePicker";
 
 function Reports() {
@@ -139,14 +140,7 @@ function Reports() {
 
             </div>
             <div className="flex flex-col justify-center items-center">
-              <div className={`w-[40px] h-[40px] rounded-full flex items-center text-white justify-center 
-                ${empDetails?.score ===  0 || empDetails?.score<1 ? 'bg-red-400 ' : ''}
-                ${empDetails?.score >= 1 && empDetails?.score < 2 ? 'bg-red-300' : ''}
-                ${empDetails?.score >= 2 && empDetails?.score < 3 ? 'bg-green-400' : ''}
-                ${empDetails?.score >= 3 && empDetails?.score < 4 ? 'bg-green-500 ' : ''}
-                ${empDetails?.score >= 4 && empDetails?.score < 5 ? 'bg-green-600 ' : ''}
-                ${empDetails?.score >= 5 ? 'bg-green-600 ' : ''}
-  `}>
+              <div className={`w-[40px] h-[40px] rounded-full flex items-center text-white justify-center  ${scoreColor(empDetails?.score)}`}>
                 <span className="text-lg font-bold">{empDetails?.score}</span>
               </div>
               <div className="">

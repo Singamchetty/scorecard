@@ -3,6 +3,8 @@ import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchReportees } from "../../redux/reducers/reporteesSlice";
 import Table from '../../components/table';
+import RightIcon from '../../assets/icons/rightIcon';
+import scoreColor from '../../utils/scoreColor';
 import PaginationComponent from "../../components/Pagenation/Pagenation";
 
 function Dashboard() {
@@ -76,14 +78,7 @@ function Dashboard() {
     {
       title: "score",
       id: "score",
-      render: (value) => <span className={`w-[30px] h-[30px] rounded-full flex items-center text-white justify-center 
-      ${value === 0 || value<1 ? 'bg-red-400 ' : ''}
-      ${value >= 1 && value < 2 ? 'bg-red-300' : ''}
-      ${value >= 2 && value < 3 ? 'bg-green-400' : ''}
-      ${value >= 3 && value < 4 ? 'bg-green-500 ' : ''}
-      ${value >= 4 && value < 5 ? 'bg-green-600 ' : ''}
-      ${value >= 5 ? 'bg-green-600 ' : ''}
-`}>{value}</span>
+      render: (value) => <span className={`w-[30px] h-[30px] rounded-full flex items-center text-white justify-center ${scoreColor(value)}`}>{value}</span>
     },
     {
       title: "Email",
@@ -92,12 +87,16 @@ function Dashboard() {
     {
       title: "Action",
       id: "empId",
-      render: (value) => <Link to={`/viewreportee/${value}`}><button className="bg-blue-400 text-white rounded-md px-3 py-1">View</button></Link>
+      render: (value) => <Link to={`/viewreportee/${value}`}>
+        <button className="bg-blue-400 text-white rounded-md px-2 py-1 flex items-center justify-center w-[40px]">
+          <RightIcon />
+          </button>
+        </Link>
     },
   ]
 
   return (
-    <div className="">
+    <div>
       <div className="mb-2">
          <Table headers={headers} data={reportees} loading={loading} maxHeight={88} />
          
