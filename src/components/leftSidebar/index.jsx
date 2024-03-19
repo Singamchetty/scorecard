@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
+import scoreColor from '../../utils/scoreColor';
 import Loading from "../loading Component/Loading";
 
 function LeftSidebar() {
@@ -20,19 +21,13 @@ function LeftSidebar() {
             {reportees?.map(({ empName, score, empId }) => (
               <Link
                 to={`/viewreportee/${empId}`}
-                className={`flex items-center bg-${Number(id) === empId ? "blue-200" : "white"
+                className={`flex items-center hover:bg-indigo-500 hover:text bg-${Number(id) == empId ? "indigo-200" : "white"
                   } p-2 justify-between mb-1 w-full`}
                 key={empId}
               >
                 <img src="/man.png" width="18px" height="18px" />
                 <p className="w-[80%] text-left">{empName}</p>
-                <p className={`w-[30px] h-[30px] rounded-full flex items-center text-white justify-center 
-      ${score === 0 || score<1 ? 'bg-red-400 ' : ''}
-      ${score >= 1 && score < 2 ? 'bg-red-300' : ''}
-      ${score >= 2 && score < 3 ? 'bg-green-400' : ''}
-      ${score >= 3 && score < 4 ? 'bg-green-500 ' : ''}
-      ${score >= 4 && score < 5 ? 'bg-green-600 ' : ''}
-      ${score >= 5 ? 'bg-green-600 ' : ''}`}>
+                <p className={`w-[30px] h-[30px] rounded-full flex items-center text-white justify-center ${scoreColor(score)}`}>
                   {score}
                 </p>
               </Link>
