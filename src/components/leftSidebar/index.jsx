@@ -9,12 +9,13 @@ import Loading from "../loading Component/Loading";
 function LeftSidebar() {
   const dispatch = useDispatch();
   const [currPage, setCurrPage] = useState(1);
-  const [inputValue, setInputValue] = useState('');
+  const [inputValue, setInputValue] = useState(null);
   const { reportees, loading, viewReportee } = useSelector((state) => state.reportees);
   const userDetails = useSelector((state) => state.userDetails);
 
 
   useEffect(() => {
+   if(inputValue!==null){
     const debounceTimeout = setTimeout(() => {
       const data = {
         reportees: userDetails.user.reportees,
@@ -24,8 +25,10 @@ function LeftSidebar() {
       };
       dispatch(fetchReportees(data));
     }, 1000);
+  
 
     return () => clearTimeout(debounceTimeout);
+  }
   }, [inputValue]);
 
   const handleChange = (event) => {
