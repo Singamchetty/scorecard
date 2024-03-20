@@ -6,7 +6,7 @@ import axios from 'axios';
 import { fetchReports } from "../../redux/reducers/reportSlice";
 import { fetchReportees } from "../../redux/reducers/reporteesSlice";
 import Accordion from "../../components/accordion";
-import scoreColor from '../../utils/scoreColor';
+import {scoreColor} from '../../utils/commonFunctions';
 import DateRangePicker from "../../components/dateRangePicker/DateRangePicker";
 
 function Reports() {
