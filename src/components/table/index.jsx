@@ -24,7 +24,7 @@ function Table({headers, data,loading, maxHeight}) {
                    {
                      headers?.map(({render, id}) => (
                        <td key={`${item.id}_${id}`}  className="px-6 py-2 "  >
-                        <span title={(id=="comments")?item[id]:null} className="listData">{render ? render(item[id]) : item[id] === "" ? "NA" : item[id] }</span>
+                        {render ? render(item[id]) : item[id] === "" ? "NA" : item[id] }
                         </td>
                      ))
                    }
