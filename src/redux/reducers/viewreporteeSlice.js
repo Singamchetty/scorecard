@@ -10,7 +10,7 @@ const initialState = {
   error: null,
 };
 
-export const fetchReports = createAsyncThunk("getReports", async (data) => {
+export const fetchReporteeActivities = createAsyncThunk("getReports", async (data) => {
   return await axios
     .post(`${base_url}/getActivities`, data)
     .then((response) => response.data);
@@ -47,13 +47,13 @@ const reportSlice = createSlice({
 
   },
   extraReducers: (builder) => {
-    builder.addCase(fetchReports.pending, (state) => {
+    builder.addCase(fetchReporteeActivities.pending, (state) => {
       return {...state,loading :true,error :"loading"}
     });
-    builder.addCase(fetchReports.fulfilled, (state, action) => {
+    builder.addCase(fetchReporteeActivities.fulfilled, (state, action) => {
       return {...state,loading :false,error :"",reports:action.payload?.activities}
     });
-    builder.addCase(fetchReports.rejected, (state, action) => {
+    builder.addCase(fetchReporteeActivities.rejected, (state, action) => {
       return {...state,loading :false,error :action.error || "Something went wrong!",reports:null}
     });
   },

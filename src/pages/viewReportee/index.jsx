@@ -4,6 +4,7 @@ import { useParams, useNavigate } from "react-router";
 import { base_url } from "../../utils/constants";
 import axios from 'axios';
 import { fetchReportees } from "../../redux/reducers/reporteesSlice";
+import {fetchReporteeActivities} from '../../redux/reducers/viewreporteeSlice'
 import Accordion from "../../components/accordion";
 import {scoreColor} from '../../utils/commonFunctions';
 
@@ -73,6 +74,11 @@ function Viewreportee() {
       alert("Please login")
     }
   }
+
+  useEffect(()=>{
+    if(reportees.length>0 && viewReportee)
+     dispatch(fetchReporteeActivities({empId:viewReportee.empId}))
+  },[reportees])
 
 
 
