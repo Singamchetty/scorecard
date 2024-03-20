@@ -22,7 +22,6 @@ function Home() {
       .then((res) => {
         setLoading(false)
         dispatch(loginUser(res.data.user))
-         navigate(`/dashboard`);
       })
       .catch((error)=>{  
         setLoading(false)

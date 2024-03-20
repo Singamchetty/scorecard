@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchReportees } from "../../redux/reducers/reporteesSlice";
+import { fetchReportees, setViewReportee } from "../../redux/reducers/reporteesSlice";
 import Table from '../../components/table';
 import RightArrowIcon from '../../assets/icons/rightArrowIcon';
 import { scoreColor } from '../../utils/commonFunctions';
@@ -107,8 +107,8 @@ function Dashboard() {
     {
       title: "Action",
       id: "empId",
-      render: (value) => <Link to={`/viewreportee/${value}`}>
-        <button className="bg-blue-400 text-white rounded-md px-2 py-1 flex items-center justify-center w-[40px]">
+      render: (value) => <Link to={`/viewreportee`}>
+        <button className="bg-blue-400 text-white rounded-md px-2 py-1 flex items-center justify-center w-[40px]" onClick={()=>dispatch(setViewReportee(value))}>
           <RightArrowIcon />
           </button>
         </Link>
@@ -125,7 +125,7 @@ function Dashboard() {
         {reportees && (
           <div className="flex justify-center mt-2">
             {/* <div className="text-blue-500">Total Results: {pagesCount}</div> */}
-            {pagesCount > 1 && (
+            {pagesCount >= 1 && (
               <PaginationComponent
                 currentPage={currPage}
                 totalPages={pagesCount}

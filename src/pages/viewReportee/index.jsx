@@ -9,16 +9,17 @@ import Accordion from "../../components/accordion";
 import {scoreColor} from '../../utils/commonFunctions';
 import DateRangePicker from "../../components/dateRangePicker/DateRangePicker";
 
-function Reports() {
+function Viewreportee() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { id } = useParams();
-  const empId = Number(id)
-  const reportees = useSelector((state) => state.reportees.reportees);
+  // const { id } = useParams();
+  // const empId = Number(id)
+  const {reportees, viewReportee } = useSelector((state) => state.reportees);
   const user = useSelector((state) => state.userDetails.user)
-  const [empDetails, setEmpDetails] = useState(null);
+  // const [empDetails, setEmpDetails] = useState(null);
   const { reports, loading, error } = useSelector((state) => state.reports);
   const [open, setOpen] = useState({ "accordianOne": false, "accordianTwo": false });
+
 
 
 
@@ -34,7 +35,7 @@ function Reports() {
       const filtered = Object.groupBy(reports, ({ type }) => type);
       return filtered;
     }
-  }, [reports, id]);
+  }, [reports, viewReportee]);
 
   const handleAccordian = (value) => {
     switch (value) {
@@ -63,9 +64,9 @@ function Reports() {
   }
 
   const handleAddActivity = async (activityData) => {
-    if (id) {
+    if (viewReportee) {
       let newData = {
-        "empId": empId,
+        "empId": viewReportee.empId,
         "data": activityData
       }
       await axios.post(`${base_url}/createActivity`, newData)
@@ -78,31 +79,31 @@ function Reports() {
   }
 
   useEffect(() => {
-    if (id !== undefined || null && reportees.length > 0) {
-      const emp = reportees?.filter((item) => item.empId === Number(id));
-      setEmpDetails(emp[0]);
-      const data = {
-        "empId": Number(id),
-        "fromDate": "",
-        "toDate": ""
-      }
-      dispatch(fetchReports(data))
-    }
-    return (() => {
-      setEmpDetails(null)
-    })
-  }, [id, reportees]);
+    // if (viewReportee !== undefined || null && reportees.length > 0) {
+    //   const emp = reportees?.filter((item) => item.empId === Number(viewReportee.empId));
+    //   setEmpDetails(emp[0]);
+    //   const data = {
+    //     "empId": Number(viewReportee.empId),
+    //     "fromDate": "",
+    //     "toDate": ""
+    //   }
+    //   dispatch(fetchReports(data))
+    // }
+    // return (() => {
+    //   setEmpDetails(null)
+    // })
+  }, [viewReportee, reportees]);
 
   useEffect(() => {
     if (user) {
-      navigate(`/viewreportee/${id}`)
+      navigate(`/viewreportee`)
       setOpen({ "accordianOne": false, "accordianTwo": false })
     } else {
       navigate("/")
     }
-  }, [id]);
+  }, []);
 
-  if (empDetails && reportees.length)
+  if (viewReportee && reportees.length)
     return (
       <div className="p-4" >
         <div className="bg-white p-3 rounded-md">
@@ -110,33 +111,33 @@ function Reports() {
             {/* <img src="/generic-male-avatar-rectangular.jpg" width="100px" height="100px" /> */}
             <div className="my-1">
               <p>
-                <span className="font-medium">Employee Name : </span> {empDetails?.empName}
+                <span className="font-medium">Employee Name : </span> {viewReportee?.empName}
               </p>
               <p>
-                <span className="font-medium">Designation : </span> {empDetails?.designation}
+                <span className="font-medium">Designation : </span> {viewReportee?.designation}
               </p>
               {/* <p>
-              <span className="font-medium">Email Id:  </span> {empDetails?.empEmail}
+              <span className="font-medium">Email Id:  </span> {viewReportee?.empEmail}
           </p> */}
             </div>
             <div className="my-1">
               <p>
-                <span className="font-medium">Role : </span> {empDetails?.techStack}
+                <span className="font-medium">Role : </span> {viewReportee?.techStack}
               </p>
               <p>
-                <span className="font-medium">Employee Id:  </span> {empDetails?.empId}
+                <span className="font-medium">Employee Id:  </span> {viewReportee?.empId}
               </p>
               {/* <p>
-          <span className="font-medium">Total Score : </span> {empDetails?.score}
+          <span className="font-medium">Total Score : </span> {viewReportee?.score}
           </p> */}
               {/* <p>
-          <span className="font-medium">Allocated To : </span> {empDetails?.project}
+          <span className="font-medium">Allocated To : </span> {viewReportee?.project}
           </p> */}
 
             </div>
             <div className="flex flex-col justify-center items-center">
-              <div className={`w-[40px] h-[40px] rounded-full flex items-center text-white justify-center  ${scoreColor(empDetails?.score)}`}>
-                <span className="text-lg font-bold">{empDetails?.score}</span>
+              <div className={`w-[40px] h-[40px] rounded-full flex items-center text-white justify-center  ${scoreColor(viewReportee?.score)}`}>
+                <span className="text-lg font-bold">{viewReportee?.score}</span>
               </div>
               <div className="">
                 <span className="text-blue-400 font-semibold">Total Score</span>
@@ -162,4 +163,4 @@ function Reports() {
 }
 
 
-export default Reports;
+export default Viewreportee;

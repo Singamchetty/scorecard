@@ -4,6 +4,7 @@ import axios from "axios";
 
 const initialState = {
   reportees: [],
+  viewReportee:null,
   totalCount:0,
   loading: false,
   error: null,
@@ -20,6 +21,20 @@ const reporteesSlice = createSlice({
   reducers: {
     resetReportees:() => {
       return initialState
+    },
+    setViewReportee:(state,action)=>{
+        const reportee=state.reportees.find((reportee)=>reportee.empId==action.payload)
+         if(!reportee){
+          return {
+            ...state,
+            viewReportee: null
+          }
+        } else {
+          return {
+            ...state,
+            viewReportee: reportee
+          }
+        }
     }
   },
   extraReducers: (builder) => {
@@ -41,6 +56,6 @@ const reporteesSlice = createSlice({
   },
 });
 
-export const {resetReportees} = reporteesSlice.actions;
+export const {resetReportees,setViewReportee} = reporteesSlice.actions;
 
 export default reporteesSlice.reducer;
