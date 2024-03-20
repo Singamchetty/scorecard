@@ -3,20 +3,16 @@ import { useSelector, useDispatch } from "react-redux";
 import { useParams, useNavigate } from "react-router";
 import { base_url } from "../../utils/constants";
 import axios from 'axios';
-import { fetchReports } from "../../redux/reducers/reportSlice";
 import { fetchReportees } from "../../redux/reducers/reporteesSlice";
 import Accordion from "../../components/accordion";
 import {scoreColor} from '../../utils/commonFunctions';
-import DateRangePicker from "../../components/dateRangePicker/DateRangePicker";
+
 
 function Viewreportee() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  // const { id } = useParams();
-  // const empId = Number(id)
   const {reportees, viewReportee } = useSelector((state) => state.reportees);
   const user = useSelector((state) => state.userDetails.user)
-  // const [empDetails, setEmpDetails] = useState(null);
   const { reports, loading, error } = useSelector((state) => state.reports);
   const [open, setOpen] = useState({ "accordianOne": false, "accordianTwo": false });
 
@@ -78,21 +74,7 @@ function Viewreportee() {
     }
   }
 
-  useEffect(() => {
-    // if (viewReportee !== undefined || null && reportees.length > 0) {
-    //   const emp = reportees?.filter((item) => item.empId === Number(viewReportee.empId));
-    //   setEmpDetails(emp[0]);
-    //   const data = {
-    //     "empId": Number(viewReportee.empId),
-    //     "fromDate": "",
-    //     "toDate": ""
-    //   }
-    //   dispatch(fetchReports(data))
-    // }
-    // return (() => {
-    //   setEmpDetails(null)
-    // })
-  }, [viewReportee, reportees]);
+
 
   useEffect(() => {
     if (user) {

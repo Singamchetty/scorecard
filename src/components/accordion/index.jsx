@@ -6,7 +6,7 @@ import { useSelector ,useDispatch} from "react-redux";
 import { useEffect } from "react";
 import {useParams} from 'react-router'
 import { fetchReportees } from "../../redux/reducers/reporteesSlice";
-import { calculateDefaultScore,calculateInitiativeScore } from "../../redux/reducers/reportSlice";
+import { calculateDefaultScore,calculateInitiativeScore } from "../../redux/reducers/viewreporteeSlice";
 import Loading from "../loading Component/Loading";
 
 

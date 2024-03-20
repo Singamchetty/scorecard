@@ -39,8 +39,8 @@ export default function MyModal({ visible, onClose, type, handleAddActivity }) {
   }
 
   const handlePerformance=(value)=> {
-    let appreciateScores = [0, 1, 2, 3, 4, 5]
-    let depreciateScores = [-0, -1, -2, -3, -4, -5]
+    let appreciateScores = [1, 2, 3, 4, 5]
+    let depreciateScores = [ -1, -2, -3, -4, -5]
     if (value == 1) {
       setActivityData({ ...activityData, score: 0 })
       setScoreRender(appreciateScores)
