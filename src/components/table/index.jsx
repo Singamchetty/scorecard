@@ -11,7 +11,7 @@ function Table({headers, data,loading, maxHeight}) {
           <tr className="mb-2">
             {headers?.map((item,index) => (
               <th key={index} scope="col" className={`px-6 py-4 w-[${item.width}]`} > 
-                {item.title}
+                { item.renderHeader ? item.renderHeader(item.title) : item.title}
               </th>
             ))}
           </tr>

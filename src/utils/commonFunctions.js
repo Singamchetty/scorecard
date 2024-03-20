@@ -1,4 +1,4 @@
-const scoreColor = (value) => {
+export const scoreColor = (value) => {
     if (value < 1) {
       return 'bg-red-400';
     } else if (value >= 1 && value < 2) {
@@ -16,4 +16,13 @@ const scoreColor = (value) => {
     }
 };
 
-export default scoreColor;
+export const debounce = (func, delay) => {
+  let timeoutId;
+  
+  return function(...args) {
+    clearTimeout(timeoutId);
+    timeoutId = setTimeout(() => {
+      func.apply(this, args);
+    }, delay);
+  };
+}

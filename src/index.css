@@ -23,5 +23,6 @@ code {
   display: inline-block;
 }
 
-
-
+.childDiv {
+  max-height: calc(100vh - 85px);
+}
