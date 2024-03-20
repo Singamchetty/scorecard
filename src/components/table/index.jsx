@@ -23,7 +23,7 @@ function Table({headers, data,loading, maxHeight}) {
                <tr key={item.id} className="bg-white  hover:bg-gray-300 " >
                    {
                      headers?.map(({render, id}) => (
-                       <td key={`${item.id}_${id}`}  className="px-6 py-2 "  >
+                       <td className="px-6 py-2 "  >
                         {render ? render(item[id]) : item[id] === "" ? "NA" : item[id] }
                         </td>
                      ))

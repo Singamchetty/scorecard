@@ -2,7 +2,7 @@ import {BrowserRouter, Routes, Route} from 'react-router-dom';
 import Home from "./pages/home";
 import Dashboard from './pages/dashboard';
 import Layout from './pages/layout';
-import Reports from './pages/reports';
+import Viewreportee from './pages/viewReportee';
 import './App.css';
 import PageNotFound from './pages/pagenotfound/PageNotFound';
 
@@ -12,7 +12,7 @@ function App() {
       <Routes>
         <Route path='/' element={<Home />}/>
         <Route path="/dashboard" element={<Layout><Dashboard/></Layout>}/>
-        <Route path="/viewreportee/:id" element={<Layout><Reports/></Layout>}/>
+        <Route path="/viewreportee" element={<Layout><Viewreportee/></Layout>}/>
         <Route path="/*" element={<PageNotFound/>}/>
       </Routes>
     </BrowserRouter>
