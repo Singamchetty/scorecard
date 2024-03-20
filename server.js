@@ -246,9 +246,10 @@ const calculateAverage = async(query) => {
     "fromDate":"2024-03-10",
     "toDate":"2024-03-14",
     page:0
-    perPage:10,
+    perPage:10, 
 }
 */
+
 app.post("/getActivities", async(req, res) => {
   let { empId,today } = req.body;
   if (!empId || typeof empId == "string") {
