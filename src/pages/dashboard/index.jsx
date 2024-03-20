@@ -27,13 +27,7 @@ function Dashboard() {
     setCurrPage(currPage)
     dispatch(fetchReportees(data))
   }
-  // useEffect(() => {
-  //   let data={
-  //     reportees:reportees,
-  //     ["page"]:page,
-  //   }
-  //   dispatch(fetchReportees(data))
-  // } ,[page]);
+
 
   useEffect(() => {
     setPagesCount(Math.ceil((totalCount) / (10)))
@@ -96,13 +90,13 @@ function Dashboard() {
       id: 'designation'
     },
     {
+      title: "Role",
+      id: 'techStack'
+    },
+    {
       title: "score",
       id: "score",
       render: (value) => <span className={`w-[30px] h-[30px] rounded-full flex items-center text-white justify-center ${scoreColor(value)}`}>{value}</span>
-    },
-    {
-      title: "Role",
-      id: 'techStack'
     },
     {
       title: "Action",
@@ -123,9 +117,8 @@ function Dashboard() {
          
       <div className="">
         {reportees && (
-          <div className="flex justify-center mt-2">
-            {/* <div className="text-blue-500">Total Results: {pagesCount}</div> */}
-            {pagesCount > 1 && (
+          <div className="flex justify-center mt-2 ">
+            {pagesCount >= 1 && (
               <PaginationComponent
                 currentPage={currPage}
                 totalPages={pagesCount}

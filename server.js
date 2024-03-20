@@ -92,14 +92,21 @@ app.post("/getreportees",async (req, res) => {
   let query = { empId: { $in: reporteesArray } };
   let aggre = [{ $match: { empId: { $in: reporteesArray } } }];
 
+  aggre.push({
+    $addFields: {
+      empIdString: { $toString: "$empId" } 
+    }
+  })
+
   if (req.body.searchText) {
     let searchText = req.body.searchText.trim();
     let searchStr = new RegExp(searchText, "ig");
     let orCondation = {
       $or: [
-        { empId: searchStr },
+        { empIdString: searchStr },
         { empName: searchStr },
         { designation: searchStr },
+        {techStack:searchStr}
       ],
     };
     aggre.push({ $match: orCondation });
@@ -120,7 +127,7 @@ app.post("/getreportees",async (req, res) => {
       if (result && result.length) {
         res.status(201).json({ ...result[0] });
       } else {
-        res.status(404).json({ data: [], totalCount: { count: 0 } });
+        res.status(201).json({ data: [], totalCount: { count: 0 } });
       }
     })
     .catch((error) => res.status(401).send(error));
