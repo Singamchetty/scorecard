@@ -40,11 +40,11 @@ function Accordion({ title, data ,handleAddActivity,open,handleAccordian}) {
     handleAccordian(title)
   }
   const headers = [
-    { title: "Activity Name", id: "aName", width: "25%" },
-    { title: "Date", id: "recorded_date", width: "20%", render: (value) => moment(value).format('DD-MM-YYYY') },
-    {title: "Rated By", id: "ratedBy", width: "25%"},
-    { title: "Score", id: "score", width: "10%", render: (value) => <div className="w-[35px] bg-blue-400 rounded-full text-white font-bold text-center p-[4px]">{value}</div> },
-    { title: "Comments", id: "comments", width: "30%" },
+    { title: "Activity Name", id: "aName"},
+    { title: "Date", id: "recorded_date",  render: (value) => moment(value).format('DD-MM-YYYY') },
+    {title: "Rated By", id: "ratedBy"},
+    { title: "Score", id: "score", render: (value) => <div className="w-[35px] px-3 bg-blue-400 rounded-full text-white font-bold text-center p-[4px]">{value}</div> },
+    { title: "Comments", id: "comments", render:(value)=><span className="listData" title={value}>{value}</span>},
   ];
   
   if(loading && title =="Duties")return <Loading/>
