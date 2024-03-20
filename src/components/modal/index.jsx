@@ -35,7 +35,7 @@ export default function MyModal({ visible, onClose, type, handleAddActivity }) {
 
 
   const handleScoreChange = (value) => {
-    setActivityData({ ...activityData, score: value })
+    setActivityData({ ...activityData, score: Number(value) })
   }
 
   const handlePerformance=(value)=> {

@@ -43,7 +43,7 @@ function LeftSidebar() {
         Reportees
         </p>
         <input 
-          placeholder="Search Reportees"
+          placeholder="Search"
           type="text" 
           className="p-2 mi-2 border rounded w-[160px]"
           value={inputValue} 
