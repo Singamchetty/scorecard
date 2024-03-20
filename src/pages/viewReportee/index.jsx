@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { useParams, useNavigate } from "react-router";
 import { base_url } from "../../utils/constants";
 import axios from 'axios';
-import { fetchReportees } from "../../redux/reducers/reporteesSlice";
+import { fetchReportees,setViewReportee } from "../../redux/reducers/reporteesSlice";
 import {fetchReporteeActivities} from '../../redux/reducers/viewreporteeSlice'
 import Accordion from "../../components/accordion";
 import {scoreColor} from '../../utils/commonFunctions';
@@ -55,7 +55,7 @@ function Viewreportee() {
         page: 1,
         perPage: 10,
       };
-      dispatch(fetchReportees(data));
+      dispatch(fetchReportees(data))
     }
 
   }
@@ -78,6 +78,12 @@ function Viewreportee() {
   useEffect(()=>{
     if(reportees.length>0 && viewReportee)
      dispatch(fetchReporteeActivities({empId:viewReportee.empId}))
+  },[reportees,viewReportee])
+
+  useEffect(()=>{
+    if(reportees.length){
+      dispatch(setViewReportee(viewReportee.empId))
+    }
   },[reportees])
 
 
@@ -91,7 +97,7 @@ function Viewreportee() {
     }
   }, []);
 
-  if (viewReportee && reportees.length)
+  if ( reportees.length && viewReportee)
     return (
       <div className="p-4" >
         <div className="bg-white p-3 rounded-md">
