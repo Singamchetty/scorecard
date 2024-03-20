@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from 'axios';
 import { base_url } from "../../utils/constants";
@@ -7,6 +7,7 @@ import {useDispatch,useSelector} from 'react-redux'
 import Loading from '../../components/loading Component/Loading'
 
 function Home() {
+  const inputRef = useRef(null);
   const navigate = useNavigate();
   const dispatch=useDispatch()
   const [id, setId] = useState(null);
@@ -15,10 +16,11 @@ function Home() {
   const userDetails = useSelector((state) => state.userDetails);
  
 
-  const handleNavigate = async () => {
+  const handleSubmit = async (e) => {
+    e.preventDefault();
     setLoading(true)
     if(id!==null){
-     await axios.post(`${base_url}/login`,{empId:Number(id)})
+     await axios.post(`${base_url}/login`,{empId:Number(inputRef.current.value)})
       .then((res) => {
         setLoading(false)
         dispatch(loginUser(res.data.user))
@@ -35,6 +37,7 @@ function Home() {
   };
   useEffect(()=>{
      setLoading(false)
+     inputRef.current.focus();
   },[])
   useEffect(()=>{
     if (userDetails?.user!=null)
@@ -47,8 +50,7 @@ function Home() {
     <div className="container py-10 px-10 mx-0 min-w-full h-screen flex items-center justify-center bg-blue-100 ">
       <div className="">
       <h1 className="text-4xl font-extrabold leading-none tracking-tight   md:text-5xl lg:text-6xl text-purple-900 mb-10 ">SCORE  CARD</h1>
-      {/* {
-        (loading)?<Loading/>: */}
+      <form>
         <div className="max-w-sm p-10 bg-white border border-gray-400 rounded-lg shadow ">
         <label
           htmlFor="email"
@@ -63,6 +65,7 @@ function Home() {
           placeholder="Enter Employee ID"
           required
           onChange={(e) => setId(e.target.value)}
+          ref={inputRef}
         />
         {
 
@@ -75,17 +78,21 @@ function Home() {
         <div className="flex justify-between">
         <button
           className="bg-purple-900 text-white disabled:bg-purple-900 hover:bg-blue-400 font-bold py-2 px-4 mt-6  rounded text-center"
-          onClick={handleNavigate}
+          onClick={(e) => handleSubmit(e)}
           disabled={!id}
+          type="submit"
         >
           Submit
         </button>
+
         {
           (loading)?<img src="/Loader2.gif" className="" width={100} height={100}/>:null
         }
         </div>
+        
       </div>
-      {/* } */}
+      </form>
+
       </div>
     </div>
   );

@@ -76,7 +76,6 @@ function Dashboard() {
     {
       title: "Employee Name",
       id: "empName",
-      renderHeader: (value) => <div><span>{value}</span> <input placeholder="Search Employee" value={inputValue} onChange={handleChange} type="text" className="p-2 mi-2 border rounded"/></div>,
       render: (value) => <span className="flex items-center">
         {/* <img className="pr-2" src="/man.png" width="30px" height="30px" /> */}
         {value}</span>
@@ -113,6 +112,10 @@ function Dashboard() {
   return (
     <div>
       <div className="mb-2">
+        <div className="flex justify-end my-1 mr-2 items-center">
+          <label>Search Employee:</label>
+          <input placeholder="Enter value" value={inputValue} onChange={handleChange} type="text" className="p-1 px-2 border rounded ml-2"/>
+        </div>
          <Table headers={headers} data={reportees} loading={loading} maxHeight={88} />
          
       <div className="">
