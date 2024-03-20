@@ -291,9 +291,14 @@ app.post("/getActivities", async(req, res) => {
     .toArray()
     .then((result) => {
       if (result && result.length) {
-        res.status(201).json({ ...result[0] });
+        let resData = { activities: [], totalCount: result[0].totalCount,"empId":empId };
+        result[0].data.forEach((item)=>{
+          resData["activities"].push(item.activities);
+        });
+
+        res.status(201).json(resData);
       } else {
-        res.status(201).json({ data: [], totalCount: { count: 0 } });
+        res.status(201).json({ activities: [], totalCount: { count: 0 } });
       }
     })
     .catch((error) => res.status(401).send(error));
