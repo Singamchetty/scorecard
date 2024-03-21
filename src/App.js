@@ -5,7 +5,7 @@ import Layout from './pages/layout';
 import Viewreportee from './pages/viewReportee';
 import './App.css';
 import PageNotFound from './pages/pagenotfound/PageNotFound';
-
+import Exporttable from './pages/reportexport'
 function App() {
   return (
     <BrowserRouter>
@@ -13,6 +13,7 @@ function App() {
         <Route path='/' element={<Home />}/>
         <Route path="/dashboard" element={<Layout><Dashboard/></Layout>}/>
         <Route path="/viewreportee" element={<Layout><Viewreportee/></Layout>}/>
+        <Route path="/reportees" element={<Layout><Exporttable/></Layout>}/>
         <Route path="/*" element={<PageNotFound/>}/>
       </Routes>
     </BrowserRouter>
