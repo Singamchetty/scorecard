@@ -141,7 +141,7 @@ app.post("/getreportees",async (req, res) => {
     "data":{
         "aName":"Approval of timesheet",
         "aId":"D001",
-        "type":"default",
+        "type":"duties",
         "ratedBy":"Name",
         "score":3,
         "comments":""
