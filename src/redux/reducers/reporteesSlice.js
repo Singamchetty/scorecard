@@ -8,6 +8,8 @@ const initialState = {
   totalCount:0,
   loading: false,
   error: null,
+  currPage:1,
+  pagesCount:1
 };
 
 export const fetchReportees = createAsyncThunk("getreportees", async (data) => {
@@ -35,6 +37,12 @@ const reporteesSlice = createSlice({
             viewReportee: reportee
           }
         }
+    },
+    setCurrPage: (state, action) => {
+      state.currPage = action.payload
+    },
+    setPagesCount: (state, action) => {
+      state.pagesCount = action.payload
     }
   },
   extraReducers: (builder) => {
@@ -56,6 +64,6 @@ const reporteesSlice = createSlice({
   },
 });
 
-export const {resetReportees,setViewReportee} = reporteesSlice.actions;
+export const {resetReportees,setViewReportee, setCurrPage, setPagesCount} = reporteesSlice.actions;
 
 export default reporteesSlice.reducer;
