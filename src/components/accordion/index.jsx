@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import Table from "../table";
-import moment from "moment";
 import ModalButton from "../modal/modalButton";
 import { useSelector ,useDispatch} from "react-redux";
 import { useEffect } from "react";
@@ -8,6 +7,7 @@ import {useParams} from 'react-router'
 import { fetchReportees } from "../../redux/reducers/reporteesSlice";
 import { calculateDefaultScore,calculateInitiativeScore } from "../../redux/reducers/viewreporteeSlice";
 import Loading from "../loading Component/Loading";
+import {convertUTCToLocal} from '../../utils/commonFunctions';
 
 
 function Accordion({ title, data ,handleAddActivity,open,handleAccordian}) {
@@ -41,7 +41,7 @@ function Accordion({ title, data ,handleAddActivity,open,handleAccordian}) {
   }
   const headers = [
     { title: "Activity Name", id: "aName"},
-    { title: "Date", id: "recorded_date",  render: (value) => moment(value).format('DD-MM-YYYY') },
+    { title: "Date", id: "recorded_date",  render: (value) => convertUTCToLocal(value) },
     {title: "Rated By", id: "ratedBy"},
     { title: "Score", id: "score", render: (value) => <div className="w-[35px] px-3 bg-blue-400 rounded-full text-white font-bold text-center p-[4px]">{value}</div> },
     { title: "Comments", id: "comments", render:(value)=><span className="listData" title={value}>{value}</span>},
