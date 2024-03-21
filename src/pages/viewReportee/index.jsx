@@ -76,15 +76,15 @@ function Viewreportee() {
   }
 
   useEffect(()=>{
-    if(reportees.length>0 && viewReportee)
-     dispatch(fetchReporteeActivities({empId:viewReportee.empId}))
+    if(reportees.length>0 && viewReportee !== null)
+     dispatch(fetchReporteeActivities({empId:viewReportee?.empId}))
   },[reportees,viewReportee])
 
-  useEffect(()=>{
-    if(reportees.length){
-      dispatch(setViewReportee(viewReportee.empId))
-    }
-  },[reportees])
+  // useEffect(()=>{
+  //   if(reportees.length){
+  //     dispatch(setViewReportee(viewReportee?.empId))
+  //   }
+  // },[reportees])
 
 
 
