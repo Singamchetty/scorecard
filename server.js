@@ -302,7 +302,7 @@ app.post("/getActivities", async(req, res) => {
 
         res.status(201).json(resData);
       } else {
-        res.status(201).json({ activities: [], totalCount: { count: 0 } });
+        res.status(201).json({ activities: [], totalCount: { count: 0 },"empId":empId });
       }
     })
     .catch((error) => res.status(401).send(error));

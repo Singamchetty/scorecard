@@ -1,3 +1,5 @@
+import moment from 'moment';
+
 export const scoreColor = (value) => {
     if (value < 1) {
       return 'bg-red-400';
@@ -18,11 +20,18 @@ export const scoreColor = (value) => {
 
 export const debounce = (func, delay) => {
   let timeoutId;
-  
+
   return function(...args) {
     clearTimeout(timeoutId);
     timeoutId = setTimeout(() => {
       func.apply(this, args);
     }, delay);
   };
+}
+
+export const convertUTCToLocal = (utcDate) => {
+  const utcDateObj = new Date(utcDate);
+  const localTimeMillis = utcDateObj.getTime() + utcDateObj.getTimezoneOffset() * 60 * 1000;
+  const localDateObj = new Date(localTimeMillis);
+  return moment(localDateObj).format('DD-MM-YYYY')
 }

@@ -5,12 +5,14 @@ import { useSelector, useDispatch } from "react-redux";
 import { useParams } from "react-router-dom";
 import { scoreColor } from '../../utils/commonFunctions';
 import Loading from "../loading Component/Loading";
+import PaginationComponent from "../Pagenation/Pagenation";
 
 function LeftSidebar() {
   const dispatch = useDispatch();
   const [currPage, setCurrPage] = useState(1);
+  const [pagesCount, setPagesCount] = useState(1);
   const [inputValue, setInputValue] = useState(null);
-  const { reportees, loading, viewReportee } = useSelector((state) => state.reportees);
+  const { reportees, loading, viewReportee, totalCount } = useSelector((state) => state.reportees);
   const userDetails = useSelector((state) => state.userDetails);
 
 
@@ -35,6 +37,20 @@ function LeftSidebar() {
     setInputValue(event.target.value);
   };
 
+  useEffect(() => {
+    setPagesCount(Math.ceil((totalCount) / (10)))
+  }, [totalCount])
+
+  const handlePageChange = (currPage) => {
+    let data = {
+      reportees: userDetails.user.reportees,
+      page: currPage,
+      perPage: 10
+    }
+    setCurrPage(currPage)
+    dispatch(fetchReportees(data))
+  }
+
   return (
 
     <div className="  w-[33%] flex flex-col px-[5px]">
@@ -56,7 +72,7 @@ function LeftSidebar() {
             {reportees?.map(({ empName, score, empId }) => (
               <button onClick={() => dispatch(setViewReportee(empId))}
                 // to={`/viewreportee`}
-                className={`flex items-center hover:bg-blue-400 hover:text-white  bg-${viewReportee.empId == empId ? "blue-400 text-white" : "white"
+                className={`flex items-center hover:bg-blue-400 hover:text-white  bg-${viewReportee?.empId == empId ? "blue-400 text-white" : "white"
                   } p-2 justify-between mb-1 w-full`}
                 key={empId}
               >
@@ -70,7 +86,13 @@ function LeftSidebar() {
             ))}
           </div>
       }
-
+      <div>
+        <PaginationComponent 
+          currentPage={currPage}
+          totalPages={pagesCount}
+          onPageChange={handlePageChange}
+        />
+      </div>
     </div>
   );
 }
