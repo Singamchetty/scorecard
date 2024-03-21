@@ -55,7 +55,7 @@ export default function MyModal({ visible, onClose, type, handleAddActivity }) {
   }
 
   const handleComments = (e) => {
-    setActivityData({ ...activityData, comments: e.target.value })
+    setActivityData({ ...activityData, comments:e.target.value.trim() })
   }
 
   const handleSubmit = (e) => {

@@ -51,22 +51,22 @@ function LeftSidebar() {
 
   return (
 
-    <div className="  w-[33%] flex flex-col px-[5px]">
-      <div className="flex mt-3 items-center justify-between">
+    <div className=" w-[33%] flex flex-col px-[5px]">
+      <div className="  flex mt-3 items-center justify-between">
         <p className="text-xl text-blue-400 font-semibold pl-4">
         Reportees
         </p>
         <input 
           placeholder="Search"
           type="text" 
-          className="p-2 mi-2 border rounded w-[160px]"
+          className="p-2  border rounded w-[160px] placeholder:text-[14px]"
           value={inputValue} 
           onChange={handleChange} 
         />
       </div>
       {
         (loading) ? <Loading /> :
-          <div className="p-2 bg-[#E9EDEE] mt-4 max-h-[80vh] overflow-auto">
+          <div className="p-2 bg-[#E9EDEE] mt-4 max-h-[70vh] overflow-auto">
             {reportees?.map(({ empName, score, empId }) => (
               <button onClick={() => dispatch(setViewReportee(empId))}
                 // to={`/viewreportee`}
