@@ -113,8 +113,8 @@ function Dashboard() {
     <div>
       <div className="mb-2">
         <div className="flex justify-end my-1 mr-2 items-center">
-          <label>Search Employee:</label>
-          <input placeholder="Enter" value={inputValue} onChange={handleChange} type="text" className="p-1 px-2 border rounded ml-2"/>
+          <label>Search :</label>
+          <input placeholder="Name/Id/Designation/Role"  value={inputValue} onChange={handleChange} type="text" className="p-1 px-2 border rounded ml-2 placeholder:text-[14px]"/>
         </div>
          <Table headers={headers} data={reportees} loading={loading} maxHeight={88} />
          
