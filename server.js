@@ -110,7 +110,7 @@ app.post("/getreportees",async (req, res) => {
       ],
     };
     aggre.push({ $match: orCondation });
-
+    aggre.push({$unset:"empIdString"});
     query = Object.assign(query);
   }
   aggre.push({ $sort: { [sortBy]: sortByOrder } });
@@ -244,42 +244,67 @@ const calculateAverage = async(query) => {
 {
     "empId":41689,
     "fromDate":"2024-03-10",
-    "toDate":"2024-03-14"
+    "toDate":"2024-03-14",
+    page:0
+    perPage:10, 
 }
 */
+
 app.post("/getActivities", async(req, res) => {
-  let { empId, fromDate, toDate, today } = req.body;
+  let { empId,today } = req.body;
   if (!empId || typeof empId == "string") {
     res.status(401).json({ message: "Employee id is missing / EmpId should be string only" });
     return;
   } else {
-    let query = {
-      empId: empId,
-    };
-    if (fromDate && toDate) {
-      fromDate = new Date(fromDate)
-      toDate = new Date(toDate);
-      toDate.setHours(23);
-      toDate.setMinutes(59);
-      toDate.setSeconds(59);
-      query["activities.recorded_date"] = {
-        $gte: new Date(fromDate),
-        $lte: new Date(toDate),
-      };
-    } else {
-      // If fromDate and toDate are not provided, fetch data for the last 90 days
-      query["activities.recorded_date"] = {
-        $gte: moment().subtract(90, "days").toDate(),
-        $lte: moment().toDate(),
-      };
+    let page = req.body.page ? parseInt(req.body.page) || 1 : 1;
+    let limit = req.body.perPage ? parseInt(req.body.perPage) || 10 : 10;
+    let skip = (page - 1) * limit || 0;
+
+    //let query = { empId: empId};
+    let aggreGate = [  { $match:{empId: empId} } ];
+    let fromDate = moment().subtract(90, "days").toDate();
+    let toDate = moment().toDate()
+
+    if (req.body.fromDate && req.body.toDate) {
+        fromDate = new Date(req.body.fromDate);
+        toDate = new Date(req.body.toDate);
+                
     }
-    await db.collection("performance_master")
-      .findOne(query)
-      .then((results) => {
-        res.status(201).json(results);
-      })
-      .catch((error) => {
-        res.status(401).json({ message: "Error fetching data" }, error);
-      });
+    toDate.setHours(23);
+    toDate.setMinutes(59);
+    toDate.setSeconds(59);
+   // query["activities.recorded_date"] =  {$gte: new Date(fromDate),$lte: new Date(toDate) };
+    aggreGate.push({$match:{"activities.recorded_date": {$gte: new Date(fromDate),$lte: new Date(toDate) } } });
+    aggreGate.push({$unwind:"$activities" });
+    aggreGate.push({ $sort: { "activities.recorded_date": -1 } });
+
+    let facet = {
+      data: [{ $skip: skip }, { $limit: limit }],
+      totalCount: [{ $count: "count" }],
+    };
+    aggreGate.push({ $facet: facet });
+    aggreGate.push({ $unwind: { path: "$totalCount" } });
+      
+
+     db.collection("performance_master")
+    .aggregate(aggreGate)
+    .toArray()
+    .then((result) => {
+      if (result && result.length) {
+        let resData = { activities: [], totalCount: result[0].totalCount,"empId":empId };
+        if(result[0].data?.length){
+          result[0].data.forEach((item)=>{
+            resData["activities"].push(item.activities);
+          });
+
+        }
+       
+
+        res.status(201).json(resData);
+      } else {
+        res.status(201).json({ activities: [], totalCount: { count: 0 },"empId":empId });
+      }
+    })
+    .catch((error) => res.status(401).send(error));
   }
 });
