@@ -32,7 +32,7 @@ function LeftSidebar() {
   }, [inputValue]);
 
   const handleChange = (event) => {
-    setInputValue(event.target.value);
+    setInputValue(event.target.value.trim());
   };
 
   useEffect(() => {
