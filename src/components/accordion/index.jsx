@@ -77,6 +77,7 @@ function Accordion({ title, data ,handleAddActivity,open,handleAccordian}) {
           aria-labelledby="accordion-collapse-heading-2"
         >
            <Table headers={headers} loading={loading} data={data} />
+           
         </div>
       </div>
     );
