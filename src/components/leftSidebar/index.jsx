@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { fetchReportees, setViewReportee } from "../../redux/reducers/reporteesSlice";
+import { fetchReportees, setViewReportee, setCurrPage, setPagesCount } from "../../redux/reducers/reporteesSlice";
 import { Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { useParams } from "react-router-dom";
@@ -9,10 +9,8 @@ import PaginationComponent from "../Pagenation/Pagenation";
 
 function LeftSidebar() {
   const dispatch = useDispatch();
-  const [currPage, setCurrPage] = useState(1);
-  const [pagesCount, setPagesCount] = useState(1);
   const [inputValue, setInputValue] = useState(null);
-  const { reportees, loading, viewReportee, totalCount } = useSelector((state) => state.reportees);
+  const { reportees, loading, viewReportee, totalCount, currPage, pagesCount } = useSelector((state) => state.reportees);
   const userDetails = useSelector((state) => state.userDetails);
 
 
@@ -38,7 +36,7 @@ function LeftSidebar() {
   };
 
   useEffect(() => {
-    setPagesCount(Math.ceil((totalCount) / (10)))
+    dispatch(setPagesCount(Math.ceil((totalCount) / (10))))
   }, [totalCount])
 
   const handlePageChange = (currPage) => {
@@ -47,7 +45,7 @@ function LeftSidebar() {
       page: currPage,
       perPage: 10
     }
-    setCurrPage(currPage)
+    dispatch(setCurrPage(currPage))
     dispatch(fetchReportees(data))
   }
 

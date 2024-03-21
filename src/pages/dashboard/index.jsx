@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchReportees, setViewReportee } from "../../redux/reducers/reporteesSlice";
+import { fetchReportees, setViewReportee, setCurrPage, setPagesCount } from "../../redux/reducers/reporteesSlice";
 import Table from '../../components/table';
 import RightArrowIcon from '../../assets/icons/rightArrowIcon';
 import { scoreColor } from '../../utils/commonFunctions';
@@ -10,11 +10,9 @@ import PaginationComponent from "../../components/Pagenation/Pagenation";
 function Dashboard() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { reportees, loading, totalCount } = useSelector((state) => state.reportees);
+  const { reportees, loading, totalCount, currPage,  pagesCount} = useSelector((state) => state.reportees);
   const userDetails = useSelector((state) => state.userDetails);
   const [reporteIds, setReporteIds] = useState([]);
-  const [currPage, setCurrPage] = useState(1)
-  const [pagesCount, setPagesCount] = useState(1);
   const [inputValue, setInputValue] = useState('');
 
   //  userDetails.user.reportees || [];
@@ -24,13 +22,13 @@ function Dashboard() {
       page: currPage,
       perPage: 10
     }
-    setCurrPage(currPage)
+    dispatch(setCurrPage(currPage))
     dispatch(fetchReportees(data))
   }
 
 
   useEffect(() => {
-    setPagesCount(Math.ceil((totalCount) / (10)))
+    dispatch(setPagesCount(Math.ceil((totalCount) / (10))))
   }, [totalCount])
 
   useEffect(() => {
