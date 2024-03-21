@@ -76,23 +76,28 @@ function Dashboard() {
       id: "empName",
       render: (value) => <span className="flex items-center">
         {/* <img className="pr-2" src="/man.png" width="30px" height="30px" /> */}
-        {value}</span>
+        {value}</span>,
+      isSorting: true
     },
     {
       title: "Emp.Id",
-      id: "empId"
+      id: "empId",
+      isSorting: true
     },
     {
       title: "Designation",
-      id: 'designation'
+      id: 'designation',
+      isSorting: true
     },
     {
       title: "Role",
-      id: 'techStack'
+      id: 'techStack',
+      isSorting: true
     },
     {
       title: "score",
       id: "score",
+      isSorting: true,
       render: (value) => <span className={`w-[30px] h-[30px] rounded-full flex items-center text-white justify-center ${scoreColor(value)}`}>{value}</span>
     },
     {
@@ -131,8 +136,6 @@ function Dashboard() {
         )}
       </div>
       </div>
-      
-
     </div>
   )
 }
