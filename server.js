@@ -282,7 +282,7 @@ app.post("/getActivities", async(req, res) => {
     aggreGate.push({ $sort: { "activities.recorded_date": -1 } });
     if(types && types?.length)
         aggreGate.push({$match:{"activities.type": {"$in":types} } });
-    console.log(JSON.stringify(aggreGate));
+    //console.log(JSON.stringify(aggreGate));
 
     let facet = {
       data: [{ $skip: skip }, { $limit: limit }],
