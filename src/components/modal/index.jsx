@@ -7,16 +7,16 @@ import { v4 as uuidv4 } from 'uuid';
 
 
 export default function MyModal({ visible, onClose, type, handleAddActivity }) {
-  const {user} = useSelector((state) => state.userDetails)
+  const { user } = useSelector((state) => state.userDetails)
   const [activitiesList, setActivitiesList] = useState([])
   const [enableSubmit, setEnableSubmit] = useState(false)
-  const [activityData, setActivityData] = useState({ aName: "",ratedBy:"", aId: "", type: type, score: 0, comments: "" })
+  const [activityData, setActivityData] = useState({ aName: "", ratedBy: "", aId: "", type: type, score: 0, comments: "" })
   const [activityType, setActivtyType] = useState("")
   const [showCustActivity, setShowActivity] = useState(false);
   const [modalLoading, setModalLoading] = useState(true)
   const [scoreRender, setScoreRender] = useState([]);
   const [showScore, setShowScore] = useState(false)
-  const [disableAppreciate,setDisableAppreciate]=useState(false)
+  const [disableAppreciate, setDisableAppreciate] = useState(false)
 
   const getActivitysList = async (type) => {
     const activities = await axios.get(`${base_url}/activities`)
@@ -26,7 +26,14 @@ export default function MyModal({ visible, onClose, type, handleAddActivity }) {
   }
 
   const handleActivityName = (e) => {
-    setActivityData({ ...activityData, aName: e.target.value, aId: e.target.options[e.target.selectedIndex].id })
+    if (e.target.value === "custom") {
+      setActivityData({ ...activityData, aName: "", aId: "" })
+      setShowActivity(true)
+    }
+    else {
+      setShowActivity(false)
+      setActivityData({ ...activityData, aName: e.target.value, aId: e.target.options[e.target.selectedIndex].id })
+    }
   }
 
   const handleCustumActivity = (e) => {
@@ -39,9 +46,9 @@ export default function MyModal({ visible, onClose, type, handleAddActivity }) {
     setActivityData({ ...activityData, score: Number(value) })
   }
 
-  const handlePerformance=(value)=> {
+  const handlePerformance = (value) => {
     let appreciateScores = [1, 2, 3, 4, 5]
-    let depreciateScores = [ -1, -2, -3, -4, -5]
+    let depreciateScores = [-1, -2, -3, -4, -5]
     if (value == 1) {
       setActivityData({ ...activityData, score: 0 })
       setScoreRender(appreciateScores)
@@ -55,10 +62,11 @@ export default function MyModal({ visible, onClose, type, handleAddActivity }) {
   }
 
   const handleComments = (e) => {
-    setActivityData({ ...activityData, comments:e.target.value.trim() })
+    setActivityData({ ...activityData, comments: e.target.value.trim() })
   }
 
   const handleSubmit = (e) => {
+    e.preventDefault()
     onClose()
     setShowActivity(false)
     handleAddActivity(activityData)
@@ -79,16 +87,16 @@ export default function MyModal({ visible, onClose, type, handleAddActivity }) {
     setActivtyType(str.charAt(0).toUpperCase() + str.slice(1).toLowerCase())
   }
   useEffect(() => {
-    if(type==="duties"){
+    if (type === "duties") {
       setDisableAppreciate(true);
-    }else{
+    } else {
       setDisableAppreciate(false);
     }
     SentenceCase(type)
     if (visible === false) {
-      setActivityData({ aName: "",ratedBy:"", aId: "", type: type, score: 0, comments: "" })
+      setActivityData({ aName: "", ratedBy: "", aId: "", type: type, score: 0, comments: "" })
     } else {
-      setActivityData({...activityData,ratedBy:user.empName})
+      setActivityData({ ...activityData, ratedBy: user.empName })
       getActivitysList(type);
       setModalLoading(true)
     }
@@ -114,25 +122,19 @@ export default function MyModal({ visible, onClose, type, handleAddActivity }) {
               <div>
                 <form className=" p-2 max-w-sm mx-auto text-[12px]" onClick={(e) => e.stopPropagation()}>
                   <div className="flex items-center   my-5">
-                      
-
                     <label htmlFor="countries">SELECT ACTIVITY<span className="text-[15px]">*</span>: </label>
-                    <select disabled={showCustActivity} className="bg-gray-50 ml-2 w-6/12 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 " onChange={(e) => handleActivityName(e)} value={activityData.aName}>
+                    <select className="bg-gray-50 ml-2 w-6/12 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 " onChange={(e) => handleActivityName(e)} >
                       <option id="" value="">Select</option>
                       {
                         activitiesList && activitiesList.map((activity) => <option className=" w-7/12" key={activity.aId} id={activity.aId} value={activity.aName}>{activity.aName}</option>)
                       }
+                      <option value="custom" className={`${showCustActivity || type == "duties" && 'hidden'}`}>Add Activity</option>
                     </select>
-                    <button onClick={(e) => { handleCustBtn(e) }} className={`${showCustActivity && 'hidden'} bg-blue-400 ml-2 w-2/12 text-white  py-1 rounded hover:scale-95 transition text-sm`}>Custom</button>
                   </div>
                   <div className={`flex items-center  ${!showCustActivity && 'hidden'}`}>
-                    <label className={`font-medium  mr-2`}>Custom Activity<span className="text-[15px]">*</span>:</label>
+                    <label className={`font-medium  mr-2`}>Activity<span className="text-[15px]">*</span>:</label>
                     <input type="text" value={activityData.aName} placeholder="Enter Activity name" name="performance" className={`border border-gray-300 rounded p-2 `} onChange={(e) => handleCustumActivity(e)} />
-                    <button onClick={(e) => { handleCustBtn(e) }} className={`${!showCustActivity && 'hidden'} bg-blue-400 ml-2 w-2/12 text-white  py-1 rounded hover:scale-95 transition text-sm`}>Close</button>
                   </div>
-
-
-
                   <div className="flex items-center mb-4 ">
                     <label htmlFor="appreciate" className="font-medium">APPRECIATION<span className="text-[15px]">*</span>:</label>
                     <input id="appreciate" disabled={disableAppreciate} type="radio" value="appreciate" name="performance" className="w-4 h-4 m-3 text-blue-600 bg-gray-100 border-gray-300  " onChange={() => handlePerformance(1)} />
