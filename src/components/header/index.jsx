@@ -37,7 +37,7 @@ function Header({ isOpen }) {
     }, []);
 
     return (
-        <div className="flex items-center justify-between py-5 px-10" >
+        <div className="flex items-center justify-between py-5 px-10 fixed bg-white w-full" >
             <Link to={"/dashboard"}><img src="/logo.png" /></Link>
             <div className="flex items-center relative">
                 <button ref={logoutRef} className=" -mt-1 text-2xl flex" onClick={() => setOpen(!open)}>

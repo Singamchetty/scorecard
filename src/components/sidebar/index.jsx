@@ -1,12 +1,12 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { useSelector } from "react-redux";
+import SetWindowSize from '../../utils/SetWindowSize';
 
 function Sidebar() {
-  const user = useSelector((state) => state.userDetails.user);
+  const  [windowWidth, windowHeight] = SetWindowSize();
 
   return (
-    <div className="w-[20%] flex items-center flex-col">
+    <div className="w-[20%] flex items-center flex-col overflow-auto" style={{ height: `calc(${windowHeight}px - 87px)` }}>
       <nav
         className="hs-accordion-group p-6 w-full flex flex-col flex-wrap"
         data-hs-accordion-always-open

@@ -46,7 +46,7 @@ function Accordion({ title, data ,handleAddActivity,open,handleAccordian}) {
     { title: "Score", id: "score", render: (value) => <div className="w-[35px] px-3 bg-blue-400 rounded-full text-white font-bold text-center p-[4px]">{value}</div> },
     { title: "Comments", id: "comments", render:(value)=><span className="listData" title={value}>{value}</span>},
   ];
-  
+
   if(loading && title =="Duties")return <Loading/>
  
   if(!loading){
