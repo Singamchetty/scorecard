@@ -1,19 +1,22 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { base_url } from "../../utils/constants";
 import axios from "axios";
-
+ 
 const initialState = {
-    activitiesData:null,
+    // totalReporteesData: [],
+    activitiesData:[],
     loading: false,
     error: null,
+
 };
+ 
 
-
-export const fetchReportesActivitiesData = createAsyncThunk("getactivities", async (data) => {
+ 
+export const fetchReportesActivitiesData = createAsyncThunk("gettotalactivities", async (data) => {
   return await axios.post(`${base_url}/getActivities`,  data)
-    .then((response) =>  response.data.activities);
+    .then((response) => response.data);
 });
-
+ 
 const exporttableSlice = createSlice({
   name: "totalReportees",
   initialState,
@@ -21,16 +24,18 @@ const exporttableSlice = createSlice({
     resetReporteesTableData:() => {
       return initialState
     },
-    
+   
   },
   extraReducers: (builder) => {
+
     builder.addCase(fetchReportesActivitiesData.pending, (state) => {
       state.loading = true;
       state.error = "pending";
     });
     builder.addCase(fetchReportesActivitiesData.fulfilled, (state, action) => {
+      console.log(action.payload.activities)
       state.loading = false;
-      state.activitiesData = action.payload;
+      state.activitiesData = action.payload.activities      ;
       state.error = "";
     });
     builder.addCase(fetchReportesActivitiesData.rejected, (state, action) => {
@@ -40,7 +45,7 @@ const exporttableSlice = createSlice({
     });
   },
 });
-
+ 
 export const {resetReporteesTableData} = exporttableSlice.actions;
-
+ 
 export default exporttableSlice.reducer;
