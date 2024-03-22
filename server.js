@@ -373,6 +373,17 @@ app.post("/getActivities-avg", async(req, res) => {
 
         }
       });
+      aggreGate.push({
+        $project:{
+          "type":"$_id",
+          "avgScore":1
+        }
+      });
+      aggreGate.push({
+        $unset:"_id"
+      });
+
+
 
      db.collection("performance_master")
     .aggregate(aggreGate)
