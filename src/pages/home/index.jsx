@@ -4,7 +4,6 @@ import axios from 'axios';
 import { base_url } from "../../utils/constants";
 import { loginUser } from "../../redux/reducers/userSlice";
 import {useDispatch,useSelector} from 'react-redux'
-import Loading from '../../components/loading Component/Loading'
 
 function Home() {
   const inputRef = useRef(null);
