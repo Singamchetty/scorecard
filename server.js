@@ -247,6 +247,7 @@ const calculateAverage = async(query) => {
     "toDate":"2024-03-14",
     page:0
     perPage:10, 
+    "types":["duties","initiative"]
 }
 */
 
@@ -310,6 +311,74 @@ app.post("/getActivities", async(req, res) => {
       } else {
         res.status(201).json({ activities: [], totalCount: { count: 0 },"empId":empId });
       }
+    })
+    .catch((error) => res.status(401).send(error));
+  }
+});
+
+//sending filtered activities avg score data
+/*Example post data
+{
+    "empId":41689,
+    "fromDate":"2024-03-10",
+    "toDate":"2024-03-14",
+    "types":["duties","initiative"]
+   
+}
+*/
+app.post("/getActivities-avg", async(req, res) => {
+  let { empId,today,types } = req.body;
+  if (!empId || typeof empId == "string") {
+    res.status(401).json({ message: "Employee id is missing / EmpId should be string only" });
+    return;
+  } else {
+    let page = req.body.page ? parseInt(req.body.page) || 1 : 1;
+    let limit = req.body.perPage ? parseInt(req.body.perPage) || 10 : 10;
+    let skip = (page - 1) * limit || 0;
+
+    //let query = { empId: empId};
+    let aggreGate = [  { $match:{empId: empId} } ];
+    
+     
+    let fromDate = moment().subtract(90, "days").toDate();
+    let toDate = moment().toDate()
+
+    if (req.body.fromDate && req.body.toDate) {
+        fromDate = new Date(req.body.fromDate);
+        toDate = new Date(req.body.toDate);
+                
+    }
+    toDate.setHours(23);
+    toDate.setMinutes(59);
+    toDate.setSeconds(59);
+   // query["activities.recorded_date"] =  {$gte: new Date(fromDate),$lte: new Date(toDate) };
+   
+    aggreGate.push({$match:{"activities.recorded_date": {$gte: new Date(fromDate),$lte: new Date(toDate) } } });
+    aggreGate.push({$unwind:"$activities" });
+    aggreGate.push({ $sort: { "activities.recorded_date": -1 } });
+    if(types && types?.length)
+        aggreGate.push({$match:{"activities.type": {"$in":types} } });
+
+    let facet = {
+      data: [{ $skip: skip }, { $limit: limit }],
+      totalCount: [{ $count: "count" }],
+    };
+    //aggreGate.push({ $facet: facet });
+    //aggreGate.push({ $unwind: { path: "$totalCount" } });
+
+      aggreGate.push({
+        $group:{
+          _id:"$activities.type",
+          "avgScore":{ "$avg":"$activities.score" }
+
+        }
+      });
+
+     db.collection("performance_master")
+    .aggregate(aggreGate)
+    .toArray()
+    .then((result) => {
+      res.status(201).json(result);
     })
     .catch((error) => res.status(401).send(error));
   }
