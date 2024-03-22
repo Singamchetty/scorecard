@@ -101,7 +101,7 @@ function Exporttable() {
   if (reportees?.length > 0) {
     return (
       <div>
-        <div className={` overflow-auto sm:rounded-lg p-4 bg-gray-100`}>
+        <div className={` overflow-auto sm:rounded-lg p-4 bg-[#E9EDEE]`}>
           <div className="text-blue-800 py-3 pl-2 text-center">
             {" "}
             Genarate Report

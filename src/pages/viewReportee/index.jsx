@@ -4,7 +4,7 @@ import { useParams, useNavigate } from "react-router";
 import { base_url } from "../../utils/constants";
 import axios from 'axios';
 import { fetchReportees,setViewReportee } from "../../redux/reducers/reporteesSlice";
-import {fetchReporteeActivities} from '../../redux/reducers/viewreporteeSlice'
+import {fetchReporteeActivities, fetchActivitiesAvg} from '../../redux/reducers/viewreporteeSlice'
 import Accordion from "../../components/accordion";
 import {scoreColor} from '../../utils/commonFunctions';
 
@@ -14,10 +14,8 @@ function Viewreportee() {
   const navigate = useNavigate();
   const {reportees, viewReportee } = useSelector((state) => state.reportees);
   const user = useSelector((state) => state.userDetails.user)
-  const { reports, loading, error } = useSelector((state) => state.reports);
+  const { reports, loading, error, dutiesReports, initiativeReports } = useSelector((state) => state.reports);
   const [open, setOpen] = useState({ "accordianOne": false, "accordianTwo": false });
-
-
 
 
   /*Example post data
@@ -27,20 +25,25 @@ function Viewreportee() {
     "toDate":"2024-03-11"
 }
 */
-  const activities = useMemo(() => {
-    if (reports) {
-      const filtered = Object.groupBy(reports, ({ type }) => type);
-      return filtered;
+  const fetchActivities = (type) => {
+    const data ={
+      empId:viewReportee?.empId, 
+      types:[type], 
+      page: 1,
+      perPage: 5
     }
-  }, [reports, viewReportee]);
+    dispatch(fetchReporteeActivities(data))
+  }
 
   const handleAccordian = (value) => {
     switch (value) {
       case "Duties":
         setOpen({ ...open, "accordianOne": !open["accordianOne"], "accordianTwo": false });
+        fetchActivities('duties')
         break;
       case "Initiatives":
         setOpen({ ...open, "accordianOne": false, "accordianTwo": !open["accordianTwo"] });
+        fetchActivities('initiative')
         break;
       default:
         setOpen({ "accordianOne": false, "accordianTwo": false });
@@ -51,7 +54,6 @@ function Viewreportee() {
     if (user) {
       const data = {
         reportees: user.reportees,
-        sort: { type: "empId", order: 1 },
         page: 1,
         perPage: 10,
       };
@@ -68,7 +70,8 @@ function Viewreportee() {
       }
       await axios.post(`${base_url}/createActivity`, newData)
         .then(async (result) => {
-          fetchLatestReporteesData()
+          fetchLatestReporteesData();
+          fetchActivities(activityData?.type)
         })
     } else {
       alert("Please login")
@@ -77,14 +80,14 @@ function Viewreportee() {
 
   useEffect(()=>{
     if(reportees.length>0 && viewReportee !== null)
-     dispatch(fetchReporteeActivities({empId:viewReportee?.empId}))
-  },[reportees,viewReportee])
+     dispatch(fetchActivitiesAvg({empId:viewReportee?.empId, types:["duties", "initiative"]}))
+  },[viewReportee])
 
-  // useEffect(()=>{
-  //   if(reportees.length){
-  //     dispatch(setViewReportee(viewReportee?.empId))
-  //   }
-  // },[reportees])
+  useEffect(()=>{
+    if(reportees.length){
+      dispatch(setViewReportee(viewReportee?.empId))
+    }
+  },[reportees])
 
 
 
@@ -142,10 +145,10 @@ function Viewreportee() {
         </div>
         <div className="">
           <div className="">
-            <Accordion title="Duties" open={open.accordianOne} handleAccordian={handleAccordian} data={activities?.duties} handleAddActivity={handleAddActivity} />
+            <Accordion title="Duties" open={open.accordianOne} handleAccordian={handleAccordian} data={dutiesReports} handleAddActivity={handleAddActivity} />
           </div>
           <div className="">
-            <Accordion title="Initiatives" open={open.accordianTwo} handleAccordian={handleAccordian} data={activities?.initiative} handleAddActivity={handleAddActivity} />
+            <Accordion title="Initiatives" open={open.accordianTwo} handleAccordian={handleAccordian} data={initiativeReports} handleAddActivity={handleAddActivity} />
           </div>
         </div>
       </div>

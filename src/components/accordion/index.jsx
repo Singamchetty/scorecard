@@ -29,12 +29,12 @@ function Accordion({ title, data ,handleAddActivity,open,handleAccordian}) {
   //    }
   // },[userDetails,id])
 
-  useEffect(()=>{
-    if(reports?.length !==null){
-    dispatch(calculateDefaultScore(reports))
-    dispatch(calculateInitiativeScore(reports))
-    }
-  },[reports,id])
+  // useEffect(()=>{
+  //   if(reports?.length !==null){
+  //   dispatch(calculateDefaultScore(reports))
+  //   dispatch(calculateInitiativeScore(reports))
+  //   }
+  // },[reports,id])
   
   function  handleClick(){
     handleAccordian(title)

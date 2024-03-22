@@ -4,6 +4,8 @@ import axios from "axios";
 
 const initialState = {
   reports: null,
+  dutiesReports: null,
+  initiativeReports: null,
   defaultAvgScore:0,
   initiativeAvgScore:0,
   loading: false,
@@ -13,6 +15,12 @@ const initialState = {
 export const fetchReporteeActivities = createAsyncThunk("getReports", async (data) => {
   return await axios
     .post(`${base_url}/getActivities`, data)
+    .then((response) => response.data?.activities);
+});
+
+export const fetchActivitiesAvg = createAsyncThunk("getActivities-avg", async (data) => {
+  return await axios
+    .post(`${base_url}/getActivities-avg`, data)
     .then((response) => response.data);
 });
 
@@ -23,37 +31,30 @@ const reportSlice = createSlice({
     resetReports:() => {
       return initialState
     },
-    calculateDefaultScore:(state, action)=>{
-      if(action.payload===undefined){
-        return {...state,defaultAvgScore :0}
-      }else{
-      const dutiesItems = action.payload?.filter(item => item.type === "duties");
-      const totalDutiesScore =dutiesItems?.length? dutiesItems?.reduce((acc, curr) => acc+ Number(curr.score), 0):0;
-      const defaultAvgScore =totalDutiesScore===0?0: Number(totalDutiesScore) / Number(dutiesItems?.length);
-      return {...state,defaultAvgScore :Number(defaultAvgScore).toFixed(1)}
-    }
-    },
-    calculateInitiativeScore:(state,action)=>{
-      if(action.payload===undefined){
-        return {...state,initiativeAvgScore:0}
-      }
-      else{
-      const initiatiesItems = action.payload?.filter(item => item.type === "initiative");
-      const totalInitiateScore =initiatiesItems?.length? (initiatiesItems?.reduce((acc, curr) => acc+ Number(curr.score), 0)):0;
-      const initialAvgScore =totalInitiateScore===0?0: Number(totalInitiateScore) / Number(initiatiesItems?.length) ;
-      return {...state,initiativeAvgScore :Number(initialAvgScore).toFixed(1)}
-      }
-    },
-
   },
   extraReducers: (builder) => {
     builder.addCase(fetchReporteeActivities.pending, (state) => {
       return {...state,loading :true,error :"loading"}
     });
     builder.addCase(fetchReporteeActivities.fulfilled, (state, action) => {
-      return {...state,loading :false,error :"",reports:action.payload?.activities}
+      const {type} = action?.payload[0] ?? {}
+      return {...state,loading :false,error :"", [`${type}Reports`]: action.payload}
     });
     builder.addCase(fetchReporteeActivities.rejected, (state, action) => {
+      return {...state,loading :false,error :action.error || "Something went wrong!",reports:null}
+    });
+
+    // getActivities Api
+    builder.addCase(fetchActivitiesAvg.pending, (state) => {
+      return {...state,loading :true,error :"loading"}
+    });
+    builder.addCase(fetchActivitiesAvg.fulfilled, (state, action) => {
+      const avgScores = action.payload;
+      const dutiesAvg = avgScores.find(({type}) => type === "duties")
+      const initiatieAvg = avgScores.find(({type}) => type === "initiative")
+      return {...state,loading :false,error :"", defaultAvgScore: dutiesAvg?.avgScore.toFixed(1) || 0, initiativeAvgScore: initiatieAvg?.avgScore.toFixed(1) || 0}
+    });
+    builder.addCase(fetchActivitiesAvg.rejected, (state, action) => {
       return {...state,loading :false,error :action.error || "Something went wrong!",reports:null}
     });
   },
