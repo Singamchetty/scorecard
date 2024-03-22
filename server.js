@@ -248,11 +248,12 @@ const calculateAverage = async(query) => {
     page:0
     perPage:10, 
     "types":["duties","initiative"]
+    getAll:true //send only for get all records
 }
 */
 
 app.post("/getActivities", async(req, res) => {
-  let { empId,today,types } = req.body;
+  let { empId,today,types,getAll } = req.body;
   if (!empId || typeof empId == "string") {
     res.status(401).json({ message: "Employee id is missing / EmpId should be string only" });
     return;
@@ -284,6 +285,10 @@ app.post("/getActivities", async(req, res) => {
     if(types && types?.length)
         aggreGate.push({$match:{"activities.type": {"$in":types} } });
     //console.log(JSON.stringify(aggreGate));
+    if(getAll){
+      skip =0;
+      limit = 1000000;
+    }
 
     let facet = {
       data: [{ $skip: skip }, { $limit: limit }],
