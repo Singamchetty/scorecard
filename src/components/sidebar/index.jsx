@@ -14,7 +14,7 @@ function Sidebar() {
         <ul className="space-y-1.5">
           <li>
             <Link
-              className={`flex items-center gap-x-3.5 py-2 px-2.5 bg-gray-100 text-sm text-slate-700 rounded-lg hover:bg-gray-100 `}
+              className={`flex items-center gap-x-3.5 py-2 px-2.5  text-sm text-slate-700 rounded-lg hover:bg-gray-100 `}
               to={`/dashboard`}
             >
               <svg
