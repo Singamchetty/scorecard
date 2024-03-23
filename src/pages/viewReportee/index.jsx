@@ -12,19 +12,12 @@ import {scoreColor} from '../../utils/commonFunctions';
 function Viewreportee() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const {reportees, viewReportee } = useSelector((state) => state.reportees);
+  const {reportees, viewReportee,currPage } = useSelector((state) => state.reportees);
   const user = useSelector((state) => state.userDetails.user)
   const { reports, loading, error, dutiesReports, initiativeReports } = useSelector((state) => state.reports);
   const [open, setOpen] = useState({ "accordianOne": false, "accordianTwo": false });
 
 
-  /*Example post data
-{
-    "empId":41689,
-    "fromDate":"2024-03-10",
-    "toDate":"2024-03-11"
-}
-*/
   const fetchActivities = (type) => {
     const data ={
       empId:viewReportee?.empId, 
@@ -54,7 +47,7 @@ function Viewreportee() {
     if (user) {
       const data = {
         reportees: user.reportees,
-        page: 1,
+        page: currPage,
         perPage: 10,
       };
       dispatch(fetchReportees(data))
@@ -79,15 +72,15 @@ function Viewreportee() {
   }
 
   useEffect(()=>{
-    if(reportees.length>0 && viewReportee !== null)
+    if(reportees.length>0 && viewReportee !== null )
      dispatch(fetchActivitiesAvg({empId:viewReportee?.empId, types:["duties", "initiative"]}))
-  },[viewReportee])
+  },[reportees,viewReportee])
 
   useEffect(()=>{
-    if(reportees.length){
+    if(reportees.length>0  && viewReportee !== null){
       dispatch(setViewReportee(viewReportee?.empId))
     }
-  },[reportees])
+  },[reportees,viewReportee])
 
 
 
@@ -100,12 +93,11 @@ function Viewreportee() {
     }
   }, []);
 
-  if ( reportees.length && viewReportee)
+  if ( reportees.length && viewReportee!==null)
     return (
       <div className="p-4" >
         <div className="bg-white p-3 rounded-md">
           <div className="flex justify-between">
-            {/* <img src="/generic-male-avatar-rectangular.jpg" width="100px" height="100px" /> */}
             <div className="my-1">
               <p>
                 <span className="font-medium">Employee Name : </span> {viewReportee?.empName}
@@ -113,9 +105,6 @@ function Viewreportee() {
               <p>
                 <span className="font-medium">Designation : </span> {viewReportee?.designation}
               </p>
-              {/* <p>
-              <span className="font-medium">Email Id:  </span> {viewReportee?.empEmail}
-          </p> */}
             </div>
             <div className="my-1">
               <p>
@@ -124,13 +113,6 @@ function Viewreportee() {
               <p>
                 <span className="font-medium">Employee Id:  </span> {viewReportee?.empId}
               </p>
-              {/* <p>
-          <span className="font-medium">Total Score : </span> {viewReportee?.score}
-          </p> */}
-              {/* <p>
-          <span className="font-medium">Allocated To : </span> {viewReportee?.project}
-          </p> */}
-
             </div>
             <div className="flex flex-col justify-center items-center">
               <div className={`w-[40px] h-[40px] rounded-full flex items-center text-white justify-center  ${scoreColor(viewReportee?.score)}`}>
@@ -140,7 +122,6 @@ function Viewreportee() {
                 <span className="text-blue-400 font-semibold">Total Score</span>
               </div>
             </div>
-
           </div>
         </div>
         <div className="">

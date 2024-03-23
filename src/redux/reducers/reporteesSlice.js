@@ -29,7 +29,7 @@ const reporteesSlice = createSlice({
          if(!reportee){
           return {
             ...state,
-            viewReportee: null
+            viewReportee: state.viewReportee
           }
         } else {
           return {
