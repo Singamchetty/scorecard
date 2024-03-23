@@ -57,7 +57,7 @@ function Dashboard() {
     const debounceTimeout = setTimeout(() => {
       const data = {
         reportees: userDetails.user.reportees,
-        page: currPage,
+        page: 1,
         perPage: 10,
         searchText:inputValue
       };
@@ -125,9 +125,8 @@ function Dashboard() {
          <Table headers={headers} data={reportees} loading={loading} maxHeight={88} />
          
       <div className="">
-        {reportees.length>0 && (
+        {reportees.length>0 && pagesCount>1 && (
           <div className="flex justify-center mt-2">
-            {/* <div className="text-blue-500">Total Results: {pagesCount}</div> */}
             {pagesCount >= 1 && (
               <PaginationComponent
                 currentPage={currPage}

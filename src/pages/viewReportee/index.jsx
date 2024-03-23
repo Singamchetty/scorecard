@@ -74,12 +74,7 @@ function Viewreportee() {
   useEffect(()=>{
     if(reportees.length>0 && viewReportee !== null )
      dispatch(fetchActivitiesAvg({empId:viewReportee?.empId, types:["duties", "initiative"]}))
-  },[reportees,viewReportee])
-
-  useEffect(()=>{
-    if(reportees.length>0  && viewReportee !== null){
-      dispatch(setViewReportee(viewReportee?.empId))
-    }
+     dispatch(setViewReportee(viewReportee?.empId))
   },[reportees,viewReportee])
 
 

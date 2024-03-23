@@ -20,7 +20,6 @@ function Exporttable() {
   const [fromDate, setFromDate] = useState("");
   const [toDate, setToDate] = useState("");
   const [inputValue, setInputValue] = useState('');
-  console.log(activitiesData, "activitiesData");
 
   const calculateDateRange = (monthsAgo) => {
     const toDate = new Date().toISOString().split("T")[0];
@@ -54,7 +53,6 @@ function Exporttable() {
       fromDate: fromDate,
       toDate: toDate,
     };
-    console.log(data, "data");
     dispatch(fetchReportesActivitiesData(data));
   };
 

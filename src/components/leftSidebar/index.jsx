@@ -19,16 +19,15 @@ function LeftSidebar() {
     const debounceTimeout = setTimeout(() => {
       const data = {
         reportees: userDetails.user.reportees,
-        page: currPage,
+        page: (inputValue==="")?currPage:1,
         perPage: 10,
         searchText:inputValue
       };
       dispatch(fetchReportees(data));
     }, 1000);
-  
-
     return () => clearTimeout(debounceTimeout);
   }
+ 
   }, [inputValue]);
 
   const handleChange = (event) => {
@@ -85,11 +84,15 @@ function LeftSidebar() {
           </div>
       }
       <div>
-        <PaginationComponent 
+       {
+        reportees.length>0 && pagesCount>1 && (
+          <PaginationComponent 
           currentPage={currPage}
           totalPages={pagesCount}
           onPageChange={handlePageChange}
         />
+        )
+       }
       </div>
     </div>
   );
