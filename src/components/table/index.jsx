@@ -75,15 +75,11 @@ function Table({headers, data,loading, maxHeight}) {
       </table>
       {
         (!data?.length)?<div className="w-full h-full">
-        <p className="text-center align-middle pt-14 pb-14 text-blue-500  font-bold">No records to display</p>
+        <p className="text-center align-middle pt-14 pb-14 text-blue-500  font-bold">No Records Found</p>
      </div>:null
       }
     </div>
   );
-  // else
-//   return <div className="w-full h-full">
-//      <p className="text-center align-middle pt-14 pb-14 text-blue-500  font-bold">No records to display</p>
-//   </div>
 }
 
 export default Table;
