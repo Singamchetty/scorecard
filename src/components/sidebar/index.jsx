@@ -22,7 +22,7 @@ function Sidebar() {
         <ul className="space-y-1.5">
           {
             menus.map((menu) => (
-              <li>
+              <li key={menu.path}>
               <Link
                 className={`flex items-center ${url.includes(menu.path) && 'bg-gray-100'} gap-x-3.5 py-2 px-2.5  text-sm text-slate-700 rounded-lg hover:bg-gray-100 `}
                 to={menu.path}
