@@ -24,7 +24,7 @@ function Sidebar() {
             menus.map((menu) => (
               <li>
               <Link
-                className={`flex items-center${url.includes(menu.path) && 'bg-gray-500'} gap-x-3.5 py-2 px-2.5  text-sm text-slate-700 rounded-lg hover:bg-gray-100 `}
+                className={`flex items-center ${url.includes(menu.path) && 'bg-gray-300'} gap-x-3.5 py-2 px-2.5  text-sm text-slate-700 rounded-lg hover:bg-gray-100 `}
                 to={menu.path}
               >
                 <span>{menu.icon}</span>

@@ -13,7 +13,7 @@ function Dashboard() {
   const { reportees, loading, totalCount, currPage,  pagesCount} = useSelector((state) => state.reportees);
   const userDetails = useSelector((state) => state.userDetails);
   const [reporteIds, setReporteIds] = useState([]);
-  const [inputValue, setInputValue] = useState('');
+  const [inputValue, setInputValue] = useState(null);
 
   //  userDetails.user.reportees || [];
   const handlePageChange = (currPage) => {
@@ -31,11 +31,11 @@ function Dashboard() {
     dispatch(setPagesCount(Math.ceil((totalCount) / (10))))
   }, [totalCount])
 
+
   useEffect(() => {
-    if (reporteIds.length > 0) {
+    if (reporteIds.length > 0 ) {
       const data = {
         reportees: userDetails.user.reportees,
-        // sort: { type: "empId", order: 1 },
         page: currPage,
         perPage: 10
       };
@@ -53,6 +53,7 @@ function Dashboard() {
   }, [userDetails]);
 
   useEffect(() => {
+   if(inputValue!==null){
     const debounceTimeout = setTimeout(() => {
       const data = {
         reportees: userDetails.user.reportees,
@@ -62,8 +63,10 @@ function Dashboard() {
       };
       dispatch(fetchReportees(data));
     }, 1000);
-
     return () => clearTimeout(debounceTimeout);
+   }
+
+    // return () => clearTimeout(debounceTimeout);
   }, [inputValue]);
 
   const handleChange = (event) => {
@@ -122,7 +125,7 @@ function Dashboard() {
          <Table headers={headers} data={reportees} loading={loading} maxHeight={88} />
          
       <div className="">
-        {reportees && (
+        {reportees.length>0 && (
           <div className="flex justify-center mt-2">
             {/* <div className="text-blue-500">Total Results: {pagesCount}</div> */}
             {pagesCount >= 1 && (
