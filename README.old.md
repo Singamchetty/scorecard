@@ -52,6 +52,7 @@ Data In body Example :
     "searchText":"eng"
 }*/
 
+
 3. POST method to add activity added by manager to his reportees.  Id should contain all the fields given below in the example or else it throws an error. 
 Note: Users can add a custom aName field , from frontend a unique id will be generated and added as aID.
 
@@ -59,17 +60,19 @@ https://nisumscorecardservertesting.netlify.app/.netlify/functions/api/createAct
 
 Data In body Example :
 //Example of post Data
-/*
 {
-    "empId":41689,
+    "empId":10000,
     "data":{
         "aName":"Approval of timesheet",
         "aId":"D001",
         "type":"duties",
+        "ratedBy":"Name",
         "score":3,
         "comments":""
     }
 }
+
+
 
 Actual Activities Data this to be used when trying to create a activity to a employee: 
 
@@ -91,8 +94,29 @@ Data In body Example :
 {
     "empId":41689,
     "fromDate":"2024-03-10",
-    "toDate":"2024-03-14"
+    "toDate":"2024-03-14",
+    page:0
+    perPage:10, 
+    getAll:true //send only for get all records
 }
+*/
+
+
+5. POST method to get Average scores of individual activities.
+https://nisumscorecardservertesting.netlify.app/.netlify/functions/api/getActivities-avg
+
+//sending filtered activities avg score data
+/*Example post data
+{
+    "empId":41689,
+    "fromDate":"2024-03-10",
+    "toDate":"2024-03-14",
+    "types":["duties","initiative"]
+   
+}
+*/
+
+
 
 API's for Deployment Team Usage
 
@@ -134,6 +158,7 @@ Data In body Example :
     "searchText":"eng"
 }*/
 
+
 3. POST method to add activity added by manager to his reportees.  Id should contain all the fields given below in the example or else it throws an error.
 Note: Users can add a custom aName field , from frontend a unique id will be generated and added as aID.
 
@@ -141,17 +166,18 @@ https://nisumscorecardserverdev.netlify.app/.netlify/functions/api/createActivit
 
 Data In body Example :
 //Example of post Data
-/*
 {
-    "empId":41689,
+    "empId":10000,
     "data":{
         "aName":"Approval of timesheet",
         "aId":"D001",
         "type":"duties",
+        "ratedBy":"Name",
         "score":3,
         "comments":""
     }
 }
+
 
 Actual Activities Data this to be used when trying to create a activity to a employee: 
 
@@ -168,12 +194,30 @@ Actual Activities Data this to be used when trying to create a activity to a emp
 https://nisumscorecardserverdev.netlify.app/.netlify/functions/api/getActivities
 
 Data In body Example :
-/*Example post data 
 {
     "empId":41689,
     "fromDate":"2024-03-10",
-    "toDate":"2024-03-14"
+    "toDate":"2024-03-14",
+    page:0
+    perPage:10,
+   getAll:true //send only for get all records
 }
+*/
+
+
+5. POST method to get Average scores of individual activities.
+https://nisumscorecardserverdev.netlify.app/.netlify/functions/api/getActivities-avg
+
+//sending filtered activities avg score data
+/*Example post data
+{
+    "empId":41689,
+    "fromDate":"2024-03-10",
+    "toDate":"2024-03-14",
+    "types":["duties","initiative"]
+   
+}
+*/
 
 
 
