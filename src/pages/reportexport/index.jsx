@@ -47,6 +47,7 @@ function Exporttable() {
   };
 
   const handleView = (e) => {
+    if (selectedEmployee && fromDate && toDate) {
     e.preventDefault();
     let data = {
       empId: Number(selectedEmployee),
@@ -54,6 +55,7 @@ function Exporttable() {
       toDate: toDate,
     };
     dispatch(fetchReportesActivitiesData(data));
+  }
   };
 
   useEffect(() => {
@@ -159,8 +161,8 @@ function Exporttable() {
                 </div>
                 <div className="flex">
                   <button
-                    className="px-8  py-2 ml-5 w-[100px]  h-[40px] bg-blue-500 text-white font-semibold rounded-md"
-                    onClick={(e) => handleView(e)}
+                    className={`px-8  py-2 ml-5 w-[100px] h-[40px] bg-blue-500 text-white font-semibold rounded-md ${selectedEmployee && fromDate && toDate ? "bg-blue-500" : "bg-gray-500"  }`}
+                    onClick={(e) => handleView(e)} 
                   >
                     View
                   </button>
@@ -194,46 +196,6 @@ function Exporttable() {
                                     </div>
                                 </div>
                             </div>
-                            <div className="p-4">
-                                <table className="w-full text-sm text-left rtl:text-right text-gray-500 bg-transparent justify-center border-separate border-spacing-y-2">
-                                    <thead className="text-xs text-gray-700 uppercase bg-gray-50">
-                                        <tr className="mb-2">
-
-                                            <th className="border-2 p-2 border-[#B7B7B7] text-start font-medium bg-[#D9D9D9] w-4/12">
-                                                ACTIVITY NAME
-                                            </th>
-                                            <th className="border-2 p-2 border-[#B7B7B7] text-start font-medium bg-[#D9D9D9] w-4/12  ">
-                                                DATE
-                                            </th>
-                                            <th className="border-2 p-2 border-[#B7B7B7] text-start font-medium bg-[#D9D9D9] w-4/12 " >
-                                                SCORE
-                                            </th>
-                                            <th className="border-2 p-2 border-[#B7B7B7] text-start font-medium bg-[#D9D9D9] w-4/12  " >
-                                                COMMENTS
-                                            </th>
-
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-
-                                        
-                                         {activitiesData.map((activitie)=>
-                                         <tr className="bg-white  hover:bg-gray-300 ">
-                                            <td className="px-6 py-2 " >{activitie.aName}</td>
-                                            <td className="px-6 py-2 " >{convertUTCToLocal(activitie.recorded_date)}</td>
-                                            <td className="px-6 py-2 " >{activitie.score}</td>
-                                            <td className="px-6 py-2 " >{activitie.comments}</td>
-                                            
-                                            </tr>
-                                         )}
-                                        
-                                     
-                                    </tbody>
-                                </table>
-
-                            </div>
-
-                        </div>
                     } */}
         </div>
       </div>
