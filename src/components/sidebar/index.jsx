@@ -5,13 +5,14 @@ import DashboardIcon from '../../assets/icons/dashboardIcon';
 import ReportsIcon from '../../assets/icons/reportsIcon';
 
 const menus = [
-  {title: "Dashboard", path: '/dashboard', icon: <DashboardIcon/>},
-  {title: "Reports", path: '/reportees', icon: <ReportsIcon />}
+  {title: "Dashboard", path: '/dashboard', selectPaths: ['dashboard', 'viewreportee'], icon: <DashboardIcon/> },
+  {title: "Reports", path: '/reportees', selectPaths:['reportees'], icon: <ReportsIcon />}
 ]
 
 function Sidebar() {
   const url = window.location.href;
   const  [windowWidth, windowHeight] = SetWindowSize();
+  const selected = url.split('/').at(-1)
 
   return (
     <div className="w-[20%] flex items-center flex-col overflow-auto" style={{ height: `calc(${windowHeight}px - 87px)` }}>
@@ -24,7 +25,7 @@ function Sidebar() {
             menus.map((menu) => (
               <li key={menu.path}>
               <Link
-                className={`flex items-center ${url.includes(menu.path) && 'bg-gray-100'} gap-x-3.5 py-2 px-2.5  text-sm text-slate-700 rounded-lg hover:bg-gray-100 `}
+                className={`flex items-center ${menu.selectPaths.includes(selected) && 'bg-gray-100'} gap-x-3.5 py-2 px-2.5  text-sm text-slate-700 rounded-lg hover:bg-gray-100 `}
                 to={menu.path}
               >
                 <span>{menu.icon}</span>
@@ -33,7 +34,7 @@ function Sidebar() {
             </li>
             ))
           }
-         
+          
         </ul>
       </nav>
     </div>
