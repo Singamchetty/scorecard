@@ -217,7 +217,8 @@ function Exporttable() {
                 </div>
                 <div className="flex">
                   <button
-                    className="px-8  py-2 ml-5 w-[100px]  h-[40px] bg-blue-500 text-white font-semibold rounded-md"
+                    disabled={!fromDate || !selectedEmployee  || !toDate}
+                    className="px-8  py-2 ml-5 w-[100px]  h-[40px] bg-blue-500 text-white font-semibold rounded-md disabled:bg-gray-400"
                     onClick={(e) => handleView(e)}
                   >
                     View
@@ -225,11 +226,11 @@ function Exporttable() {
 
                   <button
                     onClick={getPdfList}
-                    disabled={pdfLoading}
+                    disabled={pdfLoading || !fromDate || !selectedEmployee  || !toDate}
                     type="button"
                     className="px-3  py-2 ml-5 min-w-[100px] disabled:bg-gray-400  h-[40px] bg-blue-500 font-semibold text-white rounded-md flex items-center justify-center"  
                   >
-                    <span>Download</span>
+                    <span>{pdfLoading ? "Downloading..." : "Download"}</span>
                     { pdfLoading && <div className="loading ml-2 "></div>}
                   </button>
                 </div>
