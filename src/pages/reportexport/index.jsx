@@ -6,6 +6,7 @@ import { fetchReportees } from "../../redux/reducers/reporteesSlice";
 import { convertUTCToLocal } from "../../utils/commonFunctions";
 import Table from "../../components/table";
 import { base_url } from "../../utils/constants";
+import DownloadIcon from '../../assets/icons/downloadIcon';
 import jsPDF from 'jspdf';
 import 'jspdf-autotable';
 
@@ -23,6 +24,11 @@ function Exporttable() {
   const [inputValue, setInputValue] = useState('');
   const [pdfData, setPdfData] = useState([]);
   const [pdfLoading, setPdfLoading] = useState(false);
+  const [preState, setPreState] = useState({
+    preEmployee: 0,
+    preFromDate: '',
+    preToDate: ''
+  })
 
   const calculateDateRange = (monthsAgo) => {
     const toDate = new Date().toISOString().split("T")[0];
@@ -51,6 +57,11 @@ function Exporttable() {
 
   const handleView = (e) => {
     e.preventDefault();
+    setPreState({
+      preEmployee: selectedEmployee,
+      preFromDate: fromDate,
+      preToDate: toDate
+    })
     let data = {
       empId: Number(selectedEmployee),
       fromDate: fromDate,
@@ -73,11 +84,11 @@ function Exporttable() {
     })
   }, [user]);
 
-  useEffect(() => {
-    if(activitiesData.length > 0) {
-      dispatch(resetActivitiesData())
-    }
-  }, [selectedEmployee, toDate, fromDate])
+  // useEffect(() => {
+  //   if(activitiesData.length > 0) {
+  //     dispatch(resetActivitiesData())
+  //   }
+  // }, [selectedEmployee, toDate, fromDate])
 
   const headers = [
     { title: "Activity Name", id: "aName" },
@@ -153,8 +164,23 @@ function Exporttable() {
     }
   }
 
+  const disableBtn = (type) => {
+    if(!selectedEmployee || !fromDate || !toDate) {
+      return true
+    } else {
+      const {preEmployee, preFromDate, preToDate} = preState;
+      if(type === 'view'){
+        if(preEmployee === selectedEmployee && fromDate === preFromDate && toDate === preToDate) {
+          return true;
+        }
+      } else {
+        if((preEmployee !== selectedEmployee && fromDate !== preFromDate && toDate !== preToDate) || activitiesData.length === 0) {
+          return true;
+        }
+      }
+    }
+  }
 
-  if (reportees?.length > 0) {
     return (
       <div>
         <div className={` overflow-auto sm:rounded-lg p-4 bg-[#E9EDEE]`}>
@@ -217,7 +243,8 @@ function Exporttable() {
                 </div>
                 <div className="flex">
                   <button
-                    disabled={!fromDate || !selectedEmployee  || !toDate}
+                    // disabled={!fromDate || !selectedEmployee  || !toDate}
+                    disabled={disableBtn('view')}
                     className="px-8  py-2 ml-5 w-[100px]  h-[40px] bg-blue-500 text-white font-semibold rounded-md disabled:bg-gray-400"
                     onClick={(e) => handleView(e)}
                   >
@@ -226,10 +253,12 @@ function Exporttable() {
 
                   <button
                     onClick={getPdfList}
-                    disabled={pdfLoading || !fromDate || !selectedEmployee  || !toDate}
+                    //disabled={pdfLoading || !fromDate || !selectedEmployee  || !toDate}
+                    disabled={disableBtn()}
                     type="button"
                     className="px-3  py-2 ml-5 min-w-[100px] disabled:bg-gray-400  h-[40px] bg-blue-500 font-semibold text-white rounded-md flex items-center justify-center"  
                   >
+                    <DownloadIcon />
                     <span>{pdfLoading ? "Downloading..." : "Download"}</span>
                     { pdfLoading && <div className="loading ml-2 "></div>}
                   </button>
@@ -238,76 +267,13 @@ function Exporttable() {
             </form>
           </div>
          
-          { activitiesData?.length > 0 && (
+          {/* { activitiesData?.length > 0 && ( */}
             <Table headers={headers} loading={loading} data={activitiesData} />
-          )}
-          {/* {
-                        activitiesData?.length>0 && <div className='mx-20 items-center justify-center '>
-                            <div className='mt-5'>
-                                <div className='max-w-sm ml-4'>
-                                    <div className="relative">
-                                        <div className="absolute mt-3 flex items-center ps-3 pointer-events-none">
-                                            <svg className="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
-                                                <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z" />
-                                            </svg>
-                                        </div>
-                                        <input type="search" id="default-search" className="block p-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Search " />
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="p-4">
-                                <table className="w-full text-sm text-left rtl:text-right text-gray-500 bg-transparent justify-center border-separate border-spacing-y-2">
-                                    <thead className="text-xs text-gray-700 uppercase bg-gray-50">
-                                        <tr className="mb-2">
-
-                                            <th className="border-2 p-2 border-[#B7B7B7] text-start font-medium bg-[#D9D9D9] w-4/12">
-                                                ACTIVITY NAME
-                                            </th>
-                                            <th className="border-2 p-2 border-[#B7B7B7] text-start font-medium bg-[#D9D9D9] w-4/12  ">
-                                                DATE
-                                            </th>
-                                            <th className="border-2 p-2 border-[#B7B7B7] text-start font-medium bg-[#D9D9D9] w-4/12 " >
-                                                SCORE
-                                            </th>
-                                            <th className="border-2 p-2 border-[#B7B7B7] text-start font-medium bg-[#D9D9D9] w-4/12  " >
-                                                COMMENTS
-                                            </th>
-
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-
-                                        
-                                         {activitiesData.map((activitie)=>
-                                         <tr className="bg-white  hover:bg-gray-300 ">
-                                            <td className="px-6 py-2 " >{activitie.aName}</td>
-                                            <td className="px-6 py-2 " >{convertUTCToLocal(activitie.recorded_date)}</td>
-                                            <td className="px-6 py-2 " >{activitie.score}</td>
-                                            <td className="px-6 py-2 " >{activitie.comments}</td>
-                                            
-                                            </tr>
-                                         )}
-                                        
-                                     
-                                    </tbody>
-                                </table>
-
-                            </div>
-
-                        </div>
-                    } */}
+          {/* )} */}
         </div>
       </div>
     );
-  } else {
-    return (
-      <div classNameName="w-full h-full">
-        <p className="text-center align-middle pt-14 pb-14 text-blue-500  font-bold">
-          No records to display
-        </p>
-      </div>
-    );
-  }
+  
 }
 
 export default Exporttable;

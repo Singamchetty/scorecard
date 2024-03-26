@@ -81,7 +81,7 @@ function Viewreportee() {
 
   useEffect(() => {
     if (user) {
-      navigate(`/viewreportee`)
+      // navigate(`/viewreportee`)
       setOpen({ "accordianOne": false, "accordianTwo": false })
     } else {
       navigate("/")
