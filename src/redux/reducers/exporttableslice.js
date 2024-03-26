@@ -21,6 +21,9 @@ const exporttableSlice = createSlice({
   name: "totalReportees",
   initialState,
   reducers: {
+    resetActivitiesData: (state) => {
+      state.activitiesData = []
+    },
     resetReporteesTableData:() => {
       return initialState
     },
@@ -46,6 +49,6 @@ const exporttableSlice = createSlice({
   },
 });
  
-export const {resetReporteesTableData} = exporttableSlice.actions;
+export const {resetReporteesTableData, resetActivitiesData} = exporttableSlice.actions;
  
 export default exporttableSlice.reducer;

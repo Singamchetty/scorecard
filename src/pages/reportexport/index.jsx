@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from "react";
+import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  fetchReportstableData,
-  fetchReportesActivitiesData,
-} from "../../redux/reducers/exporttableslice";
+import { fetchReportesActivitiesData, resetReporteesTableData, resetActivitiesData } from "../../redux/reducers/exporttableslice";
 import { fetchReportees } from "../../redux/reducers/reporteesSlice";
 import { convertUTCToLocal } from "../../utils/commonFunctions";
 import Table from "../../components/table";
+import { base_url } from "../../utils/constants";
+import jsPDF from 'jspdf';
+import 'jspdf-autotable';
 
 function Exporttable() {
   const dispatch = useDispatch();
@@ -20,6 +21,8 @@ function Exporttable() {
   const [fromDate, setFromDate] = useState("");
   const [toDate, setToDate] = useState("");
   const [inputValue, setInputValue] = useState('');
+  const [pdfData, setPdfData] = useState([]);
+  const [pdfLoading, setPdfLoading] = useState(false);
 
   const calculateDateRange = (monthsAgo) => {
     const toDate = new Date().toISOString().split("T")[0];
@@ -67,7 +70,16 @@ function Exporttable() {
       };
       dispatch(fetchReportees(data));
     }
+    return(() => {
+      dispatch(resetReporteesTableData())
+    })
   }, [user]);
+
+  useEffect(() => {
+    if(activitiesData.length > 0) {
+      dispatch(resetActivitiesData())
+    }
+  }, [selectedEmployee, toDate, fromDate])
 
   const headers = [
     { title: "Activity Name", id: "aName" },
@@ -96,6 +108,52 @@ function Exporttable() {
       ),
     },
   ];
+
+
+  // Function to convert table to PDF
+  const convertTableToPDF = (data) => {
+    const doc = new jsPDF({
+      orientation: 'portrait',
+      format: 'a4'
+    });
+    const headerParams = {
+      align: 'justify',
+      fillStyle: 'FD'
+    }
+  
+    const tableData = data.map(item => [item.aName, item.ratedBy, item.score, item.comments]);
+    // Add header to the PDF
+    doc.text('Score card reports', 15, 10, headerParams);
+  
+    doc.autoTable({
+      head: [['Activity Name', 'Rated By', 'Score', 'Comments']], // Extract header row
+      body: tableData, // Extract data rows
+      startY: 20, // Start y-position of the table
+      theme: 'striped', // Table theme: 'plain', 'grid', 'striped', 'striped' (default is 'striped')
+      styles: { overflow: 'linebreak' }, // Styles for table cells
+      columnStyles: { 2: { fontStyle: 'bold' } }, // Styles for specific columns
+    });
+  
+    // Save PDF
+    doc.save('ActivitiesList.pdf');
+  };
+
+  const getPdfList = async (type) => {
+    try{
+      setPdfLoading(true);
+      let data = {
+        empId: Number(selectedEmployee),
+        fromDate: fromDate,
+        toDate: toDate,
+      };
+      const response = await axios.post(`${base_url}/getActivities`, data).then((res) =>  res.data.activities);
+      if(response.length > 0) convertTableToPDF(response);
+    } catch {
+      setPdfLoading(false);
+    } finally {
+      setPdfLoading(false);
+    }
+  }
 
 
   if (reportees?.length > 0) {
@@ -161,18 +219,21 @@ function Exporttable() {
                 </div>
                 <div className="flex">
                   <button
-                    className={`px-8  py-2 ml-5 w-[100px] h-[40px] bg-blue-500 text-white font-semibold rounded-md ${selectedEmployee && fromDate && toDate ? "bg-blue-500" : "bg-gray-500"  }`}
+                    disabled={!fromDate || !selectedEmployee  || !toDate}
+                    className={`px-8  py-2 ml-5 w-[100px] h-[40px] bg-blue-500 text-white font-semibold rounded-md disabled:bg-gray-400 ${selectedEmployee && fromDate && toDate ? "bg-blue-500" : "bg-gray-500"  }`}
                     onClick={(e) => handleView(e)} 
                   >
                     View
                   </button>
 
                   <button
-                  disabled={true}
+                    onClick={getPdfList}
+                    disabled={pdfLoading || !fromDate || !selectedEmployee  || !toDate}
                     type="button"
-                    className="px-3  py-2 ml-5   w-[100px]  h-[40px] bg-gray-500 font-semibold text-white rounded-md"  
+                    className="px-3  py-2 ml-5 min-w-[100px] disabled:bg-gray-400  h-[40px] bg-blue-500 font-semibold text-white rounded-md flex items-center justify-center"  
                   >
-                    Download
+                    <span>{pdfLoading ? "Downloading..." : "Download"}</span>
+                    { pdfLoading && <div className="loading ml-2 "></div>}
                   </button>
                 </div>
               </div>
