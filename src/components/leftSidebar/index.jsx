@@ -51,14 +51,14 @@ function LeftSidebar() {
   return (
 
     <div className=" w-[33%] flex flex-col px-[5px]">
-      <div className="  flex mt-3 items-center justify-between">
+      <div className="  flex mt-3 items-center">
         <p className="text-xl text-blue-400 font-semibold pl-4">
           Reportees
         </p>
         <input
           placeholder="Search"
           type="text"
-          className="p-2  border rounded w-[160px] placeholder:text-[14px]"
+          className="p-2  border rounded ml-[16px] placeholder:text-[14px]"
           value={inputValue}
           onChange={handleChange}
         />
@@ -69,7 +69,7 @@ function LeftSidebar() {
             {(reportees.length) ? reportees?.map(({ empName, score, empId }) => (
               <button onClick={() => dispatch(setViewReportee(empId))}
                 // to={`/viewreportee`}
-                className={`flex items-center hover:bg-blue-400 hover:text-white  bg-${viewReportee?.empId == empId ? "blue-400 text-white" : "white"
+                className={`flex rounded-lg items-center hover:bg-blue-400 hover:text-white  bg-${viewReportee?.empId == empId ? "blue-400 text-white" : "white"
                   } p-2 justify-between mb-1 w-full`}
                 key={empId}
               >
