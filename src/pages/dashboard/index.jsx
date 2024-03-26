@@ -46,7 +46,7 @@ function Dashboard() {
   useEffect(() => {
     if (userDetails.user) {
       setReporteIds(userDetails.user.reportees)
-      navigate("/dashboard")
+      // navigate("/dashboard")
     } else {
       navigate("/")
     }
