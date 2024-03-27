@@ -174,7 +174,7 @@ function Exporttable() {
           return true;
         }
       } else {
-        if((preEmployee !== selectedEmployee && fromDate !== preFromDate && toDate !== preToDate) || activitiesData.length === 0) {
+        if((preEmployee !== selectedEmployee && fromDate !== preFromDate && toDate !== preToDate) || activitiesData?.length === 0) {
           return true;
         }
       }
@@ -258,8 +258,9 @@ function Exporttable() {
                     type="button"
                     className="px-3  py-2 ml-5 min-w-[100px] disabled:bg-gray-400  h-[40px] bg-blue-500 font-semibold text-white rounded-md flex items-center justify-center"  
                   >
+                    <span>{pdfLoading ? "Downloading... " : "Download "}  </span>
                     <DownloadIcon />
-                    <span>{pdfLoading ? "Downloading..." : "Download"}</span>
+
                     { pdfLoading && <div className="loading ml-2 "></div>}
                   </button>
                 </div>

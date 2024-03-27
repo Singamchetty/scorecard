@@ -36,7 +36,7 @@ const exporttableSlice = createSlice({
       state.error = "pending";
     });
     builder.addCase(fetchReportesActivitiesData.fulfilled, (state, action) => {
-      console.log(action.payload.activities)
+      // console.log(action.payload.activities)
       state.loading = false;
       state.activitiesData = action.payload.activities      ;
       state.error = "";
