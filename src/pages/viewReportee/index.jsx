@@ -106,7 +106,7 @@ function Viewreportee() {
                 <span className="font-medium">Role : </span> {viewReportee?.techStack}
               </p>
               <p>
-                <span className="font-medium">Employee Id:  </span> {viewReportee?.empId}
+                <span className="font-medium">Employee Id :  </span> {viewReportee?.empId}
               </p>
             </div>
             <div className="flex flex-col justify-center items-center">
