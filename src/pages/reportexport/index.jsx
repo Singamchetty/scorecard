@@ -174,7 +174,7 @@ function Exporttable() {
           return true;
         }
       } else {
-        if((preEmployee !== selectedEmployee && fromDate !== preFromDate && toDate !== preToDate) || activitiesData?.length === 0) {
+        if((preEmployee !== selectedEmployee || fromDate !== preFromDate || toDate !== preToDate) || activitiesData.length === 0) {
           return true;
         }
       }

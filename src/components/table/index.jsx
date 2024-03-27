@@ -1,37 +1,58 @@
 import React, {useState, useEffect} from "react";
+import { useSelector, useDispatch} from "react-redux";
+import {setSortKey, setSortOrder} from '../../redux/reducers/reporteesSlice';
 import Loading from "../loading Component/Loading";
 import SortButton from "../sortButton";
 
-function Table({headers, data,loading, maxHeight}) {
-  const [sortedData, setSortedData] = useState([]);
-  const [sortKey, setSortKey] = useState(null);
-  const [sortOrder, setSortOrder] = useState('asc');
+function Table({headers, data,loading, handleSorting }) {
+  const dispatch = useDispatch();
+  const {sortKey,  sortOrder} = useSelector((state) => state.reportees);
+  // const [sortedData, setSortedData] = useState([]);
+  // const [sortKey, setSortKey] = useState(null);
+  // const [sortOrder, setSortOrder] = useState('asc');
 
-  useEffect(() => {
-    if(sortKey) {
-      setSortKey(null);
-    }
-    setSortedData(data);
-  }, [data]);
+  // useEffect(() => {
+  //   if(sortKey) {
+  //     setSortKey(null);
+  //   }
+  //   setSortedData(data);
+  // }, [data]);
+
+  // useEffect(() => {
+  //   if(sortKey) {
+      
+  //   }
+  // }, [sortKey, sortOrder])
 
   const handleSort = (key) => {
-    const order = key === sortKey ? (sortOrder === 'asc' ? 'desc' : 'asc') : 'asc';
 
+    const order = key === sortKey ? (sortOrder === 'asc' ? 'desc' : 'asc') : 'asc';
     if(sortOrder === 'desc' && key === sortKey) {
-      setSortedData(data);
-      setSortKey(null);
-      setSortOrder('asc');
+        dispatch(setSortKey(null))
+      dispatch(setSortOrder('asc'));
+        handleSorting(null, order)
     } else {
-      const sorted = [...data].sort((a, b) => {
-        if (typeof a[key] === 'string') {
-          return order === 'asc' ? a[key].localeCompare(b[key]) : b[key].localeCompare(a[key]);
-        }
-        return order === 'asc' ? a[key] - b[key] : b[key] - a[key];
-      });
-      setSortedData(sorted);
-      setSortKey(key);
-      setSortOrder(order);
+     dispatch(setSortKey(key));
+      dispatch(setSortOrder(order));
+      handleSorting(key, order)
     }
+   
+
+    // if(sortOrder === 'desc' && key === sortKey) {
+    //   setSortedData(data);
+    //   setSortKey(null);
+    //   setSortOrder('asc');
+    // } else {
+    //   const sorted = [...data].sort((a, b) => {
+    //     if (typeof a[key] === 'string') {
+    //       return order === 'asc' ? a[key].localeCompare(b[key]) : b[key].localeCompare(a[key]);
+    //     }
+    //     return order === 'asc' ? a[key] - b[key] : b[key] - a[key];
+    //   });
+    //   setSortedData(sorted);
+    //   setSortKey(key);
+    //   setSortOrder(order);
+    // }
 
   };
 
@@ -58,7 +79,7 @@ function Table({headers, data,loading, maxHeight}) {
        { 
        (data?.length)?<tbody >
          {
-           sortedData?.map((item, index) => (
+           data?.map((item, index) => (
                <tr key={item.id} className="bg-white  hover:bg-gray-300 " >
                    {
                      headers?.map(({render, id}) => (

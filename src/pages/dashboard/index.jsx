@@ -10,7 +10,7 @@ import PaginationComponent from "../../components/Pagenation/Pagenation";
 function Dashboard() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { reportees, loading, totalCount, currPage,  pagesCount} = useSelector((state) => state.reportees);
+  const { reportees, loading, totalCount, currPage,  pagesCount, sortKey, sortOrder} = useSelector((state) => state.reportees);
   const userDetails = useSelector((state) => state.userDetails);
   const [reporteIds, setReporteIds] = useState([]);
   const [inputValue, setInputValue] = useState(null);
@@ -20,12 +20,22 @@ function Dashboard() {
     let data = {
       reportees: userDetails.user.reportees,
       page: currPage,
-      perPage: 10
+      perPage: 10,
+      sort: sortKey ? {type:sortKey, order: sortOrder === "asc" ? 1 : -1} : {}
     }
     dispatch(setCurrPage(currPage))
     dispatch(fetchReportees(data))
   }
 
+  const handleSort = (key, order) => {
+    let data = {
+      reportees: userDetails.user.reportees,
+      page: currPage,
+      perPage: 10,
+      sort: key ? {type:key, order: order === "asc" ? 1 : -1} : {}
+    }
+    dispatch(fetchReportees(data))
+  }
 
   useEffect(() => {
     dispatch(setPagesCount(Math.ceil((totalCount) / (10))))
@@ -122,7 +132,7 @@ function Dashboard() {
           <label>Search :</label>
           <input placeholder="Name/Id/Designation/Role"  value={inputValue} onChange={handleChange} type="text" className="p-1 px-2 border rounded ml-2 placeholder:text-[14px]"/>
         </div>
-         <Table headers={headers} data={reportees} loading={loading} maxHeight={88} />
+         <Table headers={headers} data={reportees} loading={loading} handleSorting={handleSort}/>
          
       <div className="">
         {reportees.length>0 && pagesCount>1 && (
