@@ -9,6 +9,7 @@ import { base_url } from "../../utils/constants";
 import DownloadIcon from '../../assets/icons/downloadIcon';
 import jsPDF from 'jspdf';
 import 'jspdf-autotable';
+import {styles} from './styles';
 
 function Exporttable() {
   const dispatch = useDispatch();
@@ -22,13 +23,19 @@ function Exporttable() {
   const [fromDate, setFromDate] = useState("");
   const [toDate, setToDate] = useState("");
   const [inputValue, setInputValue] = useState('');
-  const [pdfData, setPdfData] = useState([]);
   const [pdfLoading, setPdfLoading] = useState(false);
-  const [preState, setPreState] = useState({
-    preEmployee: 0,
-    preFromDate: '',
-    preToDate: ''
-  })
+  const [selectedDate, setSelectedDate] = useState(null)
+
+  useEffect(() => {
+    if(selectedEmployee && fromDate && toDate) {
+      let data = {
+        empId: Number(selectedEmployee),
+        fromDate: fromDate,
+        toDate: toDate,
+      };
+      dispatch(fetchReportesActivitiesData(data));
+    }
+  },[selectedEmployee, fromDate, toDate])
 
   const calculateDateRange = (monthsAgo) => {
     const toDate = new Date().toISOString().split("T")[0];
@@ -42,33 +49,20 @@ function Exporttable() {
     const selectedValue = event.target.value;
     let fromDate, toDate;
 
-    if (selectedValue === "pastMonth") {
+    if (selectedValue === "Past 1 month") {
       ({ fromDate, toDate } = calculateDateRange(1));
-    } else if (selectedValue === "pastthreeMonth") {
+    } else if (selectedValue === "Past 3 months") {
       ({ fromDate, toDate } = calculateDateRange(3));
-    } else if (selectedValue === "pastsixMonth") {
+    } else if (selectedValue === "Past 6 months") {
       ({ fromDate, toDate } = calculateDateRange(6));
-    } else if (selectedValue === "pasttwelvemonth") {
+    } else if (selectedValue === "Past 1 year") {
       ({ fromDate, toDate } = calculateDateRange(12));
     }
+    setSelectedDate(selectedValue)
     setFromDate(fromDate);
     setToDate(toDate);
   };
 
-  const handleView = (e) => {
-    e.preventDefault();
-    setPreState({
-      preEmployee: selectedEmployee,
-      preFromDate: fromDate,
-      preToDate: toDate
-    })
-    let data = {
-      empId: Number(selectedEmployee),
-      fromDate: fromDate,
-      toDate: toDate,
-    };
-    dispatch(fetchReportesActivitiesData(data));
-  };
 
   useEffect(() => {
     if (user) {
@@ -84,11 +78,6 @@ function Exporttable() {
     })
   }, [user]);
 
-  // useEffect(() => {
-  //   if(activitiesData.length > 0) {
-  //     dispatch(resetActivitiesData())
-  //   }
-  // }, [selectedEmployee, toDate, fromDate])
 
   const headers = [
     { title: "Activity Name", id: "aName" },
@@ -117,6 +106,8 @@ function Exporttable() {
       ),
     },
   ];
+
+  const periodOptions = ['Past 1 month', 'Past 3 months', 'Past 6 months', 'Past 1 year']
 
 
   // Function to convert table to PDF
@@ -163,100 +154,76 @@ function Exporttable() {
       setPdfLoading(false);
     }
   }
-
-  const disableBtn = (type) => {
-    if(!selectedEmployee || !fromDate || !toDate) {
-      return true
-    } else {
-      const {preEmployee, preFromDate, preToDate} = preState;
-      if(type === 'view'){
-        if(preEmployee === selectedEmployee && fromDate === preFromDate && toDate === preToDate) {
-          return true;
-        }
-      } else {
-        if((preEmployee !== selectedEmployee || fromDate !== preFromDate || toDate !== preToDate) || activitiesData.length === 0) {
-          return true;
-        }
-      }
-    }
+  const getName = (id) => {
+    const user = reportees.find((item) => item?.empId === Number(id));
+    return user ? user.empName : '';
   }
 
     return (
       <div>
-        <div className={` overflow-auto sm:rounded-lg p-4 bg-[#E9EDEE]`}>
-          <div className="text-blue-800 py-3 pl-2 text-center">
-            {" "}
-            Genarate Report
+        <div className={styles.genarateReportContainer}>
+          <div className={styles.textBlueHeading}>
+            REPORTS
           </div>
 
           <div>
-            <form className=" p-2 text-[12px]">
-              <div className="flex items-center justify-evenly ">
-                <div className="flex items-center">
+            <form className={styles.formContainer}>
+              <div className={styles.flexContainer}>
+                <div className={styles.flexItemsCenter}>
+                  <div className={styles.flexItemsCenter}>
                   <label htmlFor="countries" className="font-semibold">
-                    Select Employee:{" "}
+                    SELECT EMPLOYEE:{" "}
                   </label>
-                  <select
+                  <select 
                     onChange={(e) => setSelectedEmployee(e.target.value)}
                     value={selectedEmployee}
-                    className="bg-gray-50  ml-2 w-[200px] border border-gray-300 text-gray-900 text-sm   rounded-sm focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700"
+                    className={styles.selectEmployeeDropdown}
                   >
+                    
                     <option id="" value="">
                       Select
                     </option>
                     {reportees &&
                       reportees.map((reportee) => (
                         <option
-                          key={reportee.empId}
-                          id={reportee.empId}
-                          value={reportee.empId}
+                          className="text-pretty"
+                          key={reportee?.empId}
+                          id={reportee?.empId}
+                          value={reportee?.empId}
                         >
                           {reportee?.empName}
                         </option>
                       ))}
                   </select>
-                </div>
-                <div className="flex items-center">
-                  <label htmlFor="countries" className="font-semibold">
-                    Select Period:
+                  </div>
+                  <div className={styles.flexItemsCenter}>
+                  <label htmlFor="countries" className="font-semibold ml-4">
+                    SELECT PERIOD:
                   </label>
                   <select
                     onChange={handleDropdownChange}
-                    className="bg-gray-50 ml-2 w-[200px] border border-gray-300 text-gray-900 text-sm focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 "
+                    className={styles.selectEmployeeDropdown && styles.selectDropdown}  
                   >
-                    <option id="" value="">
+                    <option value="">
                       Select
                     </option>
-                    <option id="" value="pastMonth">
-                      Past 1 months
-                    </option>
-                    <option id="" value="pastthreeMonth">
-                      Past 3 months
-                    </option>
-                    <option id="" value="pastsixMonth">
-                      Past 6 months
-                    </option>
-                    <option id="" value="pasttwelvemonth">
-                      Past year
-                    </option>
+                    {
+                      periodOptions.map((option) => (
+                        <option  value={option}>
+                          {option}
+                        </option>
+                      ))
+                    }
                   </select>
                 </div>
+                </div>
+                
                 <div className="flex">
                   <button
-                    // disabled={!fromDate || !selectedEmployee  || !toDate}
-                    disabled={disableBtn('view')}
-                    className="px-8  py-2 ml-5 w-[100px]  h-[40px] bg-blue-500 text-white font-semibold rounded-md disabled:bg-gray-400"
-                    onClick={(e) => handleView(e)}
-                  >
-                    View
-                  </button>
-
-                  <button
                     onClick={getPdfList}
-                    //disabled={pdfLoading || !fromDate || !selectedEmployee  || !toDate}
-                    disabled={disableBtn()}
+                    disabled={activitiesData?.length === 0}
                     type="button"
-                    className="px-3  py-2 ml-5 min-w-[100px] disabled:bg-gray-400  h-[40px] bg-blue-500 font-semibold text-white rounded-md flex items-center justify-center"  
+                    className={styles.downloadButton}
                   >
                     <span>{pdfLoading ? "Downloading... " : "Download "}  </span>
                     <DownloadIcon />
@@ -267,10 +234,10 @@ function Exporttable() {
               </div>
             </form>
           </div>
-         
-          {/* { activitiesData?.length > 0 && ( */}
+            <div className={`mb-4 ${activitiesData?.length === 0 && "hidden"}`}>
+              <p>Showing <span className="font-semibold">{getName(selectedEmployee)}</span> reports from <span className="font-semibold">{selectedDate}</span> </p>
+            </div>
             <Table headers={headers} loading={loading} data={activitiesData} />
-          {/* )} */}
         </div>
       </div>
     );
