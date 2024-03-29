@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { fetchReportees, setViewReportee, setCurrPage, setPagesCount } from "../../redux/reducers/reporteesSlice";
+import { fetchReportees, setCurrPage, setPagesCount, setReporteeId } from "../../redux/reducers/reporteesSlice";
 import { Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { useParams } from "react-router-dom";
@@ -67,8 +67,7 @@ function LeftSidebar() {
         (loading) ? <Loading /> :
           <div className="p-2 bg-[#E9EDEE] mt-4 max-h-[70vh] overflow-auto">
             {(reportees.length) ? reportees?.map(({ empName, score, empId }) => (
-              <button onClick={() => dispatch(setViewReportee(empId))}
-                // to={`/viewreportee`}
+              <button onClick={() => dispatch(setReporteeId(empId))}
                 className={`flex rounded-lg items-center hover:bg-blue-400 hover:text-white  bg-${viewReportee?.empId == empId ? "blue-400 text-white" : "white"
                   } p-2 justify-between mb-1 w-full`}
                 key={empId}

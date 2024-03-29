@@ -4,7 +4,7 @@ import { useParams, useNavigate } from "react-router";
 import { base_url } from "../../utils/constants";
 import axios from 'axios';
 import { fetchReportees,setViewReportee } from "../../redux/reducers/reporteesSlice";
-import {fetchReporteeActivities, fetchActivitiesAvg} from '../../redux/reducers/viewreporteeSlice'
+import {fetchReporteeActivities, fetchActivitiesAvg, } from '../../redux/reducers/viewreporteeSlice'
 import Accordion from "../../components/accordion";
 import {scoreColor} from '../../utils/commonFunctions';
 
@@ -12,7 +12,7 @@ import {scoreColor} from '../../utils/commonFunctions';
 function Viewreportee() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const {reportees, viewReportee,currPage } = useSelector((state) => state.reportees);
+  const {reportees, viewReportee,currPage, reporteeId } = useSelector((state) => state.reportees);
   const user = useSelector((state) => state.userDetails.user)
   const { reports, loading, error, dutiesReports, initiativeReports } = useSelector((state) => state.reports);
   const [open, setOpen] = useState({ "accordianOne": false, "accordianTwo": false });
@@ -52,7 +52,12 @@ function Viewreportee() {
       };
       dispatch(fetchReportees(data))
     }
+  }
 
+  const fetchViewReporteeData=async(empId)=>{
+        const response= await axios.get(`${base_url}/employee/${empId}`)
+        const data=await response.data
+        dispatch(setViewReportee(data))
   }
 
   const handleAddActivity = async (activityData) => {
@@ -65,18 +70,21 @@ function Viewreportee() {
         .then(async (result) => {
           fetchLatestReporteesData();
           fetchActivities(activityData?.type)
+          fetchViewReporteeData(reporteeId)
+          dispatch(fetchActivitiesAvg({empId:reporteeId, types:["duties", "initiative"]}))
         })
     } else {
       alert("Please login")
     }
   }
 
-  useEffect(()=>{
-    if(reportees.length>0 && viewReportee !== null )
-     dispatch(fetchActivitiesAvg({empId:viewReportee?.empId, types:["duties", "initiative"]}))
-     dispatch(setViewReportee(viewReportee?.empId))
-  },[reportees,viewReportee])
 
+  useEffect(() => {
+    if(reporteeId) {
+      fetchViewReporteeData(reporteeId)
+      dispatch(fetchActivitiesAvg({empId:reporteeId, types:["duties", "initiative"]}))
+    }
+  }, [reporteeId])
 
 
   useEffect(() => {
@@ -93,21 +101,49 @@ function Viewreportee() {
       <div className="p-4" >
         <div className="bg-white p-3 rounded-md">
           <div className="flex justify-between">
-            <div className="my-1">
+            {/* <div className="my-1">
               <p>
-                <span className="font-medium">Employee Name : </span> {viewReportee?.empName}
+                <span className="font-medium">Employee Name: </span> {viewReportee?.empName}
               </p>
               <p>
-                <span className="font-medium">Designation : </span> {viewReportee?.designation}
+                <span className="font-medium">Designation: </span> {viewReportee?.designation}
               </p>
+            </div> */}
+            <div className="flex items-center">
+              <div>
+                <p className="font-medium mb-2">
+                  Employee Name 
+                </p>
+                <p className="font-medium">
+                  Employee Id 
+                </p>
+              </div>
+              <div>
+                <p className="mb-2"><span className="font-medium">:</span> {viewReportee?.empName}</p>
+                <p><span className="font-medium">:</span> {viewReportee?.empId}</p>
+              </div>
             </div>
-            <div className="my-1">
+            {/* <div className="my-1">
               <p>
-                <span className="font-medium">Role : </span> {viewReportee?.techStack}
+                <span className="font-medium">Role: </span> {viewReportee?.techStack}
               </p>
               <p>
-                <span className="font-medium">Employee Id :  </span> {viewReportee?.empId}
+                <span className="font-medium">Employee Id:  </span> {viewReportee?.empId}
               </p>
+            </div> */}
+            <div className="flex items-center">
+              <div>
+                <p className="font-medium mb-2">
+                  Designation 
+                </p>
+                <p className="font-medium">
+                  Role 
+                </p>
+              </div>
+              <div>
+                <p className="mb-2"><span className="font-medium">:</span> {viewReportee?.designation}</p>
+                <p><span className="font-medium">:</span> {viewReportee?.techStack}</p>
+              </div>
             </div>
             <div className="flex flex-col justify-center items-center">
               <div className={`w-[40px] h-[40px] rounded-full flex items-center text-white justify-center  ${scoreColor(viewReportee?.score)}`}>

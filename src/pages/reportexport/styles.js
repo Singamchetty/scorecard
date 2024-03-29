@@ -1,8 +1,8 @@
 export const styles = {
   genarateReportContainer: "overflow-auto sm:rounded-lg p-4 bg-[#E9EDEE] ",
   textBlueHeading: "text-blue-800 py-3 pl-2 text-center fond-bold text-2xl",
-  formContainer: "p-2 text-[12px] mb-10",
-  flexContainer: "flex items-center justify-evenly",
+  formContainer: "p-2 text-[12px] mb-4",
+  flexContainer: "flex items-center justify-between",
   flexItemsCenter: "flex items-center",
   selectEmployeeDropdown:
     "bg-gray-50 text-balance  rounded-lg rounded-md ml-2  border border-gray-300 text-gray-900 text-sm   focus:ring-blue-500 focus:border-blue-500 block p-2.5 ",
