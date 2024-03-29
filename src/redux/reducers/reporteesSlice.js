@@ -9,7 +9,9 @@ const initialState = {
   loading: false,
   error: null,
   currPage:1,
-  pagesCount:1
+  pagesCount:1,
+  sortKey: null,
+  sortOrder: 'asc'
 };
 
 export const fetchReportees = createAsyncThunk("getreportees", async (data) => {
@@ -43,6 +45,12 @@ const reporteesSlice = createSlice({
     },
     setPagesCount: (state, action) => {
       state.pagesCount = action.payload
+    },
+    setSortKey: (state, action) => {
+      state.sortKey = action.payload
+    },
+    setSortOrder: (state, action) => {
+      state.sortOrder = action.payload
     }
   },
   extraReducers: (builder) => {
@@ -64,6 +72,6 @@ const reporteesSlice = createSlice({
   },
 });
 
-export const {resetReportees,setViewReportee, setCurrPage, setPagesCount} = reporteesSlice.actions;
+export const {resetReportees,setViewReportee, setCurrPage, setPagesCount, setSortKey, setSortOrder} = reporteesSlice.actions;
 
 export default reporteesSlice.reducer;

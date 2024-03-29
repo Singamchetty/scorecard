@@ -15,7 +15,7 @@ const initialState = {
 export const fetchReporteeActivities = createAsyncThunk("getReports", async (data) => {
   return await axios
     .post(`${base_url}/getActivities`, data)
-    .then((response) => response.data?.activities);
+    .then((response) => {return {data:response.data?.activities, type:data.types}});
 });
 
 export const fetchActivitiesAvg = createAsyncThunk("getActivities-avg", async (data) => {
@@ -37,8 +37,8 @@ const reportSlice = createSlice({
       return {...state,loading :true,error :"loading"}
     });
     builder.addCase(fetchReporteeActivities.fulfilled, (state, action) => {
-      const {type} = action?.payload[0] ?? {}
-      return {...state,loading :false,error :"", [`${type}Reports`]: action.payload}
+      const {data, type} = action.payload;
+      return {...state,loading :false,error :"", [`${type[0]}Reports`]: data}
     });
     builder.addCase(fetchReporteeActivities.rejected, (state, action) => {
       return {...state,loading :false,error :action.error || "Something went wrong!",reports:null}

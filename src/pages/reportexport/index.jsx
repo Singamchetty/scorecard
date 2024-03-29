@@ -177,7 +177,7 @@ function Exporttable() {
           return true;
         }
       } else {
-        if((preEmployee !== selectedEmployee && fromDate !== preFromDate && toDate !== preToDate) || activitiesData.length === 0) {
+        if((preEmployee !== selectedEmployee || fromDate !== preFromDate || toDate !== preToDate) || activitiesData.length === 0) {
           return true;
         }
       }
@@ -262,8 +262,9 @@ function Exporttable() {
                     type="button"
                     className={styles.downloadButton}
                   >
+                    <span>{pdfLoading ? "Downloading... " : "Download "}  </span>
                     <DownloadIcon />
-                    <span>{pdfLoading ? "Downloading..." : "Download"}</span>
+
                     { pdfLoading && <div className="loading ml-2 "></div>}
                   </button>
                 </div>
