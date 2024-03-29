@@ -9,6 +9,7 @@ import { base_url } from "../../utils/constants";
 import DownloadIcon from '../../assets/icons/downloadIcon';
 import jsPDF from 'jspdf';
 import 'jspdf-autotable';
+import {styles} from './styles';
 
 function Exporttable() {
   const dispatch = useDispatch();
@@ -185,30 +186,31 @@ function Exporttable() {
 
     return (
       <div>
-        <div className={` overflow-auto sm:rounded-lg p-4 bg-[#E9EDEE]`}>
-          <div className="text-blue-800 py-3 pl-2 text-center">
-            {" "}
-            Genarate Report
+        <div className={styles.genarateReportContainer}>
+          <div className={styles.textBlueHeading}>
+           
+            GENARATE REPORT
           </div>
 
           <div>
-            <form className=" p-2 text-[12px]">
-              <div className="flex items-center justify-evenly ">
-                <div className="flex items-center">
+            <form className={styles.formContainer}>
+              <div className={styles.flexContainer}>
+                <div className={styles.flexItemsCenter}>
                   <label htmlFor="countries" className="font-semibold">
-                    Select Employee:{" "}
+                    SELECT EMPLOYEE:{" "}
                   </label>
-                  <select
+                  <select 
                     onChange={(e) => setSelectedEmployee(e.target.value)}
                     value={selectedEmployee}
-                    className="bg-gray-50  ml-2 w-[200px] border border-gray-300 text-gray-900 text-sm   rounded-sm focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700"
+                    className={styles.selectEmployeeDropdown}
                   >
+                    
                     <option id="" value="">
                       Select
                     </option>
                     {reportees &&
                       reportees.map((reportee) => (
-                        <option
+                        <option  className="text-pretty"
                           key={reportee.empId}
                           id={reportee.empId}
                           value={reportee.empId}
@@ -220,26 +222,26 @@ function Exporttable() {
                 </div>
                 <div className="flex items-center">
                   <label htmlFor="countries" className="font-semibold">
-                    Select Period:
+                    SELECT PERIOD:
                   </label>
                   <select
                     onChange={handleDropdownChange}
-                    className="bg-gray-50 ml-2 w-[200px] border border-gray-300 text-gray-900 text-sm focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 "
+                    className={styles.selectEmployeeDropdown && styles.selectDropdown}  
                   >
                     <option id="" value="">
                       Select
                     </option>
                     <option id="" value="pastMonth">
-                      Past 1 months
+                      Past 1 Months
                     </option>
                     <option id="" value="pastthreeMonth">
-                      Past 3 months
+                      Past 3 Months
                     </option>
                     <option id="" value="pastsixMonth">
-                      Past 6 months
+                      Past 6 Months
                     </option>
                     <option id="" value="pasttwelvemonth">
-                      Past year
+                      Past Year
                     </option>
                   </select>
                 </div>
@@ -247,7 +249,7 @@ function Exporttable() {
                   <button
                     // disabled={!fromDate || !selectedEmployee  || !toDate}
                     disabled={disableBtn('view')}
-                    className="px-8  py-2 ml-5 w-[100px]  h-[40px] bg-blue-500 text-white font-semibold rounded-md disabled:bg-gray-400"
+                    className={styles.downloadButton}
                     onClick={(e) => handleView(e)}
                   >
                     View
@@ -258,7 +260,7 @@ function Exporttable() {
                     //disabled={pdfLoading || !fromDate || !selectedEmployee  || !toDate}
                     disabled={disableBtn()}
                     type="button"
-                    className="px-3  py-2 ml-5 min-w-[100px] disabled:bg-gray-400  h-[40px] bg-blue-500 font-semibold text-white rounded-md flex items-center justify-center"  
+                    className={styles.downloadButton}
                   >
                     <DownloadIcon />
                     <span>{pdfLoading ? "Downloading..." : "Download"}</span>
