@@ -4,12 +4,15 @@ import axios from "axios";
 
 const initialState = {
   reportees: [],
+  reporteeId: null,
   viewReportee:null,
   totalCount:0,
   loading: false,
   error: null,
   currPage:1,
-  pagesCount:1
+  pagesCount:1,
+  sortKey: null,
+  sortOrder: 'asc'
 };
 
 export const fetchReportees = createAsyncThunk("getreportees", async (data) => {
@@ -25,24 +28,25 @@ const reporteesSlice = createSlice({
       return initialState
     },
     setViewReportee:(state,action)=>{
-        const reportee=state.reportees.find((reportee)=>reportee.empId==action.payload)
-         if(!reportee){
           return {
             ...state,
-            viewReportee: null
+            viewReportee: action.payload
           }
-        } else {
-          return {
-            ...state,
-            viewReportee: reportee
-          }
-        }
+    },
+    setReporteeId: (state, action) => {
+      state.reporteeId = action.payload
     },
     setCurrPage: (state, action) => {
       state.currPage = action.payload
     },
     setPagesCount: (state, action) => {
       state.pagesCount = action.payload
+    },
+    setSortKey: (state, action) => {
+      state.sortKey = action.payload
+    },
+    setSortOrder: (state, action) => {
+      state.sortOrder = action.payload
     }
   },
   extraReducers: (builder) => {
@@ -64,6 +68,6 @@ const reporteesSlice = createSlice({
   },
 });
 
-export const {resetReportees,setViewReportee, setCurrPage, setPagesCount} = reporteesSlice.actions;
+export const {resetReportees,setViewReportee, setCurrPage, setPagesCount, setSortKey, setSortOrder, setReporteeId} = reporteesSlice.actions;
 
 export default reporteesSlice.reducer;

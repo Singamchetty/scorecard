@@ -12,7 +12,7 @@ const PaginationComponent = ({ currentPage, totalPages, onPageChange }) => {
   return (
     <nav className="flex justify-center my-2">
       <ul className="pagination flex">
-        <button disabled={currentPage === 1} onClick={() => onPageChange(currentPage-1)} className='mr-2 hover:bg-blue-400 border rounded disabled:bg-gray-200'><LeftIcon /></button>
+        <button disabled={currentPage === 1} onClick={() => onPageChange(currentPage-1)} className={`ml-2 hover:bg-blue-400 border-0 bg-transparent rounded ${currentPage===1 ? "hidden":null}`}><LeftIcon /></button>
         {pageNumbers.map(number => (
           <li key={number} className={`page-item ${number === currentPage ? 'active' : ''}` }>
             <button onClick={() => onPageChange(number)} className=" w-[22px]  font-bold h-[22px] ">
@@ -20,7 +20,7 @@ const PaginationComponent = ({ currentPage, totalPages, onPageChange }) => {
             </button>
           </li>
         ))}
-        <button disabled={currentPage === totalPages} onClick={() => onPageChange(currentPage+1)} className='ml-2 hover:bg-blue-400 border rounded disabled:bg-gray-200'><RightIcon/></button>
+        <button disabled={currentPage === totalPages} onClick={() => onPageChange(currentPage+1)} className={`ml-2 hover:bg-blue-400 border-0 bg-transparent rounded ${currentPage===totalPages ? "hidden":null}`}><RightIcon/></button>
       </ul>
     </nav>
   );

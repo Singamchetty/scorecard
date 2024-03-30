@@ -4,7 +4,7 @@ import { useParams, useNavigate } from "react-router";
 import { base_url } from "../../utils/constants";
 import axios from 'axios';
 import { fetchReportees,setViewReportee } from "../../redux/reducers/reporteesSlice";
-import {fetchReporteeActivities} from '../../redux/reducers/viewreporteeSlice'
+import {fetchReporteeActivities, fetchActivitiesAvg, } from '../../redux/reducers/viewreporteeSlice'
 import Accordion from "../../components/accordion";
 import {scoreColor} from '../../utils/commonFunctions';
 
@@ -12,35 +12,31 @@ import {scoreColor} from '../../utils/commonFunctions';
 function Viewreportee() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const {reportees, viewReportee } = useSelector((state) => state.reportees);
+  const {reportees, viewReportee,currPage, reporteeId } = useSelector((state) => state.reportees);
   const user = useSelector((state) => state.userDetails.user)
-  const { reports, loading, error } = useSelector((state) => state.reports);
+  const { reports, loading, error, dutiesReports, initiativeReports } = useSelector((state) => state.reports);
   const [open, setOpen] = useState({ "accordianOne": false, "accordianTwo": false });
 
 
-
-
-  /*Example post data
-{
-    "empId":41689,
-    "fromDate":"2024-03-10",
-    "toDate":"2024-03-11"
-}
-*/
-  const activities = useMemo(() => {
-    if (reports) {
-      const filtered = Object.groupBy(reports, ({ type }) => type);
-      return filtered;
+  const fetchActivities = (type) => {
+    const data ={
+      empId:viewReportee?.empId, 
+      types:[type], 
+      page: 1,
+      perPage: 5
     }
-  }, [reports, viewReportee]);
+    dispatch(fetchReporteeActivities(data))
+  }
 
   const handleAccordian = (value) => {
     switch (value) {
       case "Duties":
         setOpen({ ...open, "accordianOne": !open["accordianOne"], "accordianTwo": false });
+        fetchActivities('duties')
         break;
       case "Initiatives":
         setOpen({ ...open, "accordianOne": false, "accordianTwo": !open["accordianTwo"] });
+        fetchActivities('initiative')
         break;
       default:
         setOpen({ "accordianOne": false, "accordianTwo": false });
@@ -51,13 +47,17 @@ function Viewreportee() {
     if (user) {
       const data = {
         reportees: user.reportees,
-        sort: { type: "empId", order: 1 },
-        page: 1,
+        page: currPage,
         perPage: 10,
       };
       dispatch(fetchReportees(data))
     }
+  }
 
+  const fetchViewReporteeData=async(empId)=>{
+        const response= await axios.get(`${base_url}/employee/${empId}`)
+        const data=await response.data
+        dispatch(setViewReportee(data))
   }
 
   const handleAddActivity = async (activityData) => {
@@ -68,66 +68,82 @@ function Viewreportee() {
       }
       await axios.post(`${base_url}/createActivity`, newData)
         .then(async (result) => {
-          fetchLatestReporteesData()
+          fetchLatestReporteesData();
+          fetchActivities(activityData?.type)
+          fetchViewReporteeData(reporteeId)
+          dispatch(fetchActivitiesAvg({empId:reporteeId, types:["duties", "initiative"]}))
         })
     } else {
       alert("Please login")
     }
   }
 
-  useEffect(()=>{
-    if(reportees.length>0 && viewReportee !== null)
-     dispatch(fetchReporteeActivities({empId:viewReportee?.empId}))
-  },[reportees,viewReportee])
 
-  // useEffect(()=>{
-  //   if(reportees.length){
-  //     dispatch(setViewReportee(viewReportee?.empId))
-  //   }
-  // },[reportees])
-
+  useEffect(() => {
+    if(reporteeId) {
+      fetchViewReporteeData(reporteeId)
+      dispatch(fetchActivitiesAvg({empId:reporteeId, types:["duties", "initiative"]}))
+    }
+  }, [reporteeId])
 
 
   useEffect(() => {
     if (user) {
-      navigate(`/viewreportee`)
+      // navigate(`/viewreportee`)
       setOpen({ "accordianOne": false, "accordianTwo": false })
     } else {
       navigate("/")
     }
   }, []);
 
-  if ( reportees.length && viewReportee)
+  if (viewReportee!==null)
     return (
       <div className="p-4" >
         <div className="bg-white p-3 rounded-md">
           <div className="flex justify-between">
-            {/* <img src="/generic-male-avatar-rectangular.jpg" width="100px" height="100px" /> */}
-            <div className="my-1">
+            {/* <div className="my-1">
               <p>
-                <span className="font-medium">Employee Name : </span> {viewReportee?.empName}
+                <span className="font-medium">Employee Name: </span> {viewReportee?.empName}
               </p>
               <p>
-                <span className="font-medium">Designation : </span> {viewReportee?.designation}
+                <span className="font-medium">Designation: </span> {viewReportee?.designation}
               </p>
-              {/* <p>
-              <span className="font-medium">Email Id:  </span> {viewReportee?.empEmail}
-          </p> */}
+            </div> */}
+            <div className="flex items-center">
+              <div>
+                <p className="font-medium mb-2">
+                  Employee Name 
+                </p>
+                <p className="font-medium">
+                  Employee Id 
+                </p>
+              </div>
+              <div>
+                <p className="mb-2"><span className="font-medium">:</span> {viewReportee?.empName}</p>
+                <p><span className="font-medium">:</span> {viewReportee?.empId}</p>
+              </div>
             </div>
-            <div className="my-1">
+            {/* <div className="my-1">
               <p>
-                <span className="font-medium">Role : </span> {viewReportee?.techStack}
+                <span className="font-medium">Role: </span> {viewReportee?.techStack}
               </p>
               <p>
                 <span className="font-medium">Employee Id:  </span> {viewReportee?.empId}
               </p>
-              {/* <p>
-          <span className="font-medium">Total Score : </span> {viewReportee?.score}
-          </p> */}
-              {/* <p>
-          <span className="font-medium">Allocated To : </span> {viewReportee?.project}
-          </p> */}
-
+            </div> */}
+            <div className="flex items-center">
+              <div>
+                <p className="font-medium mb-2">
+                  Designation 
+                </p>
+                <p className="font-medium">
+                  Role 
+                </p>
+              </div>
+              <div>
+                <p className="mb-2"><span className="font-medium">:</span> {viewReportee?.designation}</p>
+                <p><span className="font-medium">:</span> {viewReportee?.techStack}</p>
+              </div>
             </div>
             <div className="flex flex-col justify-center items-center">
               <div className={`w-[40px] h-[40px] rounded-full flex items-center text-white justify-center  ${scoreColor(viewReportee?.score)}`}>
@@ -137,15 +153,14 @@ function Viewreportee() {
                 <span className="text-blue-400 font-semibold">Total Score</span>
               </div>
             </div>
-
           </div>
         </div>
         <div className="">
           <div className="">
-            <Accordion title="Duties" open={open.accordianOne} handleAccordian={handleAccordian} data={activities?.duties} handleAddActivity={handleAddActivity} />
+            <Accordion title="Duties" open={open.accordianOne} handleAccordian={handleAccordian} data={dutiesReports} handleAddActivity={handleAddActivity} />
           </div>
           <div className="">
-            <Accordion title="Initiatives" open={open.accordianTwo} handleAccordian={handleAccordian} data={activities?.initiative} handleAddActivity={handleAddActivity} />
+            <Accordion title="Initiatives" open={open.accordianTwo} handleAccordian={handleAccordian} data={initiativeReports} handleAddActivity={handleAddActivity} />
           </div>
         </div>
       </div>

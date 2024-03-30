@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchReportees, setViewReportee, setCurrPage, setPagesCount } from "../../redux/reducers/reporteesSlice";
+import { fetchReportees, setViewReportee, setCurrPage, setPagesCount, setReporteeId } from "../../redux/reducers/reporteesSlice";
 import Table from '../../components/table';
 import RightArrowIcon from '../../assets/icons/rightArrowIcon';
 import { scoreColor } from '../../utils/commonFunctions';
@@ -10,32 +10,42 @@ import PaginationComponent from "../../components/Pagenation/Pagenation";
 function Dashboard() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { reportees, loading, totalCount, currPage,  pagesCount} = useSelector((state) => state.reportees);
+  const { reportees, loading, totalCount, currPage,  pagesCount, sortKey, sortOrder} = useSelector((state) => state.reportees);
   const userDetails = useSelector((state) => state.userDetails);
   const [reporteIds, setReporteIds] = useState([]);
-  const [inputValue, setInputValue] = useState('');
+  const [inputValue, setInputValue] = useState(null);
 
   //  userDetails.user.reportees || [];
   const handlePageChange = (currPage) => {
     let data = {
       reportees: userDetails.user.reportees,
       page: currPage,
-      perPage: 10
+      perPage: 10,
+      sort: sortKey ? {type:sortKey, order: sortOrder === "asc" ? 1 : -1} : {}
     }
     dispatch(setCurrPage(currPage))
     dispatch(fetchReportees(data))
   }
 
+  const handleSort = (key, order) => {
+    let data = {
+      reportees: userDetails.user.reportees,
+      page: currPage,
+      perPage: 10,
+      sort: key ? {type:key, order: order === "asc" ? 1 : -1} : {}
+    }
+    dispatch(fetchReportees(data))
+  }
 
   useEffect(() => {
     dispatch(setPagesCount(Math.ceil((totalCount) / (10))))
   }, [totalCount])
 
+
   useEffect(() => {
-    if (reporteIds.length > 0) {
+    if (reporteIds.length > 0 ) {
       const data = {
         reportees: userDetails.user.reportees,
-        // sort: { type: "empId", order: 1 },
         page: currPage,
         perPage: 10
       };
@@ -46,24 +56,27 @@ function Dashboard() {
   useEffect(() => {
     if (userDetails.user) {
       setReporteIds(userDetails.user.reportees)
-      navigate("/dashboard")
+      // navigate("/dashboard")
     } else {
       navigate("/")
     }
   }, [userDetails]);
 
   useEffect(() => {
+   if(inputValue!==null){
     const debounceTimeout = setTimeout(() => {
       const data = {
         reportees: userDetails.user.reportees,
-        page: currPage,
+        page: 1,
         perPage: 10,
         searchText:inputValue
       };
       dispatch(fetchReportees(data));
     }, 1000);
-
     return () => clearTimeout(debounceTimeout);
+   }
+
+    // return () => clearTimeout(debounceTimeout);
   }, [inputValue]);
 
   const handleChange = (event) => {
@@ -104,7 +117,7 @@ function Dashboard() {
       title: "Action",
       id: "empId",
       render: (value) => <Link to={`/viewreportee`}>
-        <button className="bg-blue-400 text-white rounded-md px-2 py-1 flex items-center justify-center w-[40px]" onClick={()=>dispatch(setViewReportee(value))}>
+        <button className="bg-blue-400 text-white rounded-md px-2 py-1 flex items-center justify-center w-[40px]" onClick={()=>dispatch(setReporteeId(value))}>
           <RightArrowIcon />
           </button>
         </Link>
@@ -119,12 +132,11 @@ function Dashboard() {
           <label>Search :</label>
           <input placeholder="Name/Id/Designation/Role"  value={inputValue} onChange={handleChange} type="text" className="p-1 px-2 border rounded ml-2 placeholder:text-[14px]"/>
         </div>
-         <Table headers={headers} data={reportees} loading={loading} maxHeight={88} />
+         <Table headers={headers} data={reportees} loading={loading} handleSorting={handleSort}/>
          
       <div className="">
-        {reportees && (
+        {reportees.length>0 && pagesCount>1 && (
           <div className="flex justify-center mt-2">
-            {/* <div className="text-blue-500">Total Results: {pagesCount}</div> */}
             {pagesCount >= 1 && (
               <PaginationComponent
                 currentPage={currPage}
