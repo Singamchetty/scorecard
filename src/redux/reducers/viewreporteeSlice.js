@@ -1,6 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { base_url } from "../../utils/constants";
-import axios from "axios";
+import axiosApi from '../../api/axiosConfig'
 
 const initialState = {
   reports: null,
@@ -13,14 +12,14 @@ const initialState = {
 };
 
 export const fetchReporteeActivities = createAsyncThunk("getReports", async (data) => {
-  return await axios
-    .post(`${base_url}/getActivities`, data)
+  return await axiosApi
+    .post(`/getActivities`, data)
     .then((response) => {return {data:response.data?.activities, type:data.types}});
 });
 
 export const fetchActivitiesAvg = createAsyncThunk("getActivities-avg", async (data) => {
-  return await axios
-    .post(`${base_url}/getActivities-avg`, data)
+  return await axiosApi
+    .post(`/getActivities-avg`, data)
     .then((response) => response.data);
 });
 

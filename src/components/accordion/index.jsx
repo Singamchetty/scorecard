@@ -2,10 +2,7 @@ import React, { useState } from "react";
 import Table from "../table";
 import ModalButton from "../modal/modalButton";
 import { useSelector ,useDispatch} from "react-redux";
-import { useEffect } from "react";
 import {useParams} from 'react-router'
-import { fetchReportees } from "../../redux/reducers/reporteesSlice";
-import { calculateDefaultScore,calculateInitiativeScore } from "../../redux/reducers/viewreporteeSlice";
 import Loading from "../loading Component/Loading";
 import {convertUTCToLocal} from '../../utils/commonFunctions';
 

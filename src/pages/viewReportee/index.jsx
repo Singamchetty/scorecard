@@ -1,8 +1,7 @@
 import React, { useState, useEffect, useMemo } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useParams, useNavigate } from "react-router";
-import { base_url } from "../../utils/constants";
-import axios from 'axios';
+import axiosApi from '../../api/axiosConfig';
 import { fetchReportees,setViewReportee } from "../../redux/reducers/reporteesSlice";
 import {fetchReporteeActivities, fetchActivitiesAvg, } from '../../redux/reducers/viewreporteeSlice'
 import Accordion from "../../components/accordion";
@@ -55,7 +54,7 @@ function Viewreportee() {
   }
 
   const fetchViewReporteeData=async(empId)=>{
-        const response= await axios.get(`${base_url}/employee/${empId}`)
+        const response= await axiosApi.get(`/employee/${empId}`)
         const data=await response.data
         dispatch(setViewReportee(data))
   }
@@ -66,7 +65,7 @@ function Viewreportee() {
         "empId": viewReportee.empId,
         "data": activityData
       }
-      await axios.post(`${base_url}/createActivity`, newData)
+      await axiosApi.post(`/createActivity`, newData)
         .then(async (result) => {
           fetchLatestReporteesData();
           fetchActivities(activityData?.type)

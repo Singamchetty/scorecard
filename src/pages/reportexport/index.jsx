@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
+import axiosApi from '../../api/axiosConfig';
 import { useDispatch, useSelector } from "react-redux";
 import { fetchReportesActivitiesData, resetReporteesTableData, resetActivitiesData } from "../../redux/reducers/exporttableslice";
 import { fetchReportees } from "../../redux/reducers/reporteesSlice";
 import { convertUTCToLocal } from "../../utils/commonFunctions";
 import Table from "../../components/table";
-import { base_url } from "../../utils/constants";
 import DownloadIcon from '../../assets/icons/downloadIcon';
 import jsPDF from 'jspdf';
 import 'jspdf-autotable';
@@ -69,14 +68,15 @@ function Exporttable() {
       let data = {
         reportees: user.reportees,
         page: 1,
-        perPage: user.reportees.length,
+        perPage: 100000000, //user.reportees.length,
+        getMasterData: true
       };
       dispatch(fetchReportees(data));
     }
     return(() => {
       dispatch(resetReporteesTableData())
     })
-  }, [user]);
+  }, []);
 
 
   const headers = [
@@ -146,7 +146,7 @@ function Exporttable() {
         fromDate: fromDate,
         toDate: toDate,
       };
-      const response = await axios.post(`${base_url}/getActivities`, data).then((res) =>  res.data.activities);
+      const response = await axiosApi.post(`/getActivities`, data).then((res) =>  res.data.activities);
       if(response.length > 0) convertTableToPDF(response);
     } catch {
       setPdfLoading(false);

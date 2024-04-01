@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from 'axios';
+import axiosApi from '../../api/axiosConfig';
 import { base_url } from "../../utils/constants";
 import { loginUser } from "../../redux/reducers/userSlice";
 import {useDispatch,useSelector} from 'react-redux'
@@ -19,7 +19,7 @@ function Home() {
     e.preventDefault();
     setLoading(true)
     if(id!==null){
-     await axios.post(`${base_url}/login`,{empId:Number(inputRef.current.value)})
+     await axiosApi.post(`/login`,{empId:Number(inputRef.current.value)})
       .then((res) => {
         setLoading(false)
         dispatch(loginUser(res.data.user))

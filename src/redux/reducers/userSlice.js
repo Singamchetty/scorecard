@@ -1,6 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { base_url } from "../../utils/constants";
-import axios from "axios";
+import axiosApi from '../../api/axiosConfig';
 
 const initialState = {
   user: null,
@@ -9,8 +8,8 @@ const initialState = {
 };
 
 export const fetchUser = createAsyncThunk("getUser", async (id) => {
-  return await axios
-    .get(`${base_url}/employee/${id}`)
+  return await axiosApi
+    .get(`/employee/${id}`)
     .then((response) => response.data);
 });
 

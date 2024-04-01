@@ -1,6 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { base_url } from "../../utils/constants";
-import axios from "axios";
+import axiosApi from '../../api/axiosConfig';
 
 const initialState = {
   reportees: [],
@@ -16,7 +15,7 @@ const initialState = {
 };
 
 export const fetchReportees = createAsyncThunk("getreportees", async (data) => {
-  return await axios.post(`${base_url}/getreportees`, data)
+  return await axiosApi.post(`/getreportees`, data)
     .then((response) => response.data);
 });
 
