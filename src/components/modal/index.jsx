@@ -1,4 +1,4 @@
-import axios from "axios";
+import axiosApi from '../../api/axiosConfig';
 import React, { useMemo, useEffect, useState, useCallback } from "react";
 import { useSelector } from "react-redux";
 import { base_url } from "../../utils/constants";
@@ -19,7 +19,7 @@ export default function MyModal({ visible, onClose, type, handleAddActivity }) {
   const [disableAppreciate, setDisableAppreciate] = useState(false)
 
   const getActivitysList = async (type) => {
-    const activities = await axios.get(`${base_url}/activities`)
+    const activities = await axiosApi.get(`/activities`)
     const response = await activities.data.filter((item) => item.type == type)
     setActivitiesList(response)
     setModalLoading(false)
