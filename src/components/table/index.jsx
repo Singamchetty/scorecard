@@ -3,11 +3,9 @@ import { useSelector, useDispatch} from "react-redux";
 import {setSortKey, setSortOrder} from '../../redux/reducers/reporteesSlice';
 import Loading from "../loading Component/Loading";
 import SortButton from "../sortButton";
-import SetWindowSize from '../../utils/SetWindowSize';
 
 function Table({headers, data,loading, handleSorting }) {
   const dispatch = useDispatch();
-  const [windowWidth, windowHeight] = SetWindowSize()
   const {sortKey,  sortOrder} = useSelector((state) => state.reportees);
   // const [sortedData, setSortedData] = useState([]);
   // const [sortKey, setSortKey] = useState(null);
@@ -61,9 +59,9 @@ function Table({headers, data,loading, handleSorting }) {
   if(loading) return <Loading/>
   else
   return (
-    <div className={` overflow-auto sm:rounded-lg p-4 py-0 bg-gray-100`} style={{ height: `calc(${windowHeight}px - 170px)` }}>
+    <div className={` overflow-auto sm:rounded-lg p-4 bg-gray-100`}>
       <table className="w-full text-sm text-left rtl:text-right text-gray-500 bg-transparent justify-center border-separate border-spacing-y-2">
-        <thead className="text-xs text-gray-700 uppercase bg-gray-50 sticky top-0">
+        <thead className="text-xs text-gray-700 uppercase bg-gray-50">
           <tr className="mb-2">
             {headers?.map((item,index) => (
               <th key={index} scope="col" className={`px-6 py-4 w-[${item.width}]`} > 
