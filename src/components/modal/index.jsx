@@ -10,7 +10,7 @@ export default function MyModal({ visible, onClose, type, handleAddActivity }) {
   const { user } = useSelector((state) => state.userDetails)
   const [activitiesList, setActivitiesList] = useState([])
   const [enableSubmit, setEnableSubmit] = useState(false)
-  const [activityData, setActivityData] = useState({ aName: "", ratedBy: "", aId: "", type: type, score: 0, comments: "" })
+  const [activityData, setActivityData] = useState({ aName: "", ratedBy: "", type: type, score: 0, comments: "" })
   const [activityType, setActivtyType] = useState("")
   const [showCustActivity, setShowActivity] = useState(false);
   const [modalLoading, setModalLoading] = useState(true)
@@ -27,18 +27,17 @@ export default function MyModal({ visible, onClose, type, handleAddActivity }) {
 
   const handleActivityName = (e) => {
     if (e.target.value === "custom") {
-      setActivityData({ ...activityData, aName: "", aId: "" })
+      setActivityData({ ...activityData, aName: "" })
       setShowActivity(true)
     }
     else {
       setShowActivity(false)
-      setActivityData({ ...activityData, aName: e.target.value, aId: e.target.options[e.target.selectedIndex].id })
+      setActivityData({ ...activityData, aName: e.target.value })
     }
   }
 
   const handleCustumActivity = (e) => {
-    const randomId = uuidv4();
-    setActivityData({ ...activityData, aName: e.target.value, aId: randomId })
+    setActivityData({ ...activityData, aName: e.target.value })
   }
 
 
@@ -75,7 +74,7 @@ export default function MyModal({ visible, onClose, type, handleAddActivity }) {
 
 
   useEffect(() => {
-    if (activityData.aName !== "" && activityData.aId !== "" && activityData.comments !== "" && activityData.score != (0 || -0)) {
+    if (activityData.aName !== "" && activityData.comments !== "" && activityData.score != (0 || -0)) {
       setEnableSubmit(true);
     } else {
       setEnableSubmit(false);
@@ -94,7 +93,7 @@ export default function MyModal({ visible, onClose, type, handleAddActivity }) {
     }
     SentenceCase(type)
     if (visible === false) {
-      setActivityData({ aName: "", ratedBy: "", aId: "", type: type, score: 0, comments: "" })
+      setActivityData({ aName: "", ratedBy: "", type: type, score: 0, comments: "" })
     } else {
       setActivityData({ ...activityData, ratedBy: user.empName })
       getActivitysList(type);
@@ -105,7 +104,7 @@ export default function MyModal({ visible, onClose, type, handleAddActivity }) {
   const handleCustBtn = (e) => {
     e.preventDefault();
     setShowActivity(!showCustActivity);
-    setActivityData({ ...activityData, aName: "", aId: "" })
+    setActivityData({ ...activityData, aName: "" })
   }
 
 
@@ -126,7 +125,7 @@ export default function MyModal({ visible, onClose, type, handleAddActivity }) {
                     <select className="bg-gray-50 ml-2 w-6/12 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 " onChange={(e) => handleActivityName(e)} >
                       <option id="" value="">Select</option>
                       {
-                        activitiesList && activitiesList.map((activity) => <option className=" w-7/12" key={activity.aId} id={activity.aId} value={activity.aName}>{activity.aName}</option>)
+                        activitiesList && activitiesList.map((activity) => <option className=" w-7/12" value={activity.aName}>{activity.aName}</option>)
                       }
                       <option value="custom" className={`${showCustActivity || type == "duties" && 'hidden'}`}>Add Activity</option>
                     </select>
