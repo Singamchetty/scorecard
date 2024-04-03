@@ -1,5 +1,3 @@
-# nisum-scorecard
-
 Nisum ScoreCard Demo Documentation
 
 
@@ -54,7 +52,7 @@ Data In body Example :
 
 
 3. POST method to add activity added by manager to his reportees.  Id should contain all the fields given below in the example or else it throws an error. 
-Note: Users can add a custom aName field , from frontend a unique id will be generated and added as aID.
+Note: Users can add a custom aName field..
 
 https://nisumscorecardservertesting.netlify.app/.netlify/functions/api/createActivity
 
@@ -64,7 +62,6 @@ Data In body Example :
     "empId":10000,
     "data":{
         "aName":"Approval of timesheet",
-        "aId":"D001",
         "type":"duties",
         "ratedBy":"Name",
         "score":3,
@@ -76,12 +73,12 @@ Data In body Example :
 
 Actual Activities Data this to be used when trying to create a activity to a employee: 
 
-[{"_id":"65f19252ecd2b756fab896b8","type":"duties","aId":"D001","aName":"Submission timesheet"},
-{"_id":"65f19252ecd2b756fab896b9","type":"duties","aId":"D002","aName":"Successful deliveries"},
-{"_id":"65f19252ecd2b756fab896bb","type":"duties","aId":"D004","aName":"Approval of timesheet"},
-{"_id":"65f19252ecd2b756fab896bd","type":"initiative","aId":"I002","aName":"POC's"},
-{"_id":"65f19252ecd2b756fab896ba","type":"duties","aId":"D003","aName":"Vacation/Unplanned leaves"},
-{"_id":"65f19252ecd2b756fab896bc","type":"initiative","aId":"I001","aName":"Goals"},{"_id":"65f19252ecd2b756fab896be","type":"initiative","aId":"I003","aName":"RFP's"}]
+[{"_id":"65f19252ecd2b756fab896b8","type":"duties","aName":"Submission timesheet"},
+{"_id":"65f19252ecd2b756fab896b9","type":"duties","aName":"Successful deliveries"},
+{"_id":"65f19252ecd2b756fab896bb","type":"duties","aName":"Approval of timesheet"},
+{"_id":"65f19252ecd2b756fab896bd","type":"initiative","aName":"POC's"},
+{"_id":"65f19252ecd2b756fab896ba","type":"duties","aName":"Vacation/Unplanned leaves"},
+{"_id":"65f19252ecd2b756fab896bc","type":"initiative","aName":"Goals"},{"_id":"65f19252ecd2b756fab896be","type":"initiative","aName":"RFP's"}]
 
 
 4. POST method to get reports by filtering from Date and toDate. Mandatory is empId in the example data which we post in the body to get minimum data of the previous 90 days. 
@@ -160,7 +157,7 @@ Data In body Example :
 
 
 3. POST method to add activity added by manager to his reportees.  Id should contain all the fields given below in the example or else it throws an error.
-Note: Users can add a custom aName field , from frontend a unique id will be generated and added as aID.
+Note: Users can add a custom aName field.
 
 https://nisumscorecardserverdev.netlify.app/.netlify/functions/api/createActivity
 
@@ -170,7 +167,6 @@ Data In body Example :
     "empId":10000,
     "data":{
         "aName":"Approval of timesheet",
-        "aId":"D001",
         "type":"duties",
         "ratedBy":"Name",
         "score":3,
@@ -181,12 +177,14 @@ Data In body Example :
 
 Actual Activities Data this to be used when trying to create a activity to a employee: 
 
-[{"_id":"65f19252ecd2b756fab896b8","type":"duties","aId":"D001","aName":"Submission timesheet"},
-{"_id":"65f19252ecd2b756fab896b9","type":"duties","aId":"D002","aName":"Successful deliveries"},
-{"_id":"65f19252ecd2b756fab896bb","type":"duties","aId":"D004","aName":"Approval of timesheet"},
-{"_id":"65f19252ecd2b756fab896bd","type":"initiative","aId":"I002","aName":"POC's"},
-{"_id":"65f19252ecd2b756fab896ba","type":"duties","aId":"D003","aName":"Vacation/Unplanned leaves"},
-{"_id":"65f19252ecd2b756fab896bc","type":"initiative","aId":"I001","aName":"Goals"},{"_id":"65f19252ecd2b756fab896be","type":"initiative","aId":"I003","aName":"RFP's"}]
+[{"_id":"65f19252ecd2b756fab896b8","type":"duties","aName":"Submission timesheet"},s
+{"_id":"65f19252ecd2b756fab896b9","type":"duties","aName":"Successful deliveries"},
+{"_id":"65f19252ecd2b756fab896bb","type":"duties","aName":"Approval of timesheet"},
+{"_id":"65f19252ecd2b756fab896bd","type":"initiative","aName":"POC's"},
+{"_id":"65f19252ecd2b756fab896ba","type":"duties","aName":"Vacation/Unplanned leaves"},
+{"_id":"65f19252ecd2b756fab896bc","type":"initiative","aName":"Goals"},{"_id":"65f19252ecd2b756fab896be","type":"initiative","aName":"RFP's"}]
+
+
 
 4. POST method to get reports by filtering from Date and toDate. Mandatory is empId in the example data which we post in the body to get minimum data of the previous 90 days. 
  If fromDate and toDate is not given we get only previous 90 days activities.

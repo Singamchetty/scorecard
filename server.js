@@ -140,7 +140,6 @@ app.post("/getreportees",async (req, res) => {
     "empId":10000,
     "data":{
         "aName":"Approval of timesheet",
-        "aId":"D001",
         "type":"duties",
         "ratedBy":"Name",
         "score":3,
