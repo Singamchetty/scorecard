@@ -9,7 +9,7 @@ import {scoreColor} from '../../utils/commonFunctions';
 
 
 function Viewreportee() {
-  debugger
+
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const {reportees, viewReportee,currPage, reporteeId } = useSelector((state) => state.reportees);
@@ -101,14 +101,7 @@ function Viewreportee() {
       <div className="p-4" >
         <div className="bg-white p-3 rounded-md">
           <div className="flex justify-between">
-            {/* <div className="my-1">
-              <p>
-                <span className="font-medium">Employee Name: </span> {viewReportee?.empName}
-              </p>
-              <p>
-                <span className="font-medium">Designation: </span> {viewReportee?.designation}
-              </p>
-            </div> */}
+           
             <div className="flex items-center">
               <div>
                 <p className="font-medium mb-2">

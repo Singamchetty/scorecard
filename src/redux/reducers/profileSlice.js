@@ -2,11 +2,10 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axiosApi from '../../api/axiosConfig'
 
 const initialState = {
-  reports: null,
+  reports:null,
   dutiesReports: null,
   initiativeReports: null,
- 
-  loading: false,
+ loading: false,
   error: null,
 };
 
@@ -18,11 +17,11 @@ export const fetchProfileReporteeActivities = createAsyncThunk("getReports", asy
 
 
 
-const reportSlice = createSlice({
+const profileSlice = createSlice({
   name: "reportees",
   initialState,
   reducers: {
-    resetReports:() => {
+    resetActivities:() => {
       return initialState
     },
   },
@@ -42,6 +41,6 @@ const reportSlice = createSlice({
   },
 });
 
-export const {resetReports} = reportSlice.actions;
+export const {resetActivities} = profileSlice.actions;
 
-export default reportSlice.reducer;
+export default profileSlice.reducer;

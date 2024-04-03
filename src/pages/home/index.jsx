@@ -6,7 +6,7 @@ import { loginUser } from "../../redux/reducers/userSlice";
 import {useDispatch,useSelector} from 'react-redux'
 
 function Home() {
-  debugger
+
   const inputRef = useRef(null);
   const navigate = useNavigate();
   const dispatch=useDispatch()
@@ -17,7 +17,7 @@ function Home() {
  
 
   const handleSubmit = async (e) => {
-    debugger
+
     e.preventDefault();
     setLoading(true)
     if(id!==null){
@@ -37,12 +37,12 @@ function Home() {
 
   };
   useEffect(()=>{
-    debugger
+  
      setLoading(false)
      inputRef.current.focus();
   },[])
   useEffect(()=>{
-    debugger
+
     if (userDetails?.user!=null)
     navigate("/dashboard")
     else

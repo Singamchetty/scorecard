@@ -6,10 +6,8 @@ import Tabs from "./tabs";
 
 const AdminProfile = () => {
     const dispatch = useDispatch();
-    const { user, loading, error } = useSelector((state) => state.userDetails); // Get user data from Redux store
-
-
-
+    const { user,error,loading } = useSelector((state) => state.userDetails); // Get user data from Redux store
+  
     if (loading) return <div>Loading...</div>;
     if (error) return <div>Error: {error}</div>;
 
