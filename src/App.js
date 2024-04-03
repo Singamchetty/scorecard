@@ -6,6 +6,7 @@ import Viewreportee from './pages/viewReportee';
 import './App.css';
 import PageNotFound from './pages/pagenotfound/PageNotFound';
 import Exporttable from './pages/reportexport'
+import AdminProfile from './pages/adminProfile';
 
 function App() {
   return (
@@ -15,6 +16,8 @@ function App() {
         <Route path="/dashboard" element={<Layout><Dashboard/></Layout>}/>
         <Route path="/viewreportee" element={<Layout><Viewreportee/></Layout>}/>
         <Route path="/reportees" element={<Layout><Exporttable/></Layout>}/>
+        <Route path="/adminProfile" element={<Layout><AdminProfile/></Layout>}/>
+
         <Route path="/*" element={<PageNotFound/>}/>
       </Routes>
     </BrowserRouter>

@@ -9,6 +9,7 @@ import {scoreColor} from '../../utils/commonFunctions';
 
 
 function Viewreportee() {
+  debugger
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const {reportees, viewReportee,currPage, reporteeId } = useSelector((state) => state.reportees);
@@ -169,6 +170,7 @@ function Viewreportee() {
       <p className="text-center align-middle pt-14 pb-14 text-blue-500 font-bold">Employee Details Not Found</p>
     </div>
 }
+
 
 
 export default Viewreportee;
