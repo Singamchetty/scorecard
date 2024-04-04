@@ -59,10 +59,10 @@ function Table({headers, data,loading, handleSorting }) {
   if(loading) return <Loading/>
   else
   return (
-    <div className={` overflow-auto sm:rounded-lg p-4 bg-gray-100`}>
-      <table className="w-full text-sm text-left rtl:text-right text-gray-500 bg-transparent justify-center border-separate border-spacing-y-2">
-        <thead className="text-xs text-gray-700 uppercase bg-gray-50">
-          <tr className="mb-2">
+    <div className={` overflow-auto sm:rounded-lg p-4 `}>
+      <table className="w-full text-sm text-left rtl:text-right  bg-transparent justify-center ">
+        <thead className="  uppercase bg-white font-extrabold">
+          <tr className="mb-2 border-2 border-black-200">
             {headers?.map((item,index) => (
               <th key={index} scope="col" className={`px-6 py-4 w-[${item.width}]`} > 
                 { item.renderHeader ? item.renderHeader(item.title) : item.isSorting ? 
@@ -80,7 +80,7 @@ function Table({headers, data,loading, handleSorting }) {
        (data?.length)?<tbody >
          {
            data?.map((item, index) => (
-               <tr key={item.id} className="bg-white  hover:bg-gray-300 " >
+               <tr key={item.id} className="bg-[#eef5ff] font-medium hover:bg-white " >
                    {
                      headers?.map(({render, id}) => (
                        <td className="px-6 py-2 "  >

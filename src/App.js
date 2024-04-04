@@ -13,10 +13,15 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route path='/' element={<Home />}/>
-        <Route path="/dashboard" element={<Layout><Dashboard/></Layout>}/>
+        {/* profile  page */}
+        <Route path="/dashboard" element={<Layout><AdminProfile/></Layout>}/>
+         {/* reportees  page */}
+         <Route path="/myreportees" element={<Layout><Dashboard/></Layout>}/>
+          {/*adding activities*/}
         <Route path="/viewreportee" element={<Layout><Viewreportee/></Layout>}/>
+         {/* fetch reports */}
         <Route path="/reportees" element={<Layout><Exporttable/></Layout>}/>
-        <Route path="/adminProfile" element={<Layout><AdminProfile/></Layout>}/>
+       
 
         <Route path="/*" element={<PageNotFound/>}/>
       </Routes>

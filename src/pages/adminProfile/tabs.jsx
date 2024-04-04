@@ -8,11 +8,8 @@ import Loading from "../../components/loading Component/Loading";
 const Tabs = () => {
   const [index, setIndex] = useState(0);
   const dispatch = useDispatch();
-  const { reports, loading, error, dutiesReports, initiativeReports } =
-    useSelector((state) => state.reports);
+  const { loading, error, dutiesReports, initiativeReports } =useSelector((state) => state.reports);
   const { user } = useSelector((state) => state.userDetails);
-//   console.log(dutiesReports);
-//   console.log(initiativeReports);
   const fetchActivities = (type) => {
     const data = {
       empId: user?.empId,
@@ -20,7 +17,6 @@ const Tabs = () => {
       page: 1,
       perPage: 5,
     };
-    console.log(data);
     dispatch(fetchProfileReporteeActivities(data));
   };
   useEffect(() => {
@@ -64,7 +60,10 @@ const Tabs = () => {
                 setIndex(0);
                 fetchActivities("duties");
               }}
-              className="inline-block p-4 text-blue-600 border-b-2 border-blue-600  dark:text-blue-500 "
+              className={`inline-block p-4 border-b-2 border-blue-600 ${index === 0
+                ? 'text-blue-600'
+                : 'border-transparent hover:text-blue-300 hover:border-blue-300'
+                }`} 
             >
               Duties
             </button>
@@ -75,7 +74,10 @@ const Tabs = () => {
                 setIndex(index + 1);
                 fetchActivities("initiative");
               }}
-              className="inline-block p-4 border-b-2 border-transparent  hover:text-gray-600 hover:border-gray-300 "
+              className={`inline-block p-4 border-b-2  border-blue-600 ${index >0
+                ? 'text-blue-600'
+                : 'border-transparent hover:text-blue-300 hover:border-blue-300'
+              }`}
             >
               Initiatives
             </button>

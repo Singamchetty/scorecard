@@ -1,5 +1,5 @@
 export const styles = {
-  genarateReportContainer: "overflow-auto sm:rounded-lg p-4 bg-[#E9EDEE] ",
+  genarateReportContainer: "overflow-auto sm:rounded-lg p-4 bg-gray-50 ",
   textBlueHeading: "text-blue-800 py-3 pl-2 text-center fond-bold text-2xl",
   formContainer: "p-2 text-[12px] mb-4",
   flexContainer: "flex items-center justify-between",
