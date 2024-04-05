@@ -9,6 +9,7 @@ import {scoreColor} from '../../utils/commonFunctions';
 
 
 function Viewreportee() {
+
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const {reportees, viewReportee,currPage, reporteeId } = useSelector((state) => state.reportees);
@@ -100,14 +101,7 @@ function Viewreportee() {
       <div className="p-4" >
         <div className="bg-white p-3 rounded-md">
           <div className="flex justify-between">
-            {/* <div className="my-1">
-              <p>
-                <span className="font-medium">Employee Name: </span> {viewReportee?.empName}
-              </p>
-              <p>
-                <span className="font-medium">Designation: </span> {viewReportee?.designation}
-              </p>
-            </div> */}
+           
             <div className="flex items-center">
               <div>
                 <p className="font-medium mb-2">
@@ -169,6 +163,7 @@ function Viewreportee() {
       <p className="text-center align-middle pt-14 pb-14 text-blue-500 font-bold">Employee Details Not Found</p>
     </div>
 }
+
 
 
 export default Viewreportee;

@@ -6,15 +6,23 @@ import Viewreportee from './pages/viewReportee';
 import './App.css';
 import PageNotFound from './pages/pagenotfound/PageNotFound';
 import Exporttable from './pages/reportexport'
+import AdminProfile from './pages/adminProfile';
 
 function App() {
   return (
     <BrowserRouter>
       <Routes>
         <Route path='/' element={<Home />}/>
-        <Route path="/dashboard" element={<Layout><Dashboard/></Layout>}/>
+        {/* profile  page */}
+        <Route path="/dashboard" element={<Layout><AdminProfile/></Layout>}/>
+         {/* reportees  page */}
+         <Route path="/myreportees" element={<Layout><Dashboard/></Layout>}/>
+          {/*adding activities*/}
         <Route path="/viewreportee" element={<Layout><Viewreportee/></Layout>}/>
+         {/* fetch reports */}
         <Route path="/reportees" element={<Layout><Exporttable/></Layout>}/>
+       
+
         <Route path="/*" element={<PageNotFound/>}/>
       </Routes>
     </BrowserRouter>

@@ -17,7 +17,7 @@ function Layout({children}) {
             <Header isOpen={isOpen} />
             <div className="flex pt-[85px]">
                 <Sidebar/>
-                <div className="bg-[#E9EDEE] w-full overflow-auto" style={{ height: `calc(${windowHeight}px - 87px)` }}>
+                <div className="bg-[#fafafb] w-full overflow-auto" style={{ height: `calc(${windowHeight}px - 87px)` }}>
                     {children}
                 </div>
                 {url.includes('/viewreportee') && <LeftSidebar/>}
