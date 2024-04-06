@@ -57,6 +57,7 @@ function Exporttable() {
     } else if (selectedValue === "Past 1 year") {
       ({ fromDate, toDate } = calculateDateRange(12));
     }
+    if(selectedValue!=="")
     setSelectedDate(selectedValue)
     setFromDate(fromDate);
     setToDate(toDate);
@@ -159,6 +160,12 @@ function Exporttable() {
     return user ? user.empName : '';
   }
 
+  const handleSelectedName=(value)=>{
+    if(value!=="")
+    setSelectedEmployee(value)
+
+  }
+
     return (
       <div>
         <div className={styles.genarateReportContainer}>
@@ -175,8 +182,8 @@ function Exporttable() {
                     SELECT EMPLOYEE:{" "}
                   </label>
                   <select 
-                    onChange={(e) => setSelectedEmployee(e.target.value)}
-                    value={selectedEmployee}
+                    onChange={(e) => handleSelectedName(e.target.value)}
+                    // value={selectedEmployee}
                     className={styles.selectEmployeeDropdown}
                   >
                     
