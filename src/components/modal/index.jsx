@@ -20,7 +20,7 @@ export default function MyModal({ visible, onClose, type, handleAddActivity }) {
 
   const getActivitysList = async (type) => {
     const activities = await axiosApi.get(`/activities`)
-    const response = await activities.data.filter((item) => item.type == type)
+    const response = await activities.data.filter((item) => item.atype == type)
     setActivitiesList(response)
     setModalLoading(false)
   }
