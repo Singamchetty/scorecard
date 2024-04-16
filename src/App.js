@@ -1,7 +1,7 @@
 import {BrowserRouter, Routes, Route} from 'react-router-dom';
 import Home from "./pages/home";
 import Dashboard from './pages/dashboard';
-import Layout from './pages/layout';
+import WithLayout from './utils/withLayout/index'
 import Viewreportee from './pages/viewReportee';
 import './App.css';
 import PageNotFound from './pages/pagenotfound/PageNotFound';
@@ -15,17 +15,20 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route path='/' element={<Home />}/>
-        {/* profile  page */}
-        <Route path="/dashboard" element={<Layout><AdminProfile/></Layout>}/>
-         {/* reportees  page */}
-         <Route path="/myreportees" element={<Layout><Dashboard/></Layout>}/>
-          {/*adding activities*/}
-        <Route path="/viewreportee" element={<Layout><Viewreportee/></Layout>}/>
-         {/* fetch reports */}
-        <Route path="/reportees" element={<Layout><Exporttable/></Layout>}/>
-        <Route path="/adminreportees" element={<Layout><Adminreports/></Layout>}/>
-        <Route path="/Admin" element={<Layout><Admin/></Layout>}/>
-
+        <Route path='/' element={<WithLayout/>}>
+          {/* profile  page */}
+          <Route path="/dashboard" element={<AdminProfile/>}/>
+          {/* reportees  page */}
+          <Route path="/myreportees" element={<Dashboard/>}/>
+            {/*adding activities*/}
+          <Route path="/viewreportee" element={<Viewreportee/>}/>
+          {/* fetch reports */}
+          <Route path="/reportees" element={<Exporttable/>}/>
+          {/* Admin reports */}
+          <Route path="/adminreportees" element={<Adminreports/>}/>
+          {/* Activity List */}
+          <Route path="/Admin" element={<Admin/>}/>
+        </Route>
         <Route path="/*" element={<PageNotFound/>}/>
       </Routes>
     </BrowserRouter>
