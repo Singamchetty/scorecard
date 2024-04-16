@@ -53,6 +53,7 @@ const menus = [
   { title: "Dashboard", path: '/dashboard', selectPaths: ['dashboard'], icon: <DashboardIcon /> },
   { title: "My Reportees", path: '/myreportees', selectPaths: ['myreportees', 'viewreportee'], icon: <ReportsIcon /> },
   { title: "Reports", path: '/reportees', selectPaths:['reportees'], icon: <ReportsIcon /> },
+  { title: "Adminreports", path: '/adminreportees', selectPaths:['adminreportees'], icon: <ReportsIcon /> },
 ]
 
 function Sidebar() {

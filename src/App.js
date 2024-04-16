@@ -7,6 +7,7 @@ import './App.css';
 import PageNotFound from './pages/pagenotfound/PageNotFound';
 import Exporttable from './pages/reportexport'
 import AdminProfile from './pages/adminProfile';
+import Adminreports from './pages/adminreports';
 
 function App() {
   return (
@@ -21,7 +22,7 @@ function App() {
         <Route path="/viewreportee" element={<Layout><Viewreportee/></Layout>}/>
          {/* fetch reports */}
         <Route path="/reportees" element={<Layout><Exporttable/></Layout>}/>
-       
+        <Route path="/adminreportees" element={<Layout><Adminreports/></Layout>}/>
 
         <Route path="/*" element={<PageNotFound/>}/>
       </Routes>
