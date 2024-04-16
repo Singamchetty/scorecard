@@ -80,10 +80,10 @@ function Table({headers, data,loading, handleSorting }) {
        (data?.length)?<tbody >
          {
            data?.map((item, index) => (
-               <tr key={item.id} className="bg-[#eef5ff] font-medium hover:bg-white " >
+               <tr key={item._id} id={item?._id}className="bg-[#eef5ff] font-medium hover:bg-white " >
                    {
                      headers?.map(({render, id}) => (
-                       <td className="px-6 py-2 "  >
+                       <td className="px-6 py-2 capitalize"  >
                         {render ? render(item[id]) : item[id] === "" ? "NA" : item[id] }
                         </td>
                      ))

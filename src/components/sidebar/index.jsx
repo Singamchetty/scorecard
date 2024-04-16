@@ -48,13 +48,15 @@ import SetWindowSize from '../../utils/SetWindowSize';
 import DashboardIcon from '../../assets/icons/dashboardIcon';
 import ReportsIcon from '../../assets/icons/reportsIcon';
 import AdminProfileIcon from '../../assets/icons/adminProfileIcon'; // Assuming you have an icon for Admin Profile
+import Admin from "../../pages/admin";
+
 
 const menus = [
   { title: "Dashboard", path: '/dashboard', selectPaths: ['dashboard'], icon: <DashboardIcon /> },
   { title: "My Reportees", path: '/myreportees', selectPaths: ['myreportees', 'viewreportee'], icon: <ReportsIcon /> },
   { title: "Reports", path: '/reportees', selectPaths:['reportees'], icon: <ReportsIcon /> },
+  { title: "Activity List", path: '/admin', selectPaths:['admin'], icon: <ReportsIcon /> },
 ]
-
 function Sidebar() {
   const url = window.location.href;
   const  [windowWidth, windowHeight] = SetWindowSize();
