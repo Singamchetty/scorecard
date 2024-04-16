@@ -62,7 +62,6 @@ app.post('/login', async (req, res) => {
   }
 });
 
-
 //to get activities to display
 app.get("/activities", async(req, res) => {
   await db.collection("activities_master")
@@ -133,13 +132,13 @@ app.post("/getreportees",async (req, res) => {
     .catch((error) => res.status(401).send(error));
 });
 
-
 //Example of post Data
 /*
 {
     "empId":10000,
     "data":{
         "aName":"Approval of timesheet",
+        "aId":"D001",
         "type":"duties",
         "ratedBy":"Name",
         "score":3,
@@ -156,7 +155,7 @@ app.post('/createActivity',async (req, res) => {
     let { data } = req.body;
 
     //data validation
-    if (!_.get(data, "aName", "") || !_.get(data, "type", "") || !_.get(data, "score", "") || !_.get(data,"comments","") ||!_.get(data,"ratedBy","") ) {
+    if (!_.get(data, "aName", "") || !_.get(data, "aId", "") || !_.get(data, "type", "") || !_.get(data, "score", "") || !_.get(data,"comments","") ||!_.get(data,"ratedBy","") ) {
       res.status(401).json({ "error": "Invalid Activity data" });
       return;
     }
@@ -372,17 +371,6 @@ app.post("/getActivities-avg", async(req, res) => {
 
         }
       });
-      aggreGate.push({
-        $project:{
-          "type":"$_id",
-          "avgScore":1
-        }
-      });
-      aggreGate.push({
-        $unset:"_id"
-      });
-
-
 
      db.collection("performance_master")
     .aggregate(aggreGate)
@@ -392,4 +380,195 @@ app.post("/getActivities-avg", async(req, res) => {
     })
     .catch((error) => res.status(401).send(error));
   }
+});
+
+// -------------------------------------------------------------
+
+const checkEmpIdExists = async (req, res, next) => {
+  try {
+    const empId = req.body.empId;
+    const empEdit = req.body?.empEdit;
+    const reportingTo = req.body.reportingTo;
+ 
+    const existingEmployee = await db.collection('employees').findOne({ empId: empId });
+ 
+    if (existingEmployee && !empEdit) {
+      return  res.status(400).json({ error: "Employee already exists" });
+    }
+    else if(!existingEmployee){
+      await db.collection('employees').updateOne({ empId: reportingTo }, { $push: { reportees: empId } });
+      next();
+    } 
+    else{
+      db.collection('employees').updateOne({empId:existingEmployee.reportingTo},{ $pull: { reportees: { $eq: empId } } });
+      await db.collection('employees').updateOne({ empId: reportingTo }, { $push: { reportees: empId } });
+      next();
+    } 
+  } catch (error) {
+    console.error('Error checking or updating employee data:', error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
+
+const checkEmpIdActivityExists = async (req, res, next) => {
+  try {
+    const empId = req.body.empId;
+    const existingEmployee = await db.collection('performance_master').findOne({ empId: empId });
+    if (!existingEmployee) {
+      return  res.status(400).json({ error: "Employee doesn't have any activity" });
+    }
+    else{
+      next();
+    } 
+  } catch (error) {
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
+
+// Add employee details API endpoint
+// {
+//   "empId": 41716,
+//   "empName": "Prashanth vagalaboina",
+//   "designation": "Software Engineer",
+//   "reportingTo": 16020,
+//   "score": 0,
+//   "project": "prologies",
+//   "reportees": [],
+//   "empEmail": "pvagalaboina@nisum.com",
+//   "techStack": "Frontend",
+//   "createdBy": 41111,
+//   "roleId": 1,
+//   "status": 1,
+//   "updatedBy": 41111
+// }
+app.post('/addEmployee', checkEmpIdExists, async (req, res) => {
+  try {
+    const empData = req.body;
+    // Insert data into MongoDB
+    const result = await db.collection('employees').insertOne(empData);
+ 
+    res.status(201).json({ message: 'Data added successfully', insertedId: result.insertedId });
+  } catch (err) {
+    console.error('Error adding data:', err);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+});
+
+// Update employee details API endpoint
+// Mandatory(*) fields are Editable in UI
+// {
+//   "empId": 41716,
+//  * "empName": "Prashanth vagalaboina",
+//  * "designation": "Software Engineer",
+//  * "reportingTo": 16020,
+//   "score": 0,
+//  * "project": "prologies",
+//   "reportees": [],
+//   "empEmail": "pvagalaboina@nisum.com",
+//  * "techStack": "Frontend",
+//   "createdBy": 41111,
+//  * "roleId": 1,
+//  * "status": 1,
+//  * "updatedBy": 41111,
+//   "empEdit" : "true"
+// }
+app.put('/updateEmployee', checkEmpIdExists, async (req, res) => {
+  try {
+    const { empId, empName, project, roleId, designation, status, reportingTo, techStack, updatedBy } = req.body;
+ 
+    // Update employee details
+    const result = await db.collection('employees').updateOne(
+      { empId: empId },
+      {
+        $set: {
+          empName,
+          project,
+          roleId,
+          designation,
+          status,
+          reportingTo,
+          techStack,
+          updatedBy
+        }
+      }
+    );
+ 
+    if (result.modifiedCount === 1) {
+      res.status(200).json({ message: 'Employee details updated successfully' });
+    } else {
+      res.status(404).json({ message: 'Employee not found' });
+    }
+  } catch (err) {
+    console.error('Error updating employee details:', err);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+});
+
+// Employee role and status check API endpoint
+// {
+//   "category": "emp_roles" or "emp_status"
+// }
+app.post('/getmaster-data',(req, res) => {
+  let emp = req.body.category;
+  let collection = ""
+  if(emp === "emp_roles")
+    collection ="emp_roles";
+  if(emp === "emp_status")
+    collection = "emp_status";
+    db.collection(collection).find({}).toArray()
+        .then(result => {
+            res.status(201).json(result);
+        })
+        .catch(error => res.status(500).json({ error: "Could not fetch the Role / Status of Employee" }));
+});
+
+// Delete Activity details API endpoint
+// {
+//   "empId": 41716,
+//   "ObjectId": "660ba3ab707f841402133801"
+// }
+app.put('/deleteActivity', checkEmpIdActivityExists, async (req, res) => {
+ try {
+    const empId = req.body.empId;
+    const Id = req.body.ObjectId;
+  
+    const result = await db.collection('performance_master').updateOne({empId:empId},{ $pull: { activities: { _id: new ObjectId(Id) } } });
+    console.log(result);
+    if (result.modifiedCount === 1) {
+      res.status(200).json({ message: 'Employee activity deleted successfully' });
+    }
+ } catch (err) {
+  console.error('Error updating employee details:', err);
+  res.status(500).json({ message: 'Internal server error' });
+}
+}); 
+
+// Add MasterActivity details API endpoint
+// {
+//   "atype": "duties",
+//   "aName": "submission test",
+//   "appreciate": "true",
+//   "depreciate": "false"
+// }
+app.post('/addMasterActivity', async (req, res) => {
+  try {
+    const empActivityMasterData = req.body;
+    // Insert data into MongoDB
+    const result = await db.collection('activities_master').insertOne(empActivityMasterData);
+    res.status(201).json({ message: 'Data added successfully', insertedId: result.insertedId });
+  } catch (err) {
+    console.error('Error adding data:', err);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+});
+
+// Delete Master Activity details API endpoint
+// {
+//   "ObjectId": "660ba3ab707f841402133801"
+// }
+
+app.put('/deleteMasterActivity', async (req, res) => {
+  const aId = req.body.ObjectId;
+  await db.collection('activities_master').deleteOne({_id: new ObjectId(aId)}).then((result) => {
+    res.send(result);}).catch((error) => res.status(401).send(error));
 });

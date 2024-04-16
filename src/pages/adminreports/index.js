@@ -17,13 +17,13 @@ function Adminreports() {
   const { reportees, loading, totalCount, currPage, pagesCount } = useSelector(
     (state) => state.reportees
   );
-const base_url='http://localhost:4000';
   const [selectedEmployee, setSelectedEmployee] = useState(0);
   const [fromDate, setFromDate] = useState("");
   const [toDate, setToDate] = useState("");
   const [inputValue, setInputValue] = useState('');
   const [pdfLoading, setPdfLoading] = useState(false);
-  const [selectedDate, setSelectedDate] = useState(null)
+  const [selectedDate, setSelectedDate] = useState(null);
+  const [employees, setEmployees] = useState(null)
 
   useEffect(() => {
     if(selectedEmployee && fromDate && toDate) {
@@ -65,28 +65,39 @@ const base_url='http://localhost:4000';
 
 
   useEffect(() => {
-    if (user) {
-      let data = {
-        reportees: user.reportees,
-        page: 1,
-        perPage: 100000000, //user.reportees.length,
-        getMasterData: true
-      };
-      dispatch(fetchReportees(data));
+    // if (user) {
+    //   let data = {
+    //     reportees: user.reportees,
+    //     page: 1,
+    //     perPage: 100000000, //user.reportees.length,
+    //     getMasterData: true
+    //   };
+    //   dispatch(fetchReportees(data));
+    // }
+    // return(() => {
+    //   dispatch(resetReporteesTableData())
+    // })
+
+    const getEmployees = async () => {
+      try {
+        const res = await axiosApi.get(`/employees`);
+        const data = res?.data.filter((emp) => emp.roleId !== 1)
+        setEmployees(data)
+      } catch (error) {
+        // console.error("Error:", error);
+      }
     }
-    return(() => {
-      dispatch(resetReporteesTableData())
-    })
+    getEmployees()
   }, []);
+
   const handleReportieDelete = async (id) => {
     try {
-      console.log("Deleting activity with id:", id, "for employee:", selectedEmployee);
-      await axiosApi.put(`${base_url}/deleteActivity`, { ObjectId: id, empId: Number(selectedEmployee) });
+      await axiosApi.put(`/deleteActivity`, { ObjectId: id, empId: Number(selectedEmployee) });
    
       dispatch(fetchReportesActivitiesData({ empId: Number(selectedEmployee), fromDate, toDate }));
     } catch (error) {
-      console.error("Error deleting activity:", id);
-      console.error("Error:", error);
+      // console.error("Error deleting activity:", id);
+      // console.error("Error:", error);
     }
   };
 
@@ -117,7 +128,7 @@ const base_url='http://localhost:4000';
       ),
     },
     {
-      title: "Delete",
+      title: "Actions",
       id: "_id",
       render: (id) => (
         <button
@@ -125,9 +136,8 @@ const base_url='http://localhost:4000';
           onClick={() => {
             if (id && selectedEmployee) {
               handleReportieDelete(id,selectedEmployee);
-              console.log(id)
             } else {
-              console.error("Item or item._id is undefined");
+              // console.error("Item or item._id is undefined");
             }
           }}
         >
@@ -219,8 +229,8 @@ const base_url='http://localhost:4000';
                     <option id="" value="">
                       Select
                     </option>
-                    {reportees &&
-                      reportees.map((reportee) => (
+                    {employees &&
+                      employees.map((reportee) => (
                         <option
                           className="text-pretty"
                           key={reportee?.empId}

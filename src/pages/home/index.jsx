@@ -40,13 +40,18 @@ function Home() {
   
      setLoading(false)
      inputRef.current.focus();
-  },[])
-  useEffect(()=>{
+  },[]);
 
-    if (userDetails?.user!=null)
-    navigate("/dashboard")
-    else
-    navigate("/")
+  useEffect(()=>{
+    if (userDetails?.user!=null){
+      if(userDetails?.user.roleId === 1)
+        navigate("/admin")
+      else
+        navigate("/dashboard")
+    }
+    else {
+      navigate("/")
+    }
   },[userDetails])
 
   return (
