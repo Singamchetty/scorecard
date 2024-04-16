@@ -35,3 +35,8 @@ export const convertUTCToLocal = (utcDate) => {
   const localDateObj = new Date(localTimeMillis);
   return moment(localDateObj).format('DD-MM-YYYY')
 }
+
+export  const convertToString = (value) =>{
+ 
+  return String(value);
+}
